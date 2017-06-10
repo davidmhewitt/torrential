@@ -26,6 +26,11 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.MenuItem preferences_item;
     private Gtk.MenuItem about_item;
 
+    private Gtk.Stack stack;
+    private Gtk.HeaderBar headerbar;
+    private Gtk.Paned main_pane;
+    private Granite.Widgets.Welcome welcome_screen;
+
     private SimpleActionGroup actions = new SimpleActionGroup ();
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
@@ -60,7 +65,23 @@ public class Torrential.MainWindow : Gtk.Window {
                                        action_accelerators[action].to_array ());
         }
 
-        var headerbar = new Gtk.HeaderBar ();
+        build_headerbar ();
+        build_main_interface ();
+        build_welcome_screen ();
+
+        stack = new Gtk.Stack ();
+        stack.add_named (welcome_screen, "welcome");
+        stack.add_named (main_pane, "main");
+        stack.visible_child_name = "welcome";
+        add (stack);
+
+        set_default_size (900, 600);
+        set_titlebar (headerbar);
+        show_all ();
+    }
+
+    private void build_headerbar () {
+        headerbar = new Gtk.HeaderBar ();
         headerbar.show_close_button = true;
 
         var about_button = new Gtk.MenuButton ();
@@ -70,8 +91,11 @@ public class Torrential.MainWindow : Gtk.Window {
         headerbar.pack_end (about_button);
 
         var open_button = new Gtk.ToolButton.from_stock (Gtk.Stock.OPEN);
+        open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
         headerbar.pack_start (open_button);
+    }
 
+    private void build_main_interface () {
         var all_category = new Granite.Widgets.SourceList.Item (_("All"));
         all_category.icon = Icon.new_for_string ("folder");
         all_category.badge = "0";
@@ -95,17 +119,18 @@ public class Torrential.MainWindow : Gtk.Window {
         root.add (seeding_category);
         root.add (paused_category);
         root.add (search_category);
-    
-        var pane = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-        pane.position = 175;
-		this.add (pane);
 
-		pane.add1 (sidebar);
-		pane.add2 (new Gtk.Label ("Right"));
+        main_pane = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+        main_pane.position = 175;
 
-        set_default_size (900, 600);
-        set_titlebar (headerbar);
-        show_all ();
+        main_pane.add1 (sidebar);
+        main_pane.add2 (new Gtk.Label ("Right"));
+    }
+
+    private void build_welcome_screen () {
+        welcome_screen = new Granite.Widgets.Welcome (_("No Torrents Added"), _("Add a torrent file to begin downloading."));
+        welcome_screen.append ("folder", _("Open Torrent"), _("Open a torrent file from your computer."));
+        welcome_screen.append ("open-menu", _("Preferences"), _("Set application preferences."));
     }
 
     private Gtk.Menu build_menu () {
@@ -136,5 +161,6 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_open (SimpleAction action) {
+        stack.visible_child_name = "main";
     }
 }

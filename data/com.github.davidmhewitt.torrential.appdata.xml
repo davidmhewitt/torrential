@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 David Hewitt <davidmhewitt@gmail.com> -->
+<component type="desktop">
+  <id>com.github.davidmhewitt.torrential.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <name>Torrential</name>
+  <summary>Download torrents in style</summary>
+  <description>
+    <p>A speedy, no-frills torrent client designed for elementary OS. Prioritises audios and videos for playback even while still downloading.</p>
+  </description>
+  <custom>
+     <value key="x-appcenter-color-primary">#603461</value>
+     <value key="x-appcenter-color-primary-text">rgb(255, 255, 255)</value>
+     <value key="x-appcenter-suggested-price">2</value>
+  </custom>
+</component>

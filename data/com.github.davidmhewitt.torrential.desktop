@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Torrential
+GenericName=Torrent Client
+Comment=Download torrent files
+Categories=Network;Utility;
+Exec=com.github.davidmhewitt.torrential
+Icon=application-default-icon
+Terminal=false
+Type=Application
+X-GNOME-Gettext-Domain=torrential
+Keywords=Torrent;Bittorrent;Download
+MimeType=application/x-bittorrent

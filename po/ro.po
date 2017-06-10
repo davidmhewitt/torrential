@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-08 21:30+0100\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+
+#: ../src/MainWindow.vala:62
+msgid "Application menu"
+msgstr ""
+
+#: ../src/MainWindow.vala:72
+msgid "_Preferences"
+msgstr ""
+
+#: ../src/MainWindow.vala:76
+msgid "_About"
+msgstr ""
+
+#: ../src/Application.vala:46
+msgid "translator-credits"
+msgstr ""

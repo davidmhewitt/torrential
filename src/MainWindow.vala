@@ -131,6 +131,19 @@ public class Torrential.MainWindow : Gtk.Window {
         welcome_screen = new Granite.Widgets.Welcome (_("No Torrents Added"), _("Add a torrent file to begin downloading."));
         welcome_screen.append ("folder", _("Open Torrent"), _("Open a torrent file from your computer."));
         welcome_screen.append ("open-menu", _("Preferences"), _("Set application preferences."));
+
+        welcome_screen.activated.connect ((index) => {
+            switch (index) {
+                case 0:
+                    actions.activate_action (ACTION_OPEN, null);
+                    break;
+                case 1:
+                    actions.activate_action (ACTION_PREFERENCES, null);
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     private Gtk.Menu build_menu () {

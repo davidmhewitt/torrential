@@ -21,6 +21,7 @@
 
 public class Torrential.Application : Granite.Application {
     private static Torrential.Application? _instance = null;
+    private TorrentManager torrent_manager = TorrentManager.get_default ();
 
     construct {
         application_id = "com.github.davidmhewitt.torrential";
@@ -48,7 +49,7 @@ public class Torrential.Application : Granite.Application {
     }
 
     public override void activate () {
-        var window = new MainWindow (this);
+        var window = new MainWindow ();
         add_window (window);
     }
 

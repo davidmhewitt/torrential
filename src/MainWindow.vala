@@ -31,7 +31,11 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.Paned main_pane;
     private Granite.Widgets.Welcome welcome_screen;
 
+    private Gtk.SearchEntry search_entry;
+
     private SimpleActionGroup actions = new SimpleActionGroup ();
+    
+    private TorrentManager torrent_manager;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
     private static string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
@@ -55,8 +59,8 @@ public class Torrential.MainWindow : Gtk.Window {
         action_accelerators.set (ACTION_OPEN, "<Ctrl>o");
     }
 
-    public MainWindow (Torrential.Application app) {
-        this.app = app;
+    public MainWindow () {
+        this.app = Application.get_default ();
 
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
@@ -78,6 +82,12 @@ public class Torrential.MainWindow : Gtk.Window {
         set_default_size (900, 600);
         set_titlebar (headerbar);
         show_all ();
+
+        torrent_manager = TorrentManager.get_default ();
+        var torrents = torrent_manager.get_torrents ();
+        if (torrents.size > 0) {
+            enable_main_view ();
+        }
     }
 
     private void build_headerbar () {
@@ -93,6 +103,11 @@ public class Torrential.MainWindow : Gtk.Window {
         var open_button = new Gtk.ToolButton.from_stock (Gtk.Stock.OPEN);
         open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
         headerbar.pack_start (open_button);
+
+        search_entry = new Gtk.SearchEntry ();
+        search_entry.placeholder_text = _("Search Torrents");
+        headerbar.pack_end (search_entry);
+        search_entry.sensitive = false;
     }
 
     private void build_main_interface () {
@@ -130,7 +145,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private void build_welcome_screen () {
         welcome_screen = new Granite.Widgets.Welcome (_("No Torrents Added"), _("Add a torrent file to begin downloading."));
         welcome_screen.append ("folder", _("Open Torrent"), _("Open a torrent file from your computer."));
-        welcome_screen.append ("open-menu", _("Preferences"), _("Set application preferences."));
+        welcome_screen.append ("open-menu", _("Preferences"), _("Set download folder and other preferences."));
 
         welcome_screen.activated.connect ((index) => {
             switch (index) {
@@ -144,6 +159,11 @@ public class Torrential.MainWindow : Gtk.Window {
                     break;
             }
         });
+    }
+
+    private void enable_main_view () {
+        search_entry.sensitive = true;
+        stack.visible_child_name = "main";
     }
 
     private Gtk.Menu build_menu () {
@@ -174,6 +194,44 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_open (SimpleAction action) {
-        stack.visible_child_name = "main";
+        var filech = new Gtk.FileChooserDialog (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN);
+        filech.set_select_multiple (true);
+        filech.add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
+        filech.add_button (_("Open"), Gtk.ResponseType.ACCEPT);
+        filech.set_default_response (Gtk.ResponseType.ACCEPT);
+        filech.set_current_folder_uri (GLib.Environment.get_home_dir ());
+
+        var all_files_filter = new Gtk.FileFilter ();
+        all_files_filter.set_filter_name (_("All files"));
+        all_files_filter.add_pattern ("*");
+        var torrent_files_filter = new Gtk.FileFilter ();
+        torrent_files_filter.set_filter_name (_("Torrent files"));
+        torrent_files_filter.add_mime_type ("application/x-bittorrent");
+        filech.add_filter (torrent_files_filter);
+        filech.add_filter (all_files_filter);
+
+        if (filech.run () == Gtk.ResponseType.ACCEPT) {
+            enable_main_view ();
+            var uris = filech.get_uris ();
+            Gee.ArrayQueue<string> errors = new Gee.ArrayQueue<string> ();
+            foreach (string uri in filech.get_uris ()) {
+                var path = Filename.from_uri (uri);
+                Torrent? new_torrent;
+                var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
+                if (result == Transmission.ParseResult.OK) {
+                    // TODO: Add torrent to listview
+                } else if (result == Transmission.ParseResult.ERR) {
+                    var basename = Filename.display_basename (path);
+                    errors.offer (_("%s doesn't appear to be a valid torrent, not adding.").printf (basename));
+                } else {
+                    var basename = Filename.display_basename (path);
+                    errors.offer (_("A torrent identical to %s has already been added, not adding.").printf (basename));
+                }
+            }
+            warning (errors.size.to_string ());
+            
+        }
+
+        filech.close ();
     }
 }

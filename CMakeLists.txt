@@ -23,7 +23,7 @@ add_definitions (-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\")
 add_subdirectory (po)
 
 # now let's actually check for the required dependencies
-pkg_check_modules(DEPS REQUIRED granite sqlite3)
+pkg_check_modules(DEPS REQUIRED granite)
 
 add_definitions(${DEPS_CFLAGS})
 link_directories(${DEPS_LIBRARY_DIRS})
@@ -44,13 +44,13 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/PreferencesWindow.vala
     src/TorrentManager.vala
     src/Torrent.vala
+    src/Widgets/MultiInfoBar.vala
 CUSTOM_VAPIS
     vapi/transmission-2.0.vapi
 
 # tell what libraries to use when compiling
 PACKAGES
     granite
-    sqlite3
 )
 
 # tell cmake what to call the executable we just made

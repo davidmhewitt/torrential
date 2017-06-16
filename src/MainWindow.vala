@@ -30,6 +30,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.HeaderBar headerbar;
     private Gtk.Paned main_pane;
     private Granite.Widgets.Welcome welcome_screen;
+    private Widgets.MultiInfoBar infobar;
 
     private Gtk.SearchEntry search_entry;
 
@@ -73,11 +74,20 @@ public class Torrential.MainWindow : Gtk.Window {
         build_main_interface ();
         build_welcome_screen ();
 
+        var grid = new Gtk.Grid ();
+        grid.orientation = Gtk.Orientation.VERTICAL;
+        infobar = new Widgets.MultiInfoBar ();
+        infobar.set_message_type (Gtk.MessageType.WARNING);
+        infobar.no_show_all = true;
+        infobar.visible = false;
+
         stack = new Gtk.Stack ();
         stack.add_named (welcome_screen, "welcome");
         stack.add_named (main_pane, "main");
         stack.visible_child_name = "welcome";
-        add (stack);
+        grid.add (infobar);
+        grid.add (stack);
+        add (grid);
 
         set_default_size (900, 600);
         set_titlebar (headerbar);
@@ -211,7 +221,6 @@ public class Torrential.MainWindow : Gtk.Window {
         filech.add_filter (all_files_filter);
 
         if (filech.run () == Gtk.ResponseType.ACCEPT) {
-            enable_main_view ();
             var uris = filech.get_uris ();
             Gee.ArrayQueue<string> errors = new Gee.ArrayQueue<string> ();
             foreach (string uri in filech.get_uris ()) {
@@ -222,14 +231,19 @@ public class Torrential.MainWindow : Gtk.Window {
                     // TODO: Add torrent to listview
                 } else if (result == Transmission.ParseResult.ERR) {
                     var basename = Filename.display_basename (path);
-                    errors.offer (_("%s doesn't appear to be a valid torrent, not adding.").printf (basename));
+                    errors.offer (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
                 } else {
                     var basename = Filename.display_basename (path);
-                    errors.offer (_("A torrent identical to %s has already been added, not adding.").printf (basename));
+                    errors.offer (_("Didn\u2019t add \u201C%s\u201D. An identical torrent has already been added.").printf (basename));
                 }
             }
-            warning (errors.size.to_string ());
-            
+            if (uris.length () - errors.size > 0) {
+                enable_main_view ();
+            }
+            if (errors.size > 0) {
+                infobar.set_errors (errors);
+                infobar.show ();
+            }
         }
 
         filech.close ();

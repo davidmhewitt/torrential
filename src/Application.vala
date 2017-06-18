@@ -20,8 +20,7 @@
 */
 
 public class Torrential.Application : Granite.Application {
-    private static Torrential.Application? _instance = null;
-    private TorrentManager torrent_manager = TorrentManager.get_default ();
+    private MainWindow? window = null;
 
     construct {
         application_id = "com.github.davidmhewitt.torrential";
@@ -49,19 +48,23 @@ public class Torrential.Application : Granite.Application {
     }
 
     public override void activate () {
-        var window = new MainWindow ();
-        add_window (window);
-    }
+        if (window == null) {
+            window = new MainWindow (this);
+            window.show_about.connect ((window) => {
+                show_about (window);
+            });
 
-    public static new Torrential.Application get_default () {
-        if (_instance == null) {
-            _instance = new Torrential.Application ();
+            add_window (window);
         }
-        return _instance;
+        window.present ();
     }
 }
 
 int main (string[] args) {
-    var app = Torrential.Application.get_default ();
-    return app.run (args);
+    var app = new Torrential.Application ();
+    var ret_val = app.run (args);
+    // Ensure we free the static instance of our application or else destructors won't be called
+    // and libtransmission won't be shut down cleanly
+    Granite.app = null;
+    return ret_val;
 }

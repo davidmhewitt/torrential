@@ -20,13 +20,12 @@
 */
 
 public class Torrential.TorrentManager {
-    private static Torrential.TorrentManager? _instance = null;
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
-    private Transmission.Torrent[] transmission_torrents;
+    private unowned Transmission.Torrent[] transmission_torrents;
 
-    private TorrentManager () {
+    public TorrentManager () {
         var config_dir = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
         Transmission.String.Units.mem_init (1024, _("kB"), _("MB"), _("GB"), _("TB")); 
@@ -62,12 +61,5 @@ public class Torrential.TorrentManager {
         }
 
         return result;
-    }
-
-    public static Torrential.TorrentManager get_default () {
-        if (_instance == null) {
-            _instance = new Torrential.TorrentManager ();
-        }
-        return _instance;
     }
 }

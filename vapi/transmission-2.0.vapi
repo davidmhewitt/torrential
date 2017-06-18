@@ -709,7 +709,7 @@ namespace Transmission {
 		 * This can be used at startup to kickstart all the torrents from the previous session.
 		 */
 		[CCode (array_length_pos = 1.9, free_function = "tr_free", cname = "tr_sessionLoadTorrents")]
-		public Torrent[] load_torrents (TorrentConstructor ctor);
+		public unowned Torrent[] load_torrents (TorrentConstructor ctor);
 
 		public bool torrent_done_script_enabled {
 			[CCode (cname = "tr_sessionSetTorrentDoneScriptEnabled")]

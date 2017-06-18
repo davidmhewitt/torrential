@@ -45,6 +45,8 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/TorrentManager.vala
     src/Torrent.vala
     src/Widgets/MultiInfoBar.vala
+    src/Widgets/TorrentListBox.vala
+    src/Widgets/TorrentListRow.vala
 CUSTOM_VAPIS
     vapi/transmission-2.0.vapi
 

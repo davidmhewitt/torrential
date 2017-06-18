@@ -19,31 +19,18 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Torrent {
-    private unowned Transmission.Torrent torrent;
+public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
-    public string name;
-    public float progress {
-        get {
-            return torrent.stat.percentComplete;
+    public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
+        foreach (var torrent in torrents) {
+            add (new TorrentListRow (torrent));
         }
     }
 
-    public float download_speed_kbps {
-        get {
-            return torrent.stat.rawDownloadSpeed_KBps;
-        }
+    public void update () {
+        @foreach ((child) => {
+            (child as TorrentListRow).update ();
+        });
     }
 
-    public int secondsRemaining {
-        get {
-            return torrent.stat.eta;
-        }
-    }
-    
-    public Torrent (Transmission.Torrent torrent) {
-        this.torrent = torrent;
-        name = torrent.name;
-    }
-        
 }

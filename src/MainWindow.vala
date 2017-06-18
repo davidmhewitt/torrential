@@ -20,7 +20,9 @@
 */
 
 public class Torrential.MainWindow : Gtk.Window {
-    private Torrential.Application app;
+    public signal void show_about (Gtk.Window parent);
+
+    private uint refresh_timer;
 
     private Gtk.Menu app_menu = new Gtk.Menu();
     private Gtk.MenuItem preferences_item;
@@ -31,6 +33,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.Paned main_pane;
     private Granite.Widgets.Welcome welcome_screen;
     private Widgets.MultiInfoBar infobar;
+    private Widgets.TorrentListBox list_box;
 
     private Gtk.SearchEntry search_entry;
 
@@ -53,22 +56,22 @@ public class Torrential.MainWindow : Gtk.Window {
         {ACTION_OPEN,                       on_open                 }
     };
 
-    private static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
+    public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
     static construct {
         action_accelerators.set (ACTION_PREFERENCES, "<Ctrl>comma");
         action_accelerators.set (ACTION_QUIT, "<Ctrl>q");
         action_accelerators.set (ACTION_OPEN, "<Ctrl>o");
     }
 
-    public MainWindow () {
-        this.app = Application.get_default ();
-
+    public MainWindow (Application app) {
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
         foreach (var action in action_accelerators.get_keys ()) {
             app.set_accels_for_action (ACTION_GROUP_PREFIX + action,
                                        action_accelerators[action].to_array ());
         }
+
+        torrent_manager = new TorrentManager ();
 
         build_headerbar ();
         build_main_interface ();
@@ -93,11 +96,20 @@ public class Torrential.MainWindow : Gtk.Window {
         set_titlebar (headerbar);
         show_all ();
 
-        torrent_manager = TorrentManager.get_default ();
         var torrents = torrent_manager.get_torrents ();
         if (torrents.size > 0) {
             enable_main_view ();
         }
+
+        refresh_timer = Timeout.add_seconds (1, () => {
+            list_box.update ();
+            return true;
+        });
+
+        delete_event.connect (() => {
+            Source.remove (refresh_timer);
+            return false;
+        });
     }
 
     private void build_headerbar () {
@@ -149,7 +161,8 @@ public class Torrential.MainWindow : Gtk.Window {
         main_pane.position = 175;
 
         main_pane.add1 (sidebar);
-        main_pane.add2 (new Gtk.Label ("Right"));
+        list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
+        main_pane.add2 (list_box);
     }
 
     private void build_welcome_screen () {
@@ -196,7 +209,7 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_about (SimpleAction action) {
-        app.show_about (this);
+        show_about (this);
     }
 
     private void on_quit (SimpleAction action) {

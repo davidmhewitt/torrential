@@ -140,6 +140,16 @@ public class Torrential.Torrent {
         }
     }
 
+    public Transmission.File[]? files {
+        get {
+            if (torrent.info != null) {
+                return torrent.info.files;
+            } else {
+                return null;
+            }
+        }
+    }
+
     public void pause () {
         torrent.stop ();
     }

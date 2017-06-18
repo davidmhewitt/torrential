@@ -241,7 +241,7 @@ public class Torrential.MainWindow : Gtk.Window {
                 Torrent? new_torrent;
                 var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
                 if (result == Transmission.ParseResult.OK) {
-                    // TODO: Add torrent to listview
+                    list_box.add_torrent (new_torrent);
                 } else if (result == Transmission.ParseResult.ERR) {
                     var basename = Filename.display_basename (path);
                     errors.offer (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));

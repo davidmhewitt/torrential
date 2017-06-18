@@ -149,6 +149,12 @@ namespace Transmission {
 		JSON_LEAN
 	}
 
+	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/error.h", cname = "tr_error", free_function = "tr_errorFree", has_type_id = false)]
+	public struct Error {
+		int code;
+		string message;
+	}
+
 	/**
 	 * Variant data storage
 	 *
@@ -1092,7 +1098,7 @@ namespace Transmission {
 	}
 
 	[CCode (cname = "tr_fileFunc", has_target = false, has_type_id = false)]
-	public delegate int FileFunc (string filename);
+	public delegate bool FileFunc (string filename, Error error);
 
 	[CCode (cname = "int", cprefix = "TR_LOC_", has_type_id = false)]
 	public enum LocationStatus {
@@ -1746,9 +1752,8 @@ namespace Transmission {
 		/**
 		 * Removes our .torrent and .resume files for this torrent and frees it.
 		 */
-		[DestroysInstance]
 		[CCode (cname = "tr_torrentRemove")]
-		public void remove ();
+		public void remove (bool remove_local_data, FileFunc remove_function);
 
 		/**
 		 * Start a torrent

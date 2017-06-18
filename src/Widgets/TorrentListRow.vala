@@ -37,7 +37,12 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         add (grid);
 
-        var icon = GLib.ContentType.get_icon ("application/x-bittorrent");
+        Icon icon;
+        if (torrent.file_count > 1) {
+            icon = GLib.ContentType.get_icon ("inode/directory");
+        } else {
+            icon = GLib.ContentType.get_icon ("application/x-bittorrent");
+        }
         var icon_image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
         grid.attach (icon_image, 0, 0, 1, 4);
 
@@ -76,6 +81,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         status = new Gtk.Label (generate_status_text ());
         status.halign = Gtk.Align.START;
         grid.attach (status, 1, 3, 1, 1);
+        show_all ();
     }
 
     public void update () {
@@ -131,4 +137,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         return "";
     }
 
+    public void remove_torrent () {
+        torrent.remove ();
+        destroy ();
+    }
 }

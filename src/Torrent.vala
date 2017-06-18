@@ -30,45 +30,71 @@ public class Torrential.Torrent {
 
     public float progress {
         get {
-            return torrent.stat.percentComplete;
+            if (torrent.stat != null) {
+                return torrent.stat.percentComplete;
+            } else {
+                return 0.0f;
+            }
         }
     }
 
     public float download_speed_kbps {
         get {
-            return torrent.stat.rawDownloadSpeed_KBps;
+            if (torrent.stat != null) {
+                return torrent.stat.rawDownloadSpeed_KBps;
+            } else {
+                return 0.0f;
+            }
         }
     }
 
     public int seconds_remaining {
         get {
-            return torrent.stat.eta;
+            if (torrent.stat != null) {
+                return torrent.stat.eta;
+            } else {
+                return -1;
+            }
         }
     }
 
     public uint64 bytes_downloaded {
         get {
-            return torrent.stat.haveValid;
+            if (torrent.stat != null) {
+                return torrent.stat.haveValid;
+            } else {
+                return 0;
+            }
         }
     }
 
     public uint64 bytes_total {
         get {
-            return torrent.stat.sizeWhenDone;
+            if (torrent.stat != null) {
+                return torrent.stat.sizeWhenDone;
+            } else {
+                return 0;
+            }
         }
     }
 
     public int connected_peers {
         get {
-            return torrent.stat.peersConnected;
+            if (torrent.stat != null) {
+                return torrent.stat.peersConnected;
+            } else {
+                return 0;
+            }
         }
     }
 
     public int total_peers {
         get {
             int total = 0;
-            for (int i = 0; i < torrent.stat.peersFrom.length; i++) {
-                total += torrent.stat.peersFrom[i];
+            if (torrent.stat != null) {
+                for (int i = 0; i < torrent.stat.peersFrom.length; i++) {
+                    total += torrent.stat.peersFrom[i];
+                }
             }
             return total;
         }
@@ -76,7 +102,21 @@ public class Torrential.Torrent {
 
     public bool paused {
         get {
-            return torrent.stat.activity == Transmission.Activity.STOPPED;
+            if (torrent.stat != null) {
+                return torrent.stat.activity == Transmission.Activity.STOPPED;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public int file_count {
+        get {
+            if (torrent.info != null) {
+                return torrent.info.files.length;
+            } else {
+                return -1;
+            }
         }
     }
 
@@ -86,6 +126,10 @@ public class Torrential.Torrent {
 
     public void unpause () {
         torrent.start ();
+    }
+
+    public void remove () {
+        torrent.remove (false, null);
     }
     
     public Torrent (Transmission.Torrent torrent) {

@@ -22,7 +22,12 @@
 public class Torrential.Torrent {
     private unowned Transmission.Torrent torrent;
 
-    public string name;
+    public string name {
+        get {
+            return torrent.name;
+        }
+    }
+
     public float progress {
         get {
             return torrent.stat.percentComplete;
@@ -35,15 +40,42 @@ public class Torrential.Torrent {
         }
     }
 
-    public int secondsRemaining {
+    public int seconds_remaining {
         get {
             return torrent.stat.eta;
+        }
+    }
+
+    public uint64 bytes_downloaded {
+        get {
+            return torrent.stat.haveValid;
+        }
+    }
+
+    public uint64 bytes_total {
+        get {
+            return torrent.stat.sizeWhenDone;
+        }
+    }
+
+    public int connected_peers {
+        get {
+            return torrent.stat.peersConnected;
+        }
+    }
+
+    public int total_peers {
+        get {
+            int total = 0;
+            for (int i = 0; i < torrent.stat.peersFrom.length; i++) {
+                total += torrent.stat.peersFrom[i];
+            }
+            return total;
         }
     }
     
     public Torrent (Transmission.Torrent torrent) {
         this.torrent = torrent;
-        name = torrent.name;
     }
         
 }

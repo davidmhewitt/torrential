@@ -22,6 +22,7 @@
 public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Torrent torrent;
     private Gtk.ProgressBar progress;
+    private Gtk.Label completeness;
     private Gtk.Label status;
 
     public TorrentListRow (Torrent torrent) {
@@ -35,31 +36,40 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         var icon = GLib.ContentType.get_icon ("application/x-bittorrent");
         var icon_image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
-        grid.attach (icon_image, 0, 0, 1, 3);
+        grid.attach (icon_image, 0, 0, 1, 4);
 
         var name = new Gtk.Label (torrent.name);
         name.halign = Gtk.Align.START;
+        name.get_style_context ().add_class ("h3");
         grid.attach (name, 1, 0, 1, 1);
+
+        completeness = new Gtk.Label (generate_completeness_text ());
+        completeness.halign = Gtk.Align.START;
+        grid.attach (completeness, 1, 1, 1, 1);
 
         progress = new Gtk.ProgressBar ();
         progress.hexpand = true;
         progress.fraction = torrent.progress;
-        grid.attach (progress, 1, 1, 1, 1);
+        grid.attach (progress, 1, 2, 1, 1);
 
         status = new Gtk.Label (generate_status_text ());
         status.halign = Gtk.Align.START;
-        grid.attach (status, 1, 2, 1, 1);
+        grid.attach (status, 1, 3, 1, 1);
     }
 
     public void update () {
         progress.fraction = torrent.progress;
+        completeness.label = generate_completeness_text ();
         status.label = generate_status_text ();
     }
 
-    private string generate_status_text () {
-        return time_to_string (torrent.secondsRemaining);
+    private string generate_completeness_text () {
+        return _("%s of %s - %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
     }
 
+    private string generate_status_text () {
+        return _("%i of %i peers connected").printf (torrent.connected_peers, torrent.total_peers);
+    }
 
     public static string time_to_string (uint totalSeconds) {
         uint seconds = (totalSeconds % 60);

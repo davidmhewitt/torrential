@@ -21,6 +21,14 @@
 
 public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
+    public enum FilterType {
+        ALL,
+        DOWNLOADING,
+        SEEDING,
+        PAUSED,
+        SEARCH
+    }
+
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
         set_selection_mode (Gtk.SelectionMode.SINGLE);
 
@@ -71,5 +79,30 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         event.get_button (out button);
         menu.popup (null, null, null, button, event.get_time ());
         return true;
+    }
+
+    public void filter (FilterType filter, string? search_term) {
+        switch (filter) {
+            case FilterType.ALL:
+                set_filter_func (null);
+                break;
+            case FilterType.DOWNLOADING:
+                set_filter_func ((item) => {
+                    return (item as TorrentListRow).downloading;
+                });
+                break;
+            case FilterType.SEEDING:
+                set_filter_func ((item) => {
+                    return (item as TorrentListRow).seeding;
+                });
+                break;
+            case FilterType.PAUSED:
+                set_filter_func ((item) => {
+                    return (item as TorrentListRow).paused;
+                });
+                break;
+            default:
+                break;
+        }
     }
 }

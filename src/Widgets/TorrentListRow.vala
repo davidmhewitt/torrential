@@ -148,4 +148,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         torrent.remove ();
         destroy ();
     }
+
+    public bool downloading { get { return torrent.downloading; } }
+    public bool seeding { get { return torrent.seeding; } }
+    public bool paused { get { return torrent.paused; } }
 }

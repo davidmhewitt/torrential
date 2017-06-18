@@ -35,6 +35,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
 
+    private Granite.Widgets.SourceList sidebar;
     private Granite.Widgets.SourceList.Item all_category;
     private Granite.Widgets.SourceList.Item downloading_category;
     private Granite.Widgets.SourceList.Item seeding_category;
@@ -157,6 +158,15 @@ public class Torrential.MainWindow : Gtk.Window {
         search_entry.placeholder_text = _("Search Torrents");
         headerbar.pack_end (search_entry);
         search_entry.sensitive = false;
+        search_entry.search_changed.connect (() => {
+            if (search_entry.text != "") {
+                search_category.visible = true;
+                sidebar.selected = search_category;
+            } else {
+                search_category.visible = false;
+                sidebar.selected = all_category;
+            }
+        });
     }
 
     private void build_main_interface () {
@@ -177,13 +187,27 @@ public class Torrential.MainWindow : Gtk.Window {
         search_category.badge = "0";
         search_category.visible = false;
 
-        var sidebar = new Granite.Widgets.SourceList ();
+        sidebar = new Granite.Widgets.SourceList ();
         var root = sidebar.root;
         root.add (all_category);
         root.add (downloading_category);
         root.add (seeding_category);
         root.add (paused_category);
         root.add (search_category);
+
+        sidebar.item_selected.connect ((item) => {
+            if (item == all_category) {
+                list_box.filter (Widgets.TorrentListBox.FilterType.ALL, null);
+            } else if (item == downloading_category) {
+                list_box.filter (Widgets.TorrentListBox.FilterType.DOWNLOADING, null);
+            } else if (item == seeding_category) {
+                list_box.filter (Widgets.TorrentListBox.FilterType.SEEDING, null);
+            } else if (item == paused_category) {
+                list_box.filter (Widgets.TorrentListBox.FilterType.PAUSED, null);
+            } else if (item == search_category) {
+                list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
+            }
+        });
 
         main_pane = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
         main_pane.position = 175;

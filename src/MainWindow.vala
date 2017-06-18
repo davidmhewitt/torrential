@@ -127,8 +127,16 @@ public class Torrential.MainWindow : Gtk.Window {
             if (torrent.paused) {
                 paused++;
             }
+            if (torrent.downloading) {
+                downloading++;
+            }
+            if (torrent.seeding) {
+                seeding++;
+            }
         }
         paused_category.badge = paused.to_string ();
+        downloading_category.badge = downloading.to_string ();
+        seeding_category.badge = seeding.to_string ();
     }
 
     private void build_headerbar () {

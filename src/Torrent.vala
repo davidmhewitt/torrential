@@ -110,6 +110,26 @@ public class Torrential.Torrent {
         }
     }
 
+    public bool downloading {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.activity == Transmission.Activity.DOWNLOAD;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public bool seeding {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.activity == Transmission.Activity.SEED;
+            } else {
+                return false;
+            }
+        }
+    }
+
     public int file_count {
         get {
             if (torrent.info != null) {

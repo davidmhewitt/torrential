@@ -24,6 +24,7 @@ public class Torrential.TorrentManager {
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
     private unowned Transmission.Torrent[] transmission_torrents;
+    private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
 
     public TorrentManager () {
         var config_dir = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
@@ -42,6 +43,9 @@ public class Torrential.TorrentManager {
         for (int i = 0; i < transmission_torrents.length; i++) {
             torrents.add (new Torrent (transmission_torrents[i]));
         }
+        foreach (unowned Transmission.Torrent torrent in added_torrents) {
+            torrents.add (new Torrent (torrent));
+        }
         return torrents;
     }
 
@@ -56,6 +60,7 @@ public class Torrential.TorrentManager {
         unowned Transmission.Torrent torrent = torrent_constructor.instantiate (out result, out duplicate_id);
         if (result == Transmission.ParseResult.OK) {
             created_torrent = new Torrent (torrent);
+            added_torrents.add (torrent);
         } else {
             created_torrent = null;
         }

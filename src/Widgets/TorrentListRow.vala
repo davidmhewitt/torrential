@@ -25,6 +25,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label completeness;
     private Gtk.Label status;
 
+    private const string PAUSE_ICON_NAME = "media-playback-pause";
+    private const string RESUME_ICON_NAME = "media-playback-start";
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
 
@@ -52,6 +55,24 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         progress.fraction = torrent.progress;
         grid.attach (progress, 1, 2, 1, 1);
 
+        Gtk.Button pause_button;
+        if (!torrent.paused) {
+            pause_button = new Gtk.Button.from_icon_name (PAUSE_ICON_NAME);
+        } else {
+            pause_button = new Gtk.Button.from_icon_name (RESUME_ICON_NAME);
+        }
+        pause_button.get_style_context ().add_class ("flat");
+        pause_button.clicked.connect (() => {
+            if (!torrent.paused) {
+                torrent.pause ();
+                pause_button.set_image (new Gtk.Image.from_icon_name (RESUME_ICON_NAME, Gtk.IconSize.BUTTON));
+            } else {
+                torrent.unpause ();
+                pause_button.set_image (new Gtk.Image.from_icon_name (PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
+            }
+        });
+        grid.attach (pause_button, 2, 1, 1, 4);
+
         status = new Gtk.Label (generate_status_text ());
         status.halign = Gtk.Align.START;
         grid.attach (status, 1, 3, 1, 1);
@@ -64,11 +85,19 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     private string generate_completeness_text () {
-        return _("%s of %s - %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
+        if (!torrent.paused) {
+            return _("%s of %s - %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
+        } else {
+            return _("%s of %s").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total));
+        }
     }
 
     private string generate_status_text () {
-        return _("%i of %i peers connected").printf (torrent.connected_peers, torrent.total_peers);
+        if (!torrent.paused) {
+            return _("%i of %i peers connected").printf (torrent.connected_peers, torrent.total_peers);
+        } else {
+            return _("Paused");
+        }
     }
 
     public static string time_to_string (uint totalSeconds) {

@@ -73,6 +73,20 @@ public class Torrential.Torrent {
             return total;
         }
     }
+
+    public bool paused {
+        get {
+            return torrent.stat.activity == Transmission.Activity.STOPPED;
+        }
+    }
+
+    public void pause () {
+        torrent.stop ();
+    }
+
+    public void unpause () {
+        torrent.start ();
+    }
     
     public Torrent (Transmission.Torrent torrent) {
         this.torrent = torrent;

@@ -35,6 +35,12 @@ public class Torrential.MainWindow : Gtk.Window {
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
 
+    private Granite.Widgets.SourceList.Item all_category;
+    private Granite.Widgets.SourceList.Item downloading_category;
+    private Granite.Widgets.SourceList.Item seeding_category;
+    private Granite.Widgets.SourceList.Item paused_category;
+    private Granite.Widgets.SourceList.Item search_category;
+
     private Gtk.SearchEntry search_entry;
 
     private SimpleActionGroup actions = new SimpleActionGroup ();
@@ -99,10 +105,12 @@ public class Torrential.MainWindow : Gtk.Window {
         var torrents = torrent_manager.get_torrents ();
         if (torrents.size > 0) {
             enable_main_view ();
+            update_category_totals (torrents);
         }
 
         refresh_timer = Timeout.add_seconds (1, () => {
             list_box.update ();
+            update_category_totals (torrent_manager.get_torrents ());
             return true;
         });
 
@@ -110,6 +118,17 @@ public class Torrential.MainWindow : Gtk.Window {
             Source.remove (refresh_timer);
             return false;
         });
+    }
+
+    private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
+        all_category.badge = torrents.size.to_string ();
+        uint paused = 0, downloading = 0, seeding = 0;
+        foreach (var torrent in torrents) {
+            if (torrent.paused) {
+                paused++;
+            }
+        }
+        paused_category.badge = paused.to_string ();
     }
 
     private void build_headerbar () {
@@ -133,21 +152,22 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void build_main_interface () {
-        var all_category = new Granite.Widgets.SourceList.Item (_("All"));
+        all_category = new Granite.Widgets.SourceList.Item (_("All"));
         all_category.icon = Icon.new_for_string ("folder");
         all_category.badge = "0";
-        var downloading_category = new Granite.Widgets.SourceList.Item (_("Downloading"));
+        downloading_category = new Granite.Widgets.SourceList.Item (_("Downloading"));
         downloading_category.icon = Icon.new_for_string ("go-down");
         downloading_category.badge = "0";
-        var seeding_category = new Granite.Widgets.SourceList.Item (_("Seeding"));        
+        seeding_category = new Granite.Widgets.SourceList.Item (_("Seeding"));
         seeding_category.icon = Icon.new_for_string ("go-up");
         seeding_category.badge = "0";
-        var paused_category = new Granite.Widgets.SourceList.Item (_("Paused"));
+        paused_category = new Granite.Widgets.SourceList.Item (_("Paused"));
         paused_category.icon = Icon.new_for_string ("media-playback-pause");
         paused_category.badge = "0";
-        var search_category = new Granite.Widgets.SourceList.Item (_("Search Results"));
+        search_category = new Granite.Widgets.SourceList.Item (_("Search Results"));
         search_category.icon = Icon.new_for_string ("edit-find");
         search_category.badge = "0";
+        search_category.visible = false;
 
         var sidebar = new Granite.Widgets.SourceList ();
         var root = sidebar.root;

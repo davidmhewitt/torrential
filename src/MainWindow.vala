@@ -189,8 +189,11 @@ public class Torrential.MainWindow : Gtk.Window {
         main_pane.position = 175;
 
         main_pane.add1 (sidebar);
+
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
-        main_pane.add2 (list_box);
+        var scroll = new Gtk.ScrolledWindow (null, null);
+        scroll.add (list_box);
+        main_pane.add2 (scroll);
     }
 
     private void build_welcome_screen () {

@@ -162,6 +162,7 @@ public class Torrential.MainWindow : Gtk.Window {
             if (search_entry.text != "") {
                 search_category.visible = true;
                 sidebar.selected = search_category;
+                list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
             } else {
                 search_category.visible = false;
                 sidebar.selected = all_category;

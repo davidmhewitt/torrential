@@ -101,6 +101,11 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                     return (item as TorrentListRow).paused;
                 });
                 break;
+            case FilterType.SEARCH:
+                set_filter_func ((item) => {
+                    return (item as TorrentListRow).name.casefold ().contains (search_term.casefold ());
+                });
+                break;
             default:
                 break;
         }

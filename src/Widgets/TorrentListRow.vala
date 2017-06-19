@@ -152,4 +152,5 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     public bool downloading { get { return torrent.downloading; } }
     public bool seeding { get { return torrent.seeding; } }
     public bool paused { get { return torrent.paused; } }
+    public string name { get { return torrent.name; } }
 }

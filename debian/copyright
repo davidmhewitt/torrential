@@ -1,0 +1,134 @@
+Format: http://dep.debian.net/deps/dep5
+Upstream-Name: com.github.davidmhewitt.torrential
+Source: https://github.com/davidmhewitt/torrential
+
+Files: *
+Copyright: 2017 David Hewitt
+License: GPL-2
+
+Files: libtransmission/ConvertUTF.*
+Copyright: 2001-2004 Unicode, Inc
+License: other
+ Disclaimer
+ .
+ This source code is provided as is by Unicode, Inc. No claims are
+ made as to fitness for any particular purpose. No warranties of any
+ kind are expressed or implied. The recipient agrees to determine
+ applicability of information provided. If this file has been
+ purchased on magnetic or optical media from Unicode, Inc., the
+ sole remedy for any claim will be exchange of defective media
+ within 90 days of receipt.
+ .
+ Limitations on Rights to Redistribute This Code
+ .
+ Unicode, Inc. hereby grants the right to freely use the information
+ supplied in this file in the creation of products supporting the
+ Unicode Standard, and to make copies of this file in any form
+ for internal or external distribution as long as this notice
+ remains attached.
+
+Files: libtransmission/JSON_parser.*
+Copyright: 2006-2010 JSON.org
+License: Expat
+
+Files: libtransmission/*
+Copyright: 2007-2016 Mnemosyne LLC
+License: GPL-2
+ It may be used under the GNU GPL versions 2 or 3
+ or any future license endorsed by Mnemosyne LLC.
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ can be found in /usr/share/common-licenses/GPL-2
+
+Files: third-party/dht/*
+Copyright: 2009-2011 Juliusz Chroboczek
+License: Expat
+
+Files: third-party/libnatpmp/* third-party/miniupnp/*
+Copyright: 2005-2011, Thomas BERNARD <miniupnp@free.fr>
+License: BSD-3-clause
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions are met:
+ .
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the documentation
+      and/or other materials provided with the distribution.
+    * The name of the author may not be used to endorse or promote products
+      derived from this software without specific prior written permission.
+ .
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+
+Files: third-party/libutp/*
+Copyright: 2010 BitTorrent, Inc.
+License: Expat
+
+Files: third-party/libb64/*
+Copyright: Chris Venter	chris.venter@gmail.com
+License: public-domain
+ Copyright-Only Dedication (based on United States law)
+ or Public Domain Certification
+ .
+ The person or persons who have associated work with this document (the
+ "Dedicator" or "Certifier") hereby either (a) certifies that, to the best of
+ his knowledge, the work of authorship identified is in the public domain of the
+ country from which the work is published, or (b) hereby dedicates whatever
+ copyright the dedicators holds in the work of authorship identified below (the
+ "Work") to the public domain. A certifier, moreover, dedicates any copyright
+ interest he may have in the associated work, and for these purposes, is
+ described as a "dedicator" below.
+ .
+ A certifier has taken reasonable steps to verify the copyright status of this
+ work. Certifier recognizes that his good faith efforts may not shield him from
+ liability if in fact the work certified is not in the public domain.
+ .
+ Dedicator makes this dedication for the benefit of the public at large and to
+ the detriment of the Dedicator's heirs and successors. Dedicator intends this
+ dedication to be an overt act of relinquishment in perpetuity of all present
+ and future rights under copyright law, whether vested or contingent, in the
+ Work. Dedicator understands that such relinquishment of all rights includes
+ the relinquishment of all rights to enforce (by lawsuit or otherwise) those
+ copyrights in the Work.
+ .
+ Dedicator recognizes that, once placed in the public domain, the Work may be
+ freely reproduced, distributed, transmitted, used, modified, built upon, or
+ otherwise exploited by anyone for any purpose, commercial or non-commercial,
+ and in any way, including by methods that have not yet been invented or
+ conceived.
+
+Files: third-party/libevent/*
+Copyright: © 2002-2004 Niels Provos <provos@citi.umich.edu>
+License: MIT (3-clause version)
+
+Files: third-party/libevent/evdns.c
+Copyright: © 2006 Adam Langley <agl@imperialviolet.org>
+License: PD
+ This software is Public Domain. To view a copy of the public domain dedication,
+ visit http://creativecommons.org/licenses/publicdomain/ or send a letter to
+ Creative Commons, 559 Nathan Abbott Way, Stanford, California 94305, USA.
+ .
+ I ask and expect, but do not require, that all derivative works contain an
+ attribution similar to:
+      Parts developed by Adam Langley <agl@imperialviolet.org>
+
+Files: third-party/libevent/log.c
+Copyright: © 2005 Nick Mathewson <nickm@freehaven.net>,
+	     2000 Dug Song <dugsong@monkey.org>,
+	     1993 The Regents of the University of California
+License: MIT (3-clause version)
+
+Files: third-party/libevent/strlcpy.*
+Copyright: © 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+License: MIT (3-clause version)
+

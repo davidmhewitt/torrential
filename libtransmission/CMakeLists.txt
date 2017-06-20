@@ -2,8 +2,6 @@ project(libtr)
 
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-
 include(CheckIncludeFile)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)

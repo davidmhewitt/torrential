@@ -185,7 +185,6 @@ public class Torrential.MainWindow : Gtk.Window {
         paused_category.badge = "0";
         search_category = new Granite.Widgets.SourceList.Item (_("Search Results"));
         search_category.icon = Icon.new_for_string ("edit-find");
-        search_category.badge = "0";
         search_category.visible = false;
 
         sidebar = new Granite.Widgets.SourceList ();

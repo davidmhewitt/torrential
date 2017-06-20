@@ -165,5 +165,4 @@ public class Torrential.Torrent {
     public Torrent (Transmission.Torrent torrent) {
         this.torrent = torrent;
     }
-        
 }

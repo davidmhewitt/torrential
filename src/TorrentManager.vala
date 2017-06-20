@@ -67,4 +67,24 @@ public class Torrential.TorrentManager {
 
         return result;
     }
+
+    public Transmission.ParseResult add_torrent_by_magnet (string magnet, out Torrent? created_torrent) {
+        warning ("parsing magnet: %s", magnet);
+        torrent_constructor = new Transmission.TorrentConstructor (session);
+        torrent_constructor.set_metainfo_from_magnet_link (magnet);
+        // TODO: Set path from settings
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, "/home/david/Downloads");
+
+        Transmission.ParseResult result;
+        int duplicate_id;
+        unowned Transmission.Torrent torrent = torrent_constructor.instantiate (out result, out duplicate_id);
+        if (result == Transmission.ParseResult.OK) {
+            created_torrent = new Torrent (torrent);
+            added_torrents.add (torrent);
+        } else {
+            created_torrent = null;
+        }
+
+        return result;
+    }
 }

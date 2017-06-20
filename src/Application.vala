@@ -67,8 +67,12 @@ public class Torrential.Application : Granite.Application {
 
     public override void open (File[] files, string hint) {
         if (files[0].has_uri_scheme ("magnet")) {
-            info ("Called from magnet link");
+            var magnet = files[0].get_uri ();
+            magnet = magnet.replace ("magnet:///?", "magnet:?");
             activate ();
+            if (window != null) {
+                window.add_magnet (magnet);
+            }
             return;
         }
 

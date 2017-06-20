@@ -22,7 +22,7 @@
 public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
     
     private Gtk.Label infobar_label = new Gtk.Label ("");
-    private Gee.ArrayQueue<string> infobar_errors;
+    private Gee.ArrayQueue<string> infobar_errors = new Gee.ArrayQueue<string> ();
     private Gtk.Button next_button;
 
     construct {
@@ -31,20 +31,41 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
 
         var action = get_action_area () as Gtk.ButtonBox;
         next_button = new Gtk.Button.with_label (_("Next Warning"));
-        next_button.clicked.connect (() => set_errors (infobar_errors));
+        next_button.clicked.connect (() => next_error ());
         var close_button = new Gtk.Button.with_label (_("Close"));
-        close_button.clicked.connect (() => hide ());
+        close_button.clicked.connect (() => close_bar ());
         action.add (next_button);
         action.add (close_button);
         action.show_all ();
     }
 
-    public void set_errors (Gee.ArrayQueue<string> errors) {
-        infobar_errors = errors;
+    public void add_errors (Gee.ArrayList<string> errors) {
+        foreach (var error in errors) {
+            infobar_errors.offer (error);
+        }
+        refresh_bar ();
+    }
+
+    public void add_error (string error) {
+        infobar_errors.offer (error);
+        refresh_bar ();
+    }
+
+    private void next_error () {
+        infobar_errors.poll ();
+        refresh_bar ();
+    }
+
+    private void close_bar () {
+        hide ();
+        infobar_errors.clear ();
+    }
+
+    private void refresh_bar () {
         if (infobar_errors.size > 0) {
-            infobar_label.label = infobar_errors.poll ();
-            if (infobar_errors.size > 0) {
-                var n = infobar_errors.size;
+            infobar_label.label = infobar_errors.peek ();
+            if (infobar_errors.size > 1) {
+                var n = infobar_errors.size - 1;
                 infobar_label.label += " " + ngettext ("(Plus %d more warning\u2026)", "(Plus %d more warnings\u2026)", n).printf (n);
                 next_button.show ();
             } else {
@@ -53,5 +74,4 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
             infobar_label.show ();
         }
     }
-
 }

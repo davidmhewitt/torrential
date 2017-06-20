@@ -122,6 +122,11 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
+        if (torrents.size == 0) {
+            search_entry.sensitive = false;
+            stack.visible_child_name = "welcome";
+        }
+
         all_category.badge = torrents.size.to_string ();
         uint paused = 0, downloading = 0, seeding = 0;
         foreach (var torrent in torrents) {
@@ -296,7 +301,7 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public void add_files (SList<string> uris) {
-        Gee.ArrayQueue<string> errors = new Gee.ArrayQueue<string> ();
+        Gee.ArrayList<string> errors = new Gee.ArrayList<string> ();
         foreach (string uri in uris) {
             var path = Filename.from_uri (uri);
             Torrent? new_torrent;
@@ -305,17 +310,33 @@ public class Torrential.MainWindow : Gtk.Window {
                 list_box.add_torrent (new_torrent);
             } else if (result == Transmission.ParseResult.ERR) {
                 var basename = Filename.display_basename (path);
-                errors.offer (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
+                errors.add (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
             } else {
                 var basename = Filename.display_basename (path);
-                errors.offer (_("Didn\u2019t add \u201C%s\u201D. An identical torrent has already been added.").printf (basename));
+                errors.add (_("Didn\u2019t add \u201C%s\u201D. An identical torrent has already been added.").printf (basename));
             }
         }
         if (uris.length () - errors.size > 0) {
             enable_main_view ();
         }
         if (errors.size > 0) {
-            infobar.set_errors (errors);
+            infobar.add_errors (errors);
+            infobar.show ();
+        }
+    }
+
+    public void add_magnet (string magnet) {
+        warning ("adding magnet: %s", magnet);
+        Torrent? new_torrent;
+        var result = torrent_manager.add_torrent_by_magnet (magnet, out new_torrent);
+        if (result == Transmission.ParseResult.OK) {
+            list_box.add_torrent (new_torrent);
+            enable_main_view ();
+        } else if (result == Transmission.ParseResult.ERR) {
+            infobar.add_error (_("Failed to add magnet link as it doesn\u2019t appear to be valid."));
+            infobar.show ();
+        } else {
+            infobar.add_error (_("Didn\u2019t add magnet link. An identical torrent has already been added."));
             infobar.show ();
         }
     }

@@ -24,6 +24,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.ProgressBar progress;
     private Gtk.Label completeness;
     private Gtk.Label status;
+    private Gtk.Label torrent_name;
 
     private const string PAUSE_ICON_NAME = "media-playback-pause";
     private const string RESUME_ICON_NAME = "media-playback-start";
@@ -53,10 +54,10 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         var icon_image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
         grid.attach (icon_image, 0, 0, 1, 4);
 
-        var name = new Gtk.Label (torrent.name);
-        name.halign = Gtk.Align.START;
-        name.get_style_context ().add_class ("h3");
-        grid.attach (name, 1, 0, 1, 1);
+        torrent_name = new Gtk.Label (torrent.name);
+        torrent_name.halign = Gtk.Align.START;
+        torrent_name.get_style_context ().add_class ("h3");
+        grid.attach (torrent_name, 1, 0, 1, 1);
 
         completeness = new Gtk.Label (generate_completeness_text ());
         completeness.halign = Gtk.Align.START;
@@ -92,6 +93,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     public void update () {
+        torrent_name.label = torrent.name;
         progress.fraction = torrent.progress;
         completeness.label = generate_completeness_text ();
         status.label = generate_status_text ();

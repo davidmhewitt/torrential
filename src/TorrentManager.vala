@@ -39,7 +39,7 @@ public class Torrential.TorrentManager {
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {
-        Gee.ArrayList<Torrent> torrents = new Gee.ArrayList<Torrent>();
+        Gee.ArrayList<Torrent> torrents = new Gee.ArrayList<Torrent> ();
         for (int i = 0; i < transmission_torrents.length; i++) {
             torrents.add (new Torrent (transmission_torrents[i]));
         }

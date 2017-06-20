@@ -23,8 +23,8 @@ public class Torrential.Application : Granite.Application {
     private MainWindow? window = null;
 
     construct {
+        flags |= ApplicationFlags.HANDLES_OPEN;
         application_id = "com.github.davidmhewitt.torrential";
-        flags = ApplicationFlags.FLAGS_NONE;
 
         program_name = "Torrential";
         app_years = "2017";
@@ -45,6 +45,42 @@ public class Torrential.Application : Granite.Application {
         about_comments = "A simple torrent client";
         about_translators = _("translator-credits");
         about_license_type = Gtk.License.GPL_2_0;
+
+        if (AppInfo.get_default_for_uri_scheme ("magnet") == null) {
+            var appinfo = new DesktopAppInfo (app_launcher);
+            try {
+                appinfo.set_as_default_for_type ("x-scheme-handler/magnet");
+            } catch (Error e) {
+                warning ("Unable to set self as default for magnet links: %s", e.message);
+            }
+        }
+
+        if (AppInfo.get_default_for_type ("application/x-bittorrent", false) == null) {
+            var appinfo = new DesktopAppInfo (app_launcher);
+            try {
+                appinfo.set_as_default_for_type ("application/x-bittorrent");
+            } catch (Error e) {
+                warning ("Unable to set self as default for torrent files: %s", e.message);
+            }
+        }
+    }
+
+    public override void open (File[] files, string hint) {
+        if (files[0].has_uri_scheme ("magnet")) {
+            info ("Called from magnet link");
+            activate ();
+            return;
+        }
+
+        var uris = new SList<string> ();
+        foreach (var file in files) {
+            uris.append (file.get_uri ());
+        }
+
+        activate ();
+        if (window != null) {
+            window.add_files (uris);
+        }
     }
 
     public override void activate () {

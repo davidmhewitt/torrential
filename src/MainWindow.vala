@@ -23,6 +23,7 @@ public class Torrential.MainWindow : Gtk.Window {
     public signal void show_about (Gtk.Window parent);
 
     private uint refresh_timer;
+    private ulong torrent_deleted_signal_id;
 
     private Gtk.Menu app_menu = new Gtk.Menu();
     private Gtk.MenuItem preferences_item;
@@ -109,7 +110,7 @@ public class Torrential.MainWindow : Gtk.Window {
             update_category_totals (torrents);
         }
 
-        torrent_manager.torrent_completed.connect ((name) => {
+        torrent_deleted_signal_id = torrent_manager.torrent_completed.connect ((name) => {
             var notification = new Notification (_("Torrent Complete"));
             notification.set_body (_("\u201C%s\u201D has finished downloading").printf (name));
             app.send_notification ("notify.app", notification);
@@ -123,6 +124,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         delete_event.connect (() => {
             Source.remove (refresh_timer);
+            torrent_manager.disconnect (torrent_deleted_signal_id);
             return false;
         });
     }

@@ -19,7 +19,7 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.TorrentManager {
+public class Torrential.TorrentManager : Object {
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;

@@ -109,6 +109,12 @@ public class Torrential.MainWindow : Gtk.Window {
             update_category_totals (torrents);
         }
 
+        torrent_manager.torrent_completed.connect ((name) => {
+            var notification = new Notification (_("Torrent Complete"));
+            notification.set_body (_("\u201C%s\u201D has finished downloading").printf (name));
+            app.send_notification ("notify.app", notification);
+        });
+
         refresh_timer = Timeout.add_seconds (1, () => {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());

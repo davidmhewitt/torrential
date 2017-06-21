@@ -1177,7 +1177,7 @@ namespace Transmission {
 	}
 
 	[CCode (cname = "tr_torrent_completeness_func", has_type_id = false)]
-	public delegate void CompletnessFunc (Torrent torrent, Completeness completeness, bool wasRunning);
+	public delegate void CompletenessFunc (Torrent torrent, Completeness completeness, bool wasRunning);
 	[CCode (cname = "tr_torrent_ratio_limit_hit_func", has_type_id = false)]
 	public delegate void RatioLimitHitFunc (Torrent torrent);
 	[CCode (cname = "tr_torrent_idle_limit_hit_func", has_type_id = false)]
@@ -1938,7 +1938,7 @@ namespace Transmission {
 		 * The function is invoked FROM LIBTRANSMISSION'S THREAD! This means the function must be fast (to avoid blocking peers), shouldn't call libtransmission functions (to avoid deadlock), and shouldn't modify client-level memory without using a mutex!
 		 */
 		[CCode (cname = "tr_torrentSetCompletenessCallback")]
-		public void set_completeness_callback (CompletnessFunc func);
+		public void set_completeness_callback (CompletenessFunc func);
 		[CCode (cname = "tr_torrentClearCompletenessCallback")]
 		public void clear_completeness_callback ();
 

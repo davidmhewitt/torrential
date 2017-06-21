@@ -25,6 +25,8 @@ public class Torrential.TorrentManager {
     private Transmission.TorrentConstructor torrent_constructor;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
 
+    public signal void torrent_completed (string name);
+
     public TorrentManager () {
         var config_dir = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
@@ -36,6 +38,7 @@ public class Torrential.TorrentManager {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
+            transmission_torrents[i].set_completeness_callback (on_completeness_changed); 
             added_torrents.add (transmission_torrents[i]);
         }
     }
@@ -58,6 +61,7 @@ public class Torrential.TorrentManager {
         int duplicate_id;
         unowned Transmission.Torrent torrent = torrent_constructor.instantiate (out result, out duplicate_id);
         if (result == Transmission.ParseResult.OK) {
+            torrent.set_completeness_callback (on_completeness_changed);
             created_torrent = new Torrent (torrent);
             added_torrents.add (torrent);
         } else {
@@ -78,6 +82,7 @@ public class Torrential.TorrentManager {
         int duplicate_id;
         unowned Transmission.Torrent torrent = torrent_constructor.instantiate (out result, out duplicate_id);
         if (result == Transmission.ParseResult.OK) {
+            torrent.set_completeness_callback (on_completeness_changed);
             created_torrent = new Torrent (torrent);
             added_torrents.add (torrent);
         } else {
@@ -95,5 +100,11 @@ public class Torrential.TorrentManager {
             }
         }
         to_remove.remove ();
+    }
+
+    private void on_completeness_changed (Transmission.Torrent torrent, Transmission.Completeness completeness, bool wasRunning) {
+        if (wasRunning && completeness != Transmission.Completeness.LEECH) {
+            torrent_completed (torrent.name);
+        }
     }
 }

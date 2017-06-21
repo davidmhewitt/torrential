@@ -150,6 +150,12 @@ public class Torrential.Torrent {
         }
     }
 
+    public int id {
+        get {
+            return torrent.id;
+        }
+    }
+
     public void pause () {
         torrent.stop ();
     }

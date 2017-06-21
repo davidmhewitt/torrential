@@ -21,6 +21,8 @@
 
 public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
+    public signal void torrent_removed (Torrent torrent);
+
     public enum FilterType {
         ALL,
         DOWNLOADING,
@@ -33,7 +35,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         set_selection_mode (Gtk.SelectionMode.SINGLE);
 
         foreach (var torrent in torrents) {
-            add (new TorrentListRow (torrent));
+            add_row (torrent);
         }
 
         button_press_event.connect (on_button_press);
@@ -47,7 +49,13 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     }
 
     public void add_torrent (Torrent torrent) {
-        add (new TorrentListRow (torrent));
+        add_row (torrent);
+    }
+
+    private void add_row (Torrent torrent) {
+        var row = new TorrentListRow (torrent);
+        row.torrent_removed.connect ((torrent_to_remove) => torrent_removed (torrent_to_remove));
+        add (row);
     }
 
     public bool on_button_press (Gdk.EventButton event) {

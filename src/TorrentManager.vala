@@ -23,7 +23,6 @@ public class Torrential.TorrentManager {
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
-    private unowned Transmission.Torrent[] transmission_torrents;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
 
     public TorrentManager () {
@@ -35,14 +34,14 @@ public class Torrential.TorrentManager {
 
         session = new Transmission.Session (config_dir, false, settings);
         torrent_constructor = new Transmission.TorrentConstructor (session);
-        transmission_torrents = session.load_torrents (torrent_constructor);
+        unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
+        for (int i = 0; i < transmission_torrents.length; i++) {
+            added_torrents.add (transmission_torrents[i]);
+        }
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {
         Gee.ArrayList<Torrent> torrents = new Gee.ArrayList<Torrent> ();
-        for (int i = 0; i < transmission_torrents.length; i++) {
-            torrents.add (new Torrent (transmission_torrents[i]));
-        }
         foreach (unowned Transmission.Torrent torrent in added_torrents) {
             torrents.add (new Torrent (torrent));
         }
@@ -86,5 +85,15 @@ public class Torrential.TorrentManager {
         }
 
         return result;
+    }
+
+    public void remove_torrent (Torrent to_remove) {
+        foreach (unowned Transmission.Torrent torrent in added_torrents) {
+            if (torrent.id == to_remove.id) {
+                added_torrents.remove (torrent);
+                break;
+            }
+        }
+        to_remove.remove ();
     }
 }

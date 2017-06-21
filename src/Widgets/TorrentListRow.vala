@@ -29,6 +29,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private const string PAUSE_ICON_NAME = "media-playback-pause";
     private const string RESUME_ICON_NAME = "media-playback-start";
 
+    public signal void torrent_removed (Torrent torrent);
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
 
@@ -147,7 +149,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     public void remove_torrent () {
-        torrent.remove ();
+        torrent_removed (torrent);
         destroy ();
     }
 

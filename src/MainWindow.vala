@@ -220,6 +220,7 @@ public class Torrential.MainWindow : Gtk.Window {
         main_pane.add1 (sidebar);
 
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
+        list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
         var scroll = new Gtk.ScrolledWindow (null, null);
         scroll.add (list_box);
         main_pane.add2 (scroll);

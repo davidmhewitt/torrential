@@ -25,6 +25,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label completeness;
     private Gtk.Label status;
     private Gtk.Label torrent_name;
+    private Gtk.Button pause_button;
 
     private const string PAUSE_ICON_NAME = "media-playback-pause";
     private const string RESUME_ICON_NAME = "media-playback-start";
@@ -70,7 +71,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         progress.fraction = torrent.progress;
         grid.attach (progress, 1, 2, 1, 1);
 
-        Gtk.Button pause_button;
         if (!torrent.paused) {
             pause_button = new Gtk.Button.from_icon_name (PAUSE_ICON_NAME);
         } else {
@@ -99,6 +99,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         progress.fraction = torrent.progress;
         completeness.label = generate_completeness_text ();
         status.label = generate_status_text ();
+        pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
     }
 
     private string generate_completeness_text () {

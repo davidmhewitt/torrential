@@ -102,8 +102,8 @@ public class Torrential.Torrent {
 
     public bool paused {
         get {
-            if (torrent.stat_cached != null) {
-                return torrent.stat_cached.activity == Transmission.Activity.STOPPED;
+            if (torrent.stat != null) {
+                return torrent.stat.activity == Transmission.Activity.STOPPED;
             } else {
                 return false;
             }

@@ -30,7 +30,8 @@ public class Torrential.TorrentManager {
     public TorrentManager () {
         var config_dir = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
-        Transmission.String.Units.mem_init (1024, _("kB"), _("MB"), _("GB"), _("TB"));
+        Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
+        Transmission.String.Units.speed_init (1024, _("KB/s"), _("MB/s"), _("GB/s"), _("TB/s"));
         settings = Transmission.variant_dict (0);
         Transmission.load_default_settings (ref settings, config_dir, "torrential");
 

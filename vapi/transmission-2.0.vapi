@@ -2381,6 +2381,7 @@ namespace Transmission {
 		[CCode (cprefix = "tr_formatter_")]
 		namespace Units {
 			public void size_init (uint kilo, string kb, string mb, string gb, string tb);
+			[CCode (cname = "tr_formatter_speed_init")]
 			public void speed_init (uint kilo, string kb, string mb, string gb, string tb);
 			[CCode (cname = "tr_formatter_mem_init")]
 			public void mem_init (uint kilo, string kb, string mb, string gb, string tb);
@@ -2388,6 +2389,7 @@ namespace Transmission {
 			/**
 			 * Format a speed from KBps into a user-readable string.
 			 */
+			[CCode (cname = "tr_formatter_speed_KBps")]
 			public unowned string speed_KBps ([CCode (array_length_type = "size_t", array_length_pos = 2.9)] char[] buf, double KBps);
 
 			/**

@@ -150,6 +150,26 @@ public class Torrential.Torrent {
         }
     }
 
+    public float download_speed {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.rawDownloadSpeed_KBps;
+            } else {
+                return 0.0f;
+            }
+        }
+    }
+
+    public float upload_speed {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.rawUploadSpeed_KBps;
+            } else {
+                return 0.0f;
+            }
+        }
+    }
+
     public int id {
         get {
             return torrent.id;

@@ -180,6 +180,12 @@ public class Torrential.Torrent {
         }
     }
 
+    public string download_directory {
+        get {
+            return torrent.download_dir;
+        }
+    }
+
     public int id {
         get {
             return torrent.id;

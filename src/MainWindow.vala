@@ -23,7 +23,6 @@ public class Torrential.MainWindow : Gtk.Window {
     public signal void show_about (Gtk.Window parent);
 
     private uint refresh_timer;
-    private ulong torrent_deleted_signal_id;
 
     private Gtk.Menu app_menu = new Gtk.Menu();
     private Gtk.MenuItem preferences_item;
@@ -56,6 +55,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private const string ACTION_ABOUT = "redo";
     private const string ACTION_QUIT = "quit";
     private const string ACTION_OPEN = "open";
+    private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
 
     private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
@@ -91,6 +91,12 @@ public class Torrential.MainWindow : Gtk.Window {
                                        action_accelerators[action].to_array ());
         }
 
+        SimpleAction open_torrent = new SimpleAction (ACTION_OPEN_COMPLETED_TORRENT, VariantType.INT32);
+        open_torrent.activate.connect ((parameter) => {
+            torrent_manager.open_torrent_location (parameter.get_int32 ());
+        });
+        app.add_action (open_torrent);
+
         torrent_manager = new TorrentManager ();
 
         build_headerbar ();
@@ -121,10 +127,11 @@ public class Torrential.MainWindow : Gtk.Window {
             update_category_totals (torrents);
         }
 
-        torrent_deleted_signal_id = torrent_manager.torrent_completed.connect ((name) => {
+        var torrent_completed_signal_id = torrent_manager.torrent_completed.connect ((torrent) => {
             var notification = new Notification (_("Torrent Complete"));
-            notification.set_body (_("\u201C%s\u201D has finished downloading").printf (name));
-            app.send_notification ("notify.app", notification);
+            notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
+            notification.set_default_action_and_target_value ("app." + ACTION_OPEN_COMPLETED_TORRENT, new Variant.int32 (torrent.id));
+            app.send_notification ("app.torrent-completed", notification);
         });
 
         refresh_timer = Timeout.add_seconds (1, () => {
@@ -135,7 +142,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         delete_event.connect (() => {
             Source.remove (refresh_timer);
-            torrent_manager.disconnect (torrent_deleted_signal_id);
+            torrent_manager.disconnect (torrent_completed_signal_id);
 
             int window_width;
             int window_height;

@@ -19,13 +19,21 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
+[DBus (name = "org.freedesktop.FileManager1")]
+interface DBus.Files : Object {
+    public abstract void show_items (string[] uris, string startup_id) throws IOError;
+}
+
+const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
+const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
+
 public class Torrential.TorrentManager : Object {
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
 
-    public signal void torrent_completed (string name);
+    public signal void torrent_completed (Torrent torrent);
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
@@ -109,7 +117,18 @@ public class Torrential.TorrentManager : Object {
 
     private void on_completeness_changed (Transmission.Torrent torrent, Transmission.Completeness completeness, bool wasRunning) {
         if (wasRunning && completeness != Transmission.Completeness.LEECH) {
-            torrent_completed (torrent.name);
+            torrent_completed (new Torrent (torrent));
+        }
+    }
+
+    public void open_torrent_location (int torrent_id) {
+        foreach (unowned Transmission.Torrent torrent in added_torrents) {
+            if (torrent.id == torrent_id) {
+                DBus.Files files = Bus.get_proxy_sync (BusType.SESSION, FILES_DBUS_ID, FILES_DBUS_PATH);
+                var path = Path.build_path (Path.DIR_SEPARATOR_S, torrent.download_dir, new Torrent (torrent).files[0].name);
+                files.show_items ({ path }, "torrential");
+                break;
+            }
         }
     }
 }

@@ -47,6 +47,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         @foreach ((child) => {
             (child as TorrentListRow).update ();
         });
+        invalidate_sort ();
     }
 
     public void add_torrent (Torrent torrent) {

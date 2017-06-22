@@ -170,6 +170,16 @@ public class Torrential.Torrent {
         }
     }
 
+    public time_t date_added {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.addedDate;
+            } else {
+                return time_t ();
+            }
+        }
+    }
+
     public int id {
         get {
             return torrent.id;

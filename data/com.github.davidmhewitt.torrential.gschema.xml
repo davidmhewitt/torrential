@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <enum id="com.github.davidmhewitt.torrential.windowstate">
+    <value value="0" nick="normal"/>
+    <value value="1" nick="maximized"/>
+  </enum>
+  <schema path="/com/github/davidmhewitt/torrential/settings/" id="com.github.davidmhewitt.torrential.settings">
+    <key type="i" name="window-width">
+      <default>1100</default>
+      <summary>Window width</summary>
+      <description>Window width</description>
+    </key>
+    <key type="i" name="window-height">
+      <default>640</default>
+      <summary>Window height</summary>
+      <description>Window height</description>
+    </key>
+    <key enum="com.github.davidmhewitt.torrential.windowstate" name="window-state">
+      <default>'normal'</default>
+      <summary>The saved state of the window</summary>
+      <description>The saved state of the window</description>
+    </key>
+  </schema>
+</schemalist>
+

@@ -72,6 +72,18 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public MainWindow (Application app) {
+        Settings saved_state = Settings.get_default ();
+        set_default_size (saved_state.window_width, saved_state.window_height);
+
+        // Maximize window if necessary
+        switch (saved_state.window_state) {
+            case Settings.WindowState.MAXIMIZED:
+                this.maximize ();
+                break;
+            default:
+                break;
+        }
+
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
         foreach (var action in action_accelerators.get_keys ()) {
@@ -100,7 +112,6 @@ public class Torrential.MainWindow : Gtk.Window {
         grid.add (stack);
         add (grid);
 
-        set_default_size (900, 600);
         set_titlebar (headerbar);
         show_all ();
 
@@ -125,6 +136,18 @@ public class Torrential.MainWindow : Gtk.Window {
         delete_event.connect (() => {
             Source.remove (refresh_timer);
             torrent_manager.disconnect (torrent_deleted_signal_id);
+
+            int window_width;
+            int window_height;
+            get_size (out window_width, out window_height);
+            saved_state.window_width = window_width;
+            saved_state.window_height = window_height;
+            if (is_maximized) {
+                saved_state.window_state = Settings.WindowState.MAXIMIZED;
+            } else {
+                saved_state.window_state = Settings.WindowState.NORMAL;
+            }
+
             return false;
         });
     }

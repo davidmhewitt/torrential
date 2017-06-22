@@ -46,6 +46,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/PreferencesWindow.vala
     src/TorrentManager.vala
     src/Torrent.vala
+    src/Settings.vala
     src/Widgets/MultiInfoBar.vala
     src/Widgets/TorrentListBox.vala
     src/Widgets/TorrentListRow.vala
@@ -56,6 +57,9 @@ CUSTOM_VAPIS
 PACKAGES
     granite
 )
+
+include (GSettings)
+add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 
 # tell cmake what to call the executable we just made
 add_executable(${EXEC_NAME} ${VALA_C})

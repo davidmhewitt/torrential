@@ -27,21 +27,25 @@ public class Torrential.TorrentManager : Object {
 
     public signal void torrent_completed (string name);
 
-    public TorrentManager () {
-        var config_dir = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
+    private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
+    public TorrentManager () {
         Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
         Transmission.String.Units.speed_init (1024, _("KB/s"), _("MB/s"), _("GB/s"), _("TB/s"));
         settings = Transmission.variant_dict (0);
-        Transmission.load_default_settings (ref settings, config_dir, "torrential");
+        Transmission.load_default_settings (ref settings, CONFIG_DIR, "torrential");
 
-        session = new Transmission.Session (config_dir, false, settings);
+        session = new Transmission.Session (CONFIG_DIR, false, settings);
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
             transmission_torrents[i].set_completeness_callback (on_completeness_changed); 
             added_torrents.add (transmission_torrents[i]);
         }
+    }
+
+    ~TorrentManager () {
+        session.save_settings (CONFIG_DIR, settings);
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {

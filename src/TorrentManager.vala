@@ -22,6 +22,7 @@
 [DBus (name = "org.freedesktop.FileManager1")]
 interface DBus.Files : Object {
     public abstract void show_items (string[] uris, string startup_id) throws IOError;
+    public abstract void show_folders (string[] uris, string startup_id) throws IOError;
 }
 
 const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
@@ -126,7 +127,19 @@ public class Torrential.TorrentManager : Object {
             if (torrent.id == torrent_id) {
                 DBus.Files files = Bus.get_proxy_sync (BusType.SESSION, FILES_DBUS_ID, FILES_DBUS_PATH);
                 var path = Path.build_path (Path.DIR_SEPARATOR_S, torrent.download_dir, new Torrent (torrent).files[0].name);
-                files.show_items ({ path }, "torrential");
+                var file = File.new_for_path (path);
+                if (file.query_exists ()) {
+                    files.show_items ({ path }, "torrential");
+                } else {
+                    path += ".part";
+                    file = file.new_for_path (path);
+                    if (file.query_exists ()) {
+                        files.show_items ({ path }, "torrential");
+                    } else {
+                        path = path.substring (0, path.last_index_of ("/"));
+                        files.show_folders ({ path }, "torrential");
+                    }
+                }
                 break;
             }
         }

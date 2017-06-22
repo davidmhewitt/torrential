@@ -22,6 +22,7 @@
 public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     public signal void torrent_removed (Torrent torrent);
+    public signal void open_torrent (int id);
 
     public enum FilterType {
         ALL,
@@ -79,7 +80,16 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                 (selected_row as TorrentListRow).remove_torrent ();
             }
         });
+
+        var open_item = new Gtk.MenuItem.with_label (_("Show in File Browser"));
+        open_item.activate.connect (() => {
+            var selected_row = get_selected_row ();
+            if (selected_row != null) {
+                open_torrent ((selected_row as TorrentListRow).id);
+            }
+        });
         menu.add (remove_item);
+        menu.add (open_item);
 
         menu.set_screen (null);
         menu.attach_to_widget (this, null);

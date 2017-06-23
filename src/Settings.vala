@@ -29,6 +29,8 @@ public class Torrential.Settings : Granite.Services.Settings {
     public int window_height { get; set; }
     public WindowState window_state { get; set; }
 
+    public string download_folder { get; set; }
+
     private static Settings _settings;
     public static unowned Settings get_default () {
         if (_settings == null) {
@@ -39,6 +41,15 @@ public class Torrential.Settings : Granite.Services.Settings {
 
     private Settings ()  {
         base ("com.github.davidmhewitt.torrential.settings");
+
+        if (download_folder == "") {
+            download_folder = Environment.get_user_special_dir (GLib.UserDirectory.DOWNLOAD);
+        } else {
+            var download_folder_file = File.new_for_path (download_folder);
+            if (!download_folder_file.query_exists ()) {
+                download_folder = Environment.get_user_special_dir (GLib.UserDirectory.DOWNLOAD);
+            }
+        }
     }
 }
 

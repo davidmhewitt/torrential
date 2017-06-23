@@ -33,6 +33,7 @@ public class Torrential.TorrentManager : Object {
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
+    private Settings saved_state = Settings.get_default ();
 
     public signal void torrent_completed (Torrent torrent);
 
@@ -68,8 +69,7 @@ public class Torrential.TorrentManager : Object {
     public Transmission.ParseResult add_torrent_by_path (string path, out Torrent? created_torrent) {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_file (path);
-        // TODO: Set path from settings
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, "/home/david/Downloads");
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
         
         Transmission.ParseResult result;
         int duplicate_id;
@@ -86,11 +86,9 @@ public class Torrential.TorrentManager : Object {
     }
 
     public Transmission.ParseResult add_torrent_by_magnet (string magnet, out Torrent? created_torrent) {
-        warning ("parsing magnet: %s", magnet);
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_magnet_link (magnet);
-        // TODO: Set path from settings
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, "/home/david/Downloads");
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
 
         Transmission.ParseResult result;
         int duplicate_id;
@@ -129,15 +127,16 @@ public class Torrential.TorrentManager : Object {
                 var path = Path.build_path (Path.DIR_SEPARATOR_S, torrent.download_dir, new Torrent (torrent).files[0].name);
                 var file = File.new_for_path (path);
                 if (file.query_exists ()) {
-                    files.show_items ({ path }, "torrential");
+                    info (file.get_uri ());
+                    files.show_items ({ file.get_uri () }, "torrential");
                 } else {
                     path += ".part";
                     file = file.new_for_path (path);
                     if (file.query_exists ()) {
-                        files.show_items ({ path }, "torrential");
+                        files.show_items ({ file.get_uri () }, "torrential");
                     } else {
                         path = path.substring (0, path.last_index_of ("/"));
-                        files.show_folders ({ path }, "torrential");
+                        files.show_folders ({ Filename.to_uri (path) }, "torrential");
                     }
                 }
                 break;

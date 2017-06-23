@@ -19,6 +19,10 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     public const int MIN_WIDTH = 420;
     public const int MIN_HEIGHT = 300;
 
+    private Settings saved_state = Settings.get_default ();
+
+    private Gtk.FileChooserButton location_chooser;
+
     public PreferencesWindow (Torrential.MainWindow parent) {
         // Window properties        
         title = _("Preferences");
@@ -31,8 +35,12 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         var location_heading = create_heading (_("Download Location"));
 
-        var location_chooser = new Gtk.FileChooserButton (_("Select Download Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
+        location_chooser = new Gtk.FileChooserButton (_("Select Download Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
         location_chooser.hexpand = true;
+        location_chooser.set_current_folder (saved_state.download_folder);
+        location_chooser.file_set.connect (() => {
+            saved_state.download_folder = location_chooser.get_file ().get_path ();
+        });
         
         var download_heading = create_heading (_("Download Management"));
                 
@@ -81,6 +89,12 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         main_grid.attach (button_box, 0, 8, 2, 1);
 
         ((Gtk.Container) get_content_area ()).add (main_grid);
+
+        saved_state.changed.connect (on_saved_settings_changed);
+    }
+
+    private void on_saved_settings_changed () {
+        location_chooser.set_current_folder (saved_state.download_folder);
     }
 
     private Gtk.Label create_heading (string text) {

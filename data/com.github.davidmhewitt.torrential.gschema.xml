@@ -20,6 +20,11 @@
       <summary>The saved state of the window</summary>
       <description>The saved state of the window</description>
     </key>
+    <key type="s" name="download-folder">
+      <default>""</default>
+      <summary>Where to place downloading torrents</summary>
+      <description>Where to place downloading torrents</description>
+    </key>
   </schema>
 </schemalist>
 

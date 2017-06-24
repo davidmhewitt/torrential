@@ -116,6 +116,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         var download_speed_limit_entry = create_spinbutton (0, 1000000, 25);
         download_speed_limit_entry.tooltip_text = _("0 means unlimited");
+        saved_state.bind_property ("download_speed_limit", download_speed_limit_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var download_speed_limit_label = create_label (_("Download speed limit (KBps):"));
 
         var upload_speed_limit_entry = create_spinbutton (0, 1000000, 25);

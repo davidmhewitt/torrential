@@ -30,6 +30,11 @@
       <summary>Whether the window should hide instead of closing the application</summary>
       <description>Whether the window should hide instead of closing the application</description>
     </key>
+    <key type="i" name="max-downloads">
+      <default>5</default>
+      <summary>The maximum number of simultaneous downloads</summary>
+      <description>Other downloads will be queued until others complete</description>
+    </key>
   </schema>
 </schemalist>
 

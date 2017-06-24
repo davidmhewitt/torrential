@@ -64,65 +64,385 @@ namespace Transmission {
 		public const string PEER_LIMIT_TORRENT_STR;
 	}
 
-	[CCode (cprefix = "TR_PREFS_KEY_")]
-	namespace Prefs {
-		public const string ALT_SPEED_ENABLED;
-		public const string ALT_SPEED_UP_KBps;
-		public const string ALT_SPEED_DOWN_KBps;
-		public const string ALT_SPEED_TIME_BEGIN;
-		public const string ALT_SPEED_TIME_ENABLED;
-		public const string ALT_SPEED_TIME_END;
-		public const string ALT_SPEED_TIME_DAY;
-		public const string BIND_ADDRESS_IPV4;
-		public const string BIND_ADDRESS_IPV6;
-		public const string BLOCKLIST_ENABLED;
-		public const string BLOCKLIST_URL;
-		public const string MAX_CACHE_SIZE_MB;
-		public const string DHT_ENABLED;
-		public const string UTP_ENABLED;
-		public const string LPD_ENABLED;
-		public const string PREFETCH_ENABLED;
-		public const string DOWNLOAD_DIR;
-		public const string ENCRYPTION;
-		public const string IDLE_LIMIT;
-		public const string IDLE_LIMIT_ENABLED;
-		public const string INCOMPLETE_DIR;
-		public const string INCOMPLETE_DIR_ENABLED;
-		public const string MSGLEVEL;
-		public const string PEER_LIMIT_GLOBAL;
-		public const string PEER_LIMIT_TORRENT;
-		public const string PEER_PORT;
-		public const string PEER_PORT_RANDOM_ON_START;
-		public const string PEER_PORT_RANDOM_LOW;
-		public const string PEER_PORT_RANDOM_HIGH;
-		public const string PEER_SOCKET_TOS;
-		public const string PEER_CONGESTION_ALGORITHM;
-		public const string PEX_ENABLED;
-		public const string PORT_FORWARDING;
-		public const string PREALLOCATION;
-		public const string RATIO;
-		public const string RATIO_ENABLED;
-		public const string RENAME_PARTIAL_FILES;
-		public const string RPC_AUTH_REQUIRED;
-		public const string RPC_BIND_ADDRESS;
-		public const string RPC_ENABLED;
-		public const string RPC_PASSWORD;
-		public const string RPC_PORT;
-		public const string RPC_USERNAME;
-		public const string RPC_URL;
-		public const string RPC_WHITELIST_ENABLED;
-		public const string SCRAPE_PAUSED_TORRENTS;
-		public const string SCRIPT_TORRENT_DONE_FILENAME;
-		public const string SCRIPT_TORRENT_DONE_ENABLED;
-		public const string RPC_WHITELIST;
-		public const string DSPEED_KBps;
-		public const string DSPEED_ENABLED;
-		public const string USPEED_KBps;
-		public const string USPEED_ENABLED;
-		public const string UMASK;
-		public const string UPLOAD_SLOTS_PER_TORRENT;
-		public const string START;
-		public const string TRASH_ORIGINAL;
+    [CCode (cname = "tr_quark", cprefix = "TR_KEY_", has_type_id = false)]
+	public enum Prefs {
+        NONE, /* represented as an empty string */
+        activeTorrentCount, /* rpc */
+        activity_date, /* resume file */
+        activityDate, /* rpc */
+        added, /* pex */
+        added_date, /* rpc */
+        added_f, /* pex */
+        added6, /* pex */
+        added6_f, /* pex */
+        addedDate, /* rpc */
+        address, /* rpc */
+        alt_speed_down, /* rpc, settings */
+        alt_speed_enabled, /* rpc, settings */
+        alt_speed_time_begin, /* rpc, settings */
+        alt_speed_time_day, /* rpc, settings */
+        alt_speed_time_enabled, /* rpc, settings */
+        alt_speed_time_end, /* rpc, settings */
+        alt_speed_up, /* rpc, settings */
+        announce, /* metainfo */
+        announce_list, /* metainfo */
+        announceState, /* rpc */
+        arguments, /* rpc */
+        bandwidth_priority,
+        bandwidthPriority,
+        bind_address_ipv4,
+        bind_address_ipv6,
+        bitfield,
+        blocklist_date,
+        blocklist_enabled,
+        blocklist_size,
+        blocklist_updates_enabled,
+        blocklist_url,
+        blocks,
+        bytesCompleted,
+        cache_size_mb,
+        clientIsChoked,
+        clientIsInterested,
+        clientName,
+        comment,
+        comment_utf_8,
+        compact_view,
+        complete,
+        config_dir,
+        cookies,
+        corrupt,
+        corruptEver,
+        created_by,
+        created_by_utf_8,
+        creation_date,
+        creator,
+        cumulative_stats,
+        current_stats,
+        date,
+        dateCreated,
+        delete_local_data,
+        desiredAvailable,
+        destination,
+        dht_enabled,
+        display_name,
+        dnd,
+        done_date,
+        doneDate,
+        download_dir,
+        download_dir_free_space,
+        download_queue_enabled,
+        download_queue_size,
+        downloadCount,
+        downloadDir,
+        downloadLimit,
+        downloadLimited,
+        downloadSpeed,
+        downloaded,
+        downloaded_bytes,
+        downloadedBytes,
+        downloadedEver,
+        downloaders,
+        downloading_time_seconds,
+        dropped,
+        dropped6,
+        e,
+        encoding,
+        encryption,
+        error,
+        errorString,
+        eta,
+        etaIdle,
+        failure_reason,
+        fields,
+        fileStats,
+        filename,
+        files,
+        files_added,
+        files_unwanted,
+        files_wanted,
+        filesAdded,
+        filter_mode,
+        filter_text,
+        filter_trackers,
+        flagStr,
+        flags,
+        fromCache,
+        fromDht,
+        fromIncoming,
+        fromLpd,
+        fromLtep,
+        fromPex,
+        fromTracker,
+        hasAnnounced,
+        hasScraped,
+        hashString,
+        have,
+        haveUnchecked,
+        haveValid,
+        honorsSessionLimits,
+        host,
+        id,
+        idle_limit,
+        idle_mode,
+        idle_seeding_limit,
+        idle_seeding_limit_enabled,
+        ids,
+        incomplete,
+        incomplete_dir,
+        incomplete_dir_enabled,
+        info,
+        info_hash,
+        inhibit_desktop_hibernation,
+        interval,
+        ip,
+        ipv4,
+        ipv6,
+        isBackup,
+        isDownloadingFrom,
+        isEncrypted,
+        isFinished,
+        isIncoming,
+        isPrivate,
+        isStalled,
+        isUTP,
+        isUploadingTo,
+        lastAnnouncePeerCount,
+        lastAnnounceResult,
+        lastAnnounceStartTime,
+        lastAnnounceSucceeded,
+        lastAnnounceTime,
+        lastAnnounceTimedOut,
+        lastScrapeResult,
+        lastScrapeStartTime,
+        lastScrapeSucceeded,
+        lastScrapeTime,
+        lastScrapeTimedOut,
+        leecherCount,
+        leftUntilDone,
+        length,
+        location,
+        lpd_enabled,
+        m,
+        magnet_info,
+        magnetLink,
+        main_window_height,
+        main_window_is_maximized,
+        main_window_layout_order,
+        main_window_width,
+        main_window_x,
+        main_window_y,
+        manualAnnounceTime,
+        max_peers,
+        maxConnectedPeers,
+        memory_bytes,
+        memory_units,
+        message_level,
+        metadataPercentComplete,
+        metadata_size,
+        metainfo,
+        method,
+        min_interval,
+        min_request_interval,
+        move,
+        msg_type,
+        mtimes,
+        name,
+        name_utf_8,
+        nextAnnounceTime,
+        nextScrapeTime,
+        nodes,
+        nodes6,
+        open_dialog_dir,
+        p,
+        path,
+        path_utf_8,
+        paused,
+        pausedTorrentCount,
+        peer_congestion_algorithm,
+        peer_id_ttl_hours,
+        peer_limit,
+        peer_limit_global,
+        peer_limit_per_torrent,
+        peer_port,
+        peer_port_random_high,
+        peer_port_random_low,
+        peer_port_random_on_start,
+        peer_socket_tos,
+        peerIsChoked,
+        peerIsInterested,
+        peers,
+        peers2,
+        peers2_6,
+        peers6,
+        peersConnected,
+        peersFrom,
+        peersGettingFromUs,
+        peersSendingToUs,
+        percentDone,
+        pex_enabled,
+        piece,
+        piece_length,
+        pieceCount,
+        pieceSize,
+        pieces,
+        play_download_complete_sound,
+        port,
+        port_forwarding_enabled,
+        port_is_open,
+        preallocation,
+        prefetch_enabled,
+        priorities,
+        priority,
+        priority_high,
+        priority_low,
+        priority_normal,
+        private,
+        progress,
+        prompt_before_exit,
+        queue_move_bottom,
+        queue_move_down,
+        queue_move_top,
+        queue_move_up,
+        queue_stalled_enabled,
+        queue_stalled_minutes,
+        queuePosition,
+        rateDownload,
+        rateToClient,
+        rateToPeer,
+        rateUpload,
+        ratio_limit,
+        ratio_limit_enabled,
+        ratio_mode,
+        recent_download_dir_1,
+        recent_download_dir_2,
+        recent_download_dir_3,
+        recent_download_dir_4,
+        recheckProgress,
+        remote_session_enabled,
+        remote_session_host,
+        remote_session_password,
+        remote_session_port,
+        remote_session_requres_authentication,
+        remote_session_username,
+        removed,
+        rename_partial_files,
+        reqq,
+        result,
+        rpc_authentication_required,
+        rpc_bind_address,
+        rpc_enabled,
+        rpc_password,
+        rpc_port,
+        rpc_url,
+        rpc_username,
+        rpc_version,
+        rpc_version_minimum,
+        rpc_whitelist,
+        rpc_whitelist_enabled,
+        scrape,
+        scrape_paused_torrents_enabled,
+        scrapeState,
+        script_torrent_done_enabled,
+        script_torrent_done_filename,
+        seconds_active,
+        secondsActive,
+        secondsDownloading,
+        secondsSeeding,
+        seed_queue_enabled,
+        seed_queue_size,
+        seedIdleLimit,
+        seedIdleMode,
+        seedRatioLimit,
+        seedRatioLimited,
+        seedRatioMode,
+        seederCount,
+        seeding_time_seconds,
+        session_count,
+        session_id,
+        sessionCount,
+        show_backup_trackers,
+        show_extra_peer_details,
+        show_filterbar,
+        show_notification_area_icon,
+        show_options_window,
+        show_statusbar,
+        show_toolbar,
+        show_tracker_scrapes,
+        size_bytes,
+        size_units,
+        sizeWhenDone,
+        sort_mode,
+        sort_reversed,
+        speed,
+        speed_Bps,
+        speed_bytes,
+        speed_limit_down,
+        speed_limit_down_enabled,
+        speed_limit_up,
+        speed_limit_up_enabled,
+        speed_units,
+        start_added_torrents,
+        start_minimized,
+        startDate,
+        status,
+        statusbar_stats,
+        tag,
+        tier,
+        time_checked,
+        torrent_added,
+        torrent_added_notification_command,
+        torrent_added_notification_enabled,
+        torrent_complete_notification_command,
+        torrent_complete_notification_enabled,
+        torrent_complete_sound_command,
+        torrent_complete_sound_enabled,
+        torrent_duplicate,
+        torrent_get,
+        torrent_set,
+        torrent_set_location,
+        torrentCount,
+        torrentFile,
+        torrents,
+        totalSize,
+        total_size,
+        tracker_id,
+        trackerAdd,
+        trackerRemove,
+        trackerReplace,
+        trackerStats,
+        trackers,
+        trash_can_enabled,
+        trash_original_torrent_files,
+        umask,
+        units,
+        upload_slots_per_torrent,
+        uploadLimit,
+        uploadLimited,
+        uploadRatio,
+        uploadSpeed,
+        upload_only,
+        uploaded,
+        uploaded_bytes,
+        uploadedBytes,
+        uploadedEver,
+        url_list,
+        use_global_speed_limit,
+        use_speed_limit,
+        user_has_given_informed_consent,
+        ut_comment,
+        ut_holepunch,
+        ut_metadata,
+        ut_pex,
+        ut_recommend,
+        utp_enabled,
+        v,
+        version,
+        wanted,
+        warning_message,
+        watch_dir,
+        watch_dir_enabled,
+        webseeds,
+        webseedsSendingToUs
 	}
 
 	/**
@@ -278,41 +598,41 @@ namespace Transmission {
 		[CCode (cname = "tr_variantDictReserve")]
 		public bool set_reserve (size_t reserve_count);
 		[CCode (cname = "tr_variantDictRemove")]
-		public bool remove (string key);
+		public bool remove (Prefs key);
 		[CCode (cname = "tr_variantDictAdd")]
-		public unowned variant? add (string key);
+		public unowned variant? add (Prefs key);
 		[CCode (cname = "tr_variantDictAddReal")]
-		public unowned variant? add_real (string key, double val);
+		public unowned variant? add_real (Prefs key, double val);
 		[CCode (cname = "tr_variantDictAddInt")]
-		public unowned variant? add_int (string key, int64 val);
+		public unowned variant? add_int (Prefs key, int64 val);
 		[CCode (cname = "tr_variantDictAddBool")]
-		public unowned variant? add_bool (string key, bool val);
+		public unowned variant? add_bool (Prefs key, bool val);
 		[CCode (cname = "tr_variantDictAddStr")]
-		public unowned variant? add_str (string key, string val);
+		public unowned variant? add_str (Prefs key, string val);
 		[CCode (cname = "tr_variantDictAddList")]
-		public unowned variant? add_list (string key, size_t reserve);
+		public unowned variant? add_list (Prefs key, size_t reserve);
 		[CCode (cname = "tr_variantDictAddDict")]
-		public unowned variant? add_dict (string key, size_t reserve);
+		public unowned variant? add_dict (Prefs key, size_t reserve);
 		[CCode (cname = "tr_variantDictAddRaw")]
-		public unowned variant? add_raw (string key, [CCode (array_lengh_type = "size_t")] uint8[] raw);
+		public unowned variant? add_raw (Prefs key, [CCode (array_lengh_type = "size_t")] uint8[] raw);
 		[CCode (cname = "tr_variantDictChild")]
-		public bool get_child (size_t i, out string key, out variant? val);
+		public bool get_child (size_t i, out Prefs key, out variant? val);
 		[CCode (cname = "tr_variantDictFind")]
-		public unowned variant? get (string key);
+		public unowned variant? get (Prefs key);
 		[CCode (cname = "tr_variantDictFindList")]
-		public bool find_list (string key, out unowned variant? val);
+		public bool find_list (Prefs key, out unowned variant? val);
 		[CCode (cname = "tr_variantDictFindDict")]
-		public bool find_doc (string key, out unowned variant? val);
+		public bool find_doc (Prefs key, out unowned variant? val);
 		[CCode (cname = "tr_variantDictFindInt")]
-		public bool find_int (string key, out int64 val);
+		public bool find_int (Prefs key, out int64 val);
 		[CCode (cname = "tr_variantDictFindReal")]
-		public bool find_real (string key, out double val);
+		public bool find_real (Prefs key, out double val);
 		[CCode (cname = "tr_variantDictFindBool")]
-		public bool find_bool (string key, out bool val);
+		public bool find_bool (Prefs key, out bool val);
 		[CCode (cname = "tr_variantDictFindStr")]
-		public bool find_str (string key, out unowned string? val);
+		public bool find_str (Prefs key, out unowned string? val);
 		[CCode (cname = "tr_variantDictFindRaw")]
-		public bool find_raw (string key, [CCode (array_lengh_type = "size_t")] out uint8[]? raw);
+		public bool find_raw (Prefs key, [CCode (array_lengh_type = "size_t")] out uint8[]? raw);
 	}
 
 	[CCode (cname = "tr_session", cprefix = "tr_session", free_function = "tr_sessionClose", has_type_id = false)]

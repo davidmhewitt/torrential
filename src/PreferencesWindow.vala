@@ -53,6 +53,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         });
 
         var button_box = new Gtk.ButtonBox (Gtk.Orientation.HORIZONTAL);
+        button_box.margin_right = 10;
         button_box.set_layout (Gtk.ButtonBoxStyle.END);
         button_box.pack_end (close_button);
 
@@ -75,11 +76,11 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         var force_encryption_switch = create_switch ();
         saved_state.bind_property ("force_encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
-        var force_encryption_label = create_label (_("Force encryption:"));
+        var force_encryption_label = create_label (_("Only connect to encrypted peers:"));
 
         var randomise_port_switch = create_switch ();
         saved_state.bind_property ("randomize_port", randomise_port_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
-        var randomise_port_label  = create_label (_("Randomise port on launch:"));
+        var randomise_port_label  = create_label (_("Randomise BitTorrent port on launch:"));
 
         var port_entry = create_spinbutton (49152, 65535, 1);
         saved_state.bind_property ("peer_port", port_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);

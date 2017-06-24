@@ -30,14 +30,17 @@ public class Torrential.Application : Granite.Application {
         app_years = "2017";
 
         build_version = "0.1";
-        //app_icon = "applications-interfacedesign";
+        app_icon = "com.github.davidmhewitt.torrential";
         main_url = "https://github.com/davidmhewitt/torrential";
         bug_url = "https://github.com/davidmhewitt/torrential/issues";
         help_url = "https://github.com/davidmhewitt/torrential/issues";
         //translate_url = "https://l10n.elementary.io/projects/desktop/granite";
 
         about_documenters = { null };
-        about_artists = { null };
+        about_artists = {
+            "David Hewitt <davidmhewitt@gmail.com>",
+            "Sam Hewitt <sam@snwh.org>"
+        };
         about_authors = {
             "David Hewitt <davidmhewitt@gmail.com>",
         };

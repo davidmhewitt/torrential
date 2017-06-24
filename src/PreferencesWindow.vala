@@ -43,9 +43,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         });
         
         var download_heading = create_heading (_("Download Management"));
-                
-        var delete_torrent_switch = create_switch ();
-        var delete_torrent_label = create_label (_("Delete imported .torrent files:"));
         
         var force_encryption_switch = create_switch ();
         var force_encryption_label = create_label (_("Force encryption:"));
@@ -76,18 +73,16 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         main_grid.attach (location_chooser, 0, 1, 1, 1);
 
         main_grid.attach (download_heading, 0, 2, 1, 1);
-        main_grid.attach (delete_torrent_label, 0, 3, 1, 1);
-        main_grid.attach (delete_torrent_switch, 1, 3, 1, 1);
-        main_grid.attach (force_encryption_label, 0, 4, 1, 1);
-        main_grid.attach (force_encryption_switch, 1, 4, 1, 1);
-        main_grid.attach (randomise_port_label, 0, 5, 1, 1);
-        main_grid.attach (randomise_port_switch, 1, 5, 1, 1);
+        main_grid.attach (force_encryption_label, 0, 3, 1, 1);
+        main_grid.attach (force_encryption_switch, 1, 3, 1, 1);
+        main_grid.attach (randomise_port_label, 0, 4, 1, 1);
+        main_grid.attach (randomise_port_switch, 1, 4, 1, 1);
 
-        main_grid.attach (desktop_label, 0, 6, 1, 1);
-        main_grid.attach (hide_on_close_label, 0, 7, 1, 1);
-        main_grid.attach (hide_on_close_switch, 1, 7, 1, 1);
+        main_grid.attach (desktop_label, 0, 5, 1, 1);
+        main_grid.attach (hide_on_close_label, 0, 6, 1, 1);
+        main_grid.attach (hide_on_close_switch, 1, 6, 1, 1);
 
-        main_grid.attach (button_box, 0, 8, 2, 1);
+        main_grid.attach (button_box, 0, 7, 2, 1);
 
         ((Gtk.Container) get_content_area ()).add (main_grid);
 

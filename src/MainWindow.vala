@@ -225,19 +225,39 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private void build_main_interface () {
         all_category = new Granite.Widgets.SourceList.Item (_("All"));
-        all_category.icon = Icon.new_for_string ("folder");
+        try {
+            all_category.icon = Icon.new_for_string ("folder");
+        } catch (Error e) {
+            warning ("Error creating icon for 'All' category: %s", e.message);
+        }
         all_category.badge = "0";
         downloading_category = new Granite.Widgets.SourceList.Item (_("Downloading"));
-        downloading_category.icon = Icon.new_for_string ("go-down");
+        try {
+            downloading_category.icon = Icon.new_for_string ("go-down");
+        } catch (Error e) {
+            warning ("Error creating icon for 'Downloading' category: %s", e.message);
+        }
         downloading_category.badge = "0";
         seeding_category = new Granite.Widgets.SourceList.Item (_("Seeding"));
-        seeding_category.icon = Icon.new_for_string ("go-up");
+        try {
+            seeding_category.icon = Icon.new_for_string ("go-up");
+        } catch (Error e) {
+            warning ("Error creating icon for 'Seeding' category: %s", e.message);
+        }
         seeding_category.badge = "0";
         paused_category = new Granite.Widgets.SourceList.Item (_("Paused"));
-        paused_category.icon = Icon.new_for_string ("media-playback-pause");
+        try {
+            paused_category.icon = Icon.new_for_string ("media-playback-pause");
+        } catch (Error e) {
+            warning ("Error creating icon for 'Paused' category: %s", e.message);
+        }
         paused_category.badge = "0";
         search_category = new Granite.Widgets.SourceList.Item (_("Search Results"));
-        search_category.icon = Icon.new_for_string ("edit-find");
+        try {
+            search_category.icon = Icon.new_for_string ("edit-find");
+        } catch (Error e) {
+            warning ("Error creating icon for 'Search Results' category: %s", e.message);
+        }
         search_category.visible = false;
 
         sidebar = new Granite.Widgets.SourceList ();
@@ -324,7 +344,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private void on_preferences (SimpleAction action) {
         var prefs_window = new PreferencesWindow (this);
         prefs_window.on_close.connect (() => {
-            torrent_manager.close ();
+            torrent_manager.close.begin ();
         });
         prefs_window.show_all ();
     }
@@ -369,7 +389,13 @@ public class Torrential.MainWindow : Gtk.Window {
     public void add_files (SList<string> uris) {
         Gee.ArrayList<string> errors = new Gee.ArrayList<string> ();
         foreach (string uri in uris) {
-            var path = Filename.from_uri (uri);
+            string path = "";
+            try {
+                path = Filename.from_uri (uri);
+            } catch (ConvertError e) {
+                warning ("Error opening %s, error: %s", uri, e.message);
+                continue;
+            }
             Torrent? new_torrent;
             var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
             if (result == Transmission.ParseResult.OK) {

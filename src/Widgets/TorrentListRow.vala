@@ -160,7 +160,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     public bool downloading { get { return torrent.downloading; } }
     public bool seeding { get { return torrent.seeding; } }
     public bool paused { get { return torrent.paused; } }
-    public string name { get { return torrent.name; } }
+    public string display_name { get { return torrent.name; } }
     public time_t date_added { get { return torrent.date_added; } }
     public int id { get { return torrent.id; } }
 }

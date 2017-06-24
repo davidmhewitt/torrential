@@ -2073,7 +2073,7 @@ namespace Transmission {
 		 * Removes our .torrent and .resume files for this torrent and frees it.
 		 */
 		[CCode (cname = "tr_torrentRemove")]
-		public void remove (bool remove_local_data, FileFunc remove_function);
+		public void remove (bool remove_local_data, FileFunc? remove_function);
 
 		/**
 		 * Start a torrent

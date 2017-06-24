@@ -67,6 +67,8 @@ PACKAGES
     ${UNITY_PACKAGES}
 OPTIONS
     ${UNITY_OPTIONS}
+    --fatal-warnings
+    --enable-deprecated
 )
 
 include (GSettings)

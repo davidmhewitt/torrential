@@ -174,20 +174,48 @@ public class Torrential.TorrentManager : Object {
     public void open_torrent_location (int torrent_id) {
         foreach (unowned Transmission.Torrent torrent in added_torrents) {
             if (torrent.id == torrent_id) {
-                DBus.Files files = Bus.get_proxy_sync (BusType.SESSION, FILES_DBUS_ID, FILES_DBUS_PATH);
+                DBus.Files files;
+                try {
+                    files = Bus.get_proxy_sync (BusType.SESSION, FILES_DBUS_ID, FILES_DBUS_PATH);
+                } catch (IOError e) {
+                    warning ("Unable to connect to FileManager1 interface to show file. Error: %s", e.message);
+                    return;
+                }
                 var path = Path.build_path (Path.DIR_SEPARATOR_S, torrent.download_dir, new Torrent (torrent).files[0].name);
                 var file = File.new_for_path (path);
                 if (file.query_exists ()) {
                     info (file.get_uri ());
-                    files.show_items ({ file.get_uri () }, "torrential");
+                    try {
+                        files.show_items ({ file.get_uri () }, "torrential");
+                    } catch (IOError e) {
+                        warning ("Unable to instruct file manager to show file. Error: %s", e.message);
+                        return;
+                    }
                 } else {
                     path += ".part";
-                    file = file.new_for_path (path);
+                    file = File.new_for_path (path);
                     if (file.query_exists ()) {
-                        files.show_items ({ file.get_uri () }, "torrential");
+                        try {
+                            files.show_items ({ file.get_uri () }, "torrential");
+                        } catch (IOError e) {
+                            warning ("Unable to instruct file manager to show file. Error: %s", e.message);
+                            return;
+                        }
                     } else {
                         path = path.substring (0, path.last_index_of ("/"));
-                        files.show_folders ({ Filename.to_uri (path) }, "torrential");
+                        try {
+                            string uri = "";
+                            try {
+                                uri = Filename.to_uri (path);
+                            } catch (ConvertError e) {
+                                warning ("Unable to convert path to URI to open filemanager: %s", e.message);
+                                return;
+                            }
+                            files.show_folders ({  }, "torrential");
+                        } catch (IOError e) {
+                            warning ("Unable to instruct file manager to show folder. Error: %s", e.message);
+                            return;
+                        }
                     }
                 }
                 break;

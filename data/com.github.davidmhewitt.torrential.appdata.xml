@@ -6,11 +6,19 @@
   <name>Torrential</name>
   <summary>Download torrents in style</summary>
   <description>
-    <p>A speedy, no-frills torrent client designed for elementary OS. Prioritises audios and videos for playback even while still downloading.</p>
+    <p>A speedy, no-frills torrent client designed for elementary OS.</p>
   </description>
   <custom>
-     <value key="x-appcenter-color-primary">#603461</value>
-     <value key="x-appcenter-color-primary-text">rgb(255, 255, 255)</value>
-     <value key="x-appcenter-suggested-price">2</value>
+     <value key="x-appcenter-color-primary">rgb(160,248,164)</value>
+     <value key="x-appcenter-color-primary-text">#000</value>
   </custom>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/davidmhewitt/torrential/raw/master/data/com.github.davidmhewitt.torrential.screenshot.png</image>
+    </screenshot>
+  </screenshots>
+  <developer_name>David Hewitt</developer_name>
+  <url type="homepage">https://github.com/davidmhewitt/torrential</url>
+  <url type="bugtracker">https://github.com/davidmhewitt/torrential/issues</url>
+  <url type="help">https://github.com/davidmhewitt/torrential/issues</url>
 </component>

@@ -121,6 +121,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         var upload_speed_limit_entry = create_spinbutton (0, 1000000, 25);
         upload_speed_limit_entry.tooltip_text = _("0 means unlimited");
+        saved_state.bind_property ("upload_speed_limit", upload_speed_limit_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var upload_speed_limit_label = create_label (_("Upload speed limit (KBps):"));
 
         var desktop_label = create_heading (_("Desktop Integration"));

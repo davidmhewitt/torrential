@@ -74,6 +74,13 @@ public class Torrential.TorrentManager : Object {
             settings.add_bool (Transmission.Prefs.speed_limit_down_enabled, true);
             settings.add_int (Transmission.Prefs.speed_limit_down, saved_state.download_speed_limit);
         }
+
+        if (saved_state.upload_speed_limit == 0) {
+            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, false);
+        } else {
+            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
+            settings.add_int (Transmission.Prefs.speed_limit_up, saved_state.upload_speed_limit);
+        }
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {

@@ -33,6 +33,7 @@ public class Torrential.Settings : Granite.Services.Settings {
     public bool hide_on_close { get; set; }
     public int max_downloads { get; set; }
     public int download_speed_limit { get; set; }
+    public int upload_speed_limit { get; set; }
 
     private static Settings _settings;
     public static unowned Settings get_default () {

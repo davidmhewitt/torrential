@@ -54,15 +54,25 @@ public class Torrential.TorrentManager : Object {
             transmission_torrents[i].set_completeness_callback (on_completeness_changed); 
             added_torrents.add (transmission_torrents[i]);
         }
-
-        saved_state.changed.connect (() => {
-            update_session_settings ();
-            session.update_settings (settings);
-        });
     }
 
     ~TorrentManager () {
         session.save_settings (CONFIG_DIR, settings);
+    }
+
+    public async void close () throws ThreadError {
+        SourceFunc callback = close.callback;
+
+        ThreadFunc<void*> run = () => {
+            update_session_settings ();
+            session.update_settings (settings);
+
+            Idle.add((owned) callback);
+            return null;
+        };
+        Thread.create<void*>(run, false);
+
+        yield;
     }
 
     private void update_session_settings () {
@@ -80,6 +90,22 @@ public class Torrential.TorrentManager : Object {
         } else {
             settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
             settings.add_int (Transmission.Prefs.speed_limit_up, saved_state.upload_speed_limit);
+        }
+
+        settings.add_bool (Transmission.Prefs.peer_port_random_on_start, saved_state.randomize_port);
+        if (saved_state.randomize_port) {
+            int64 port = 0;
+            if (settings.find_int (Transmission.Prefs.peer_port, out port)) {
+                saved_state.peer_port = (int)port;
+            }
+        } else {
+            settings.add_int (Transmission.Prefs.peer_port, saved_state.peer_port);
+        }
+
+        if (saved_state.force_encryption) {
+            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
+        } else {
+            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
         }
     }
 

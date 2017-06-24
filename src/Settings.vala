@@ -34,6 +34,9 @@ public class Torrential.Settings : Granite.Services.Settings {
     public int max_downloads { get; set; }
     public int download_speed_limit { get; set; }
     public int upload_speed_limit { get; set; }
+    public int peer_port { get; set; }
+    public bool randomize_port { get; set; }
+    public bool force_encryption { get; set; }
 
     private static Settings _settings;
     public static unowned Settings get_default () {

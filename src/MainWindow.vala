@@ -323,6 +323,9 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private void on_preferences (SimpleAction action) {
         var prefs_window = new PreferencesWindow (this);
+        prefs_window.on_close.connect (() => {
+            torrent_manager.close ();
+        });
         prefs_window.show_all ();
     }
 

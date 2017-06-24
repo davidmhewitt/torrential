@@ -16,8 +16,10 @@
 
 public class Torrential.PreferencesWindow : Gtk.Dialog {
 
-    public const int MIN_WIDTH = 420;
-    public const int MIN_HEIGHT = 300;
+    public signal void on_close ();
+
+    private const int MIN_WIDTH = 420;
+    private const int MIN_HEIGHT = 300;
 
     private Settings saved_state = Settings.get_default ();
 
@@ -45,7 +47,10 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         switcher.set_stack (stack);
 
         var close_button = new Gtk.Button.with_label (_("Close"));
-        close_button.clicked.connect (() => { this.destroy (); });
+        close_button.clicked.connect (() => {
+            on_close ();
+            this.destroy ();
+        });
 
         var button_box = new Gtk.ButtonBox (Gtk.Orientation.HORIZONTAL);
         button_box.set_layout (Gtk.ButtonBoxStyle.END);
@@ -69,12 +74,15 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         var download_heading = create_heading (_("Security"));
 
         var force_encryption_switch = create_switch ();
+        saved_state.bind_property ("force_encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var force_encryption_label = create_label (_("Force encryption:"));
 
         var randomise_port_switch = create_switch ();
+        saved_state.bind_property ("randomize_port", randomise_port_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var randomise_port_label  = create_label (_("Randomise port on launch:"));
 
         var port_entry = create_spinbutton (49152, 65535, 1);
+        saved_state.bind_property ("peer_port", port_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 

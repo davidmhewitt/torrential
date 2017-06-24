@@ -38,16 +38,6 @@ public class Torrential.Torrent {
         }
     }
 
-    public float download_speed_kbps {
-        get {
-            if (torrent.stat_cached != null) {
-                return torrent.stat_cached.rawDownloadSpeed_KBps;
-            } else {
-                return 0.0f;
-            }
-        }
-    }
-
     public int seconds_remaining {
         get {
             if (torrent.stat_cached != null) {
@@ -153,7 +143,7 @@ public class Torrential.Torrent {
     public float download_speed {
         get {
             if (torrent.stat_cached != null) {
-                return torrent.stat_cached.rawDownloadSpeed_KBps;
+                return torrent.stat_cached.pieceDownloadSpeed_KBps;
             } else {
                 return 0.0f;
             }
@@ -163,7 +153,7 @@ public class Torrential.Torrent {
     public float upload_speed {
         get {
             if (torrent.stat_cached != null) {
-                return torrent.stat_cached.rawUploadSpeed_KBps;
+                return torrent.stat_cached.pieceUploadSpeed_KBps;
             } else {
                 return 0.0f;
             }

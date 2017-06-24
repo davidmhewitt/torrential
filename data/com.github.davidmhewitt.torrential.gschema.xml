@@ -45,6 +45,21 @@
       <summary>The maximum upload speed for all torrents combined</summary>
       <description>Set to 0 for unlimited</description>
     </key>
+    <key type="i" name="peer-port">
+      <default>51413</default>
+      <summary>The port on which to communicate with peers</summary>
+      <description>The port on which to communicate with peers</description>
+    </key>
+    <key type="b" name="randomize-port">
+      <default>false</default>
+      <summary>Whether to randomise the port used to communicate with peers on startup</summary>
+      <description>Whether to randomise the port used to communicate with peers on startup</description>
+    </key>
+    <key type="b" name="force-encryption">
+      <default>true</default>
+      <summary>Whether to force encryption between this device and peers</summary>
+      <description>If disabled, encryption will be preferred, but not forced</description>
+    </key>
   </schema>
 </schemalist>
 

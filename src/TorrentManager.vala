@@ -143,4 +143,23 @@ public class Torrential.TorrentManager : Object {
             }
         }
     }
+
+    public float get_overall_progress () {
+        if (added_torrents.size == 0) {
+            return 0.0f;
+        }
+        int count = 0;
+        float totalProgress = 0.0f;
+        foreach (unowned Transmission.Torrent torrent in added_torrents) {
+            var torrential_torrent = new Torrent (torrent);
+            if (torrential_torrent.downloading) {
+                totalProgress += torrential_torrent.progress;
+                count++;
+            }
+        }
+        if (count == 0) {
+            return 1.0f;
+        }
+        return totalProgress / count;
+    }
 }

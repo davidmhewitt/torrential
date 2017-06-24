@@ -22,11 +22,9 @@
 public class Torrential.MainWindow : Gtk.Window {
     public signal void show_about (Gtk.Window parent);
 
-    private uint refresh_timer;
+    private bool quitting_for_real = false;
 
-    private Gtk.Menu app_menu = new Gtk.Menu();
-    private Gtk.MenuItem preferences_item;
-    private Gtk.MenuItem about_item;
+    private uint refresh_timer;
 
     private Gtk.Stack stack;
     private Gtk.HeaderBar headerbar;
@@ -34,6 +32,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Granite.Widgets.Welcome welcome_screen;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
+    private Unity.LauncherEntry launcher_entry;
 
     private Granite.Widgets.SourceList sidebar;
     private Granite.Widgets.SourceList.Item all_category;
@@ -47,13 +46,15 @@ public class Torrential.MainWindow : Gtk.Window {
     private SimpleActionGroup actions = new SimpleActionGroup ();
     
     private TorrentManager torrent_manager;
+    private Settings saved_state;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
-    private static string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
+    private const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
 
     private const string ACTION_PREFERENCES = "undo";
     private const string ACTION_ABOUT = "redo";
     private const string ACTION_QUIT = "quit";
+    private const string ACTION_HIDE = "hide";
     private const string ACTION_OPEN = "open";
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
 
@@ -61,6 +62,7 @@ public class Torrential.MainWindow : Gtk.Window {
         {ACTION_PREFERENCES,                on_preferences          },
         {ACTION_ABOUT,                      on_about                },
         {ACTION_QUIT,                       on_quit                 },
+        {ACTION_HIDE,                       on_hide                 },
         {ACTION_OPEN,                       on_open                 }
     };
 
@@ -68,11 +70,12 @@ public class Torrential.MainWindow : Gtk.Window {
     static construct {
         action_accelerators.set (ACTION_PREFERENCES, "<Ctrl>comma");
         action_accelerators.set (ACTION_QUIT, "<Ctrl>q");
+        action_accelerators.set (ACTION_HIDE, "<Ctrl>w");
         action_accelerators.set (ACTION_OPEN, "<Ctrl>o");
     }
 
     public MainWindow (Application app) {
-        Settings saved_state = Settings.get_default ();
+        saved_state = Settings.get_default ();
         set_default_size (saved_state.window_width, saved_state.window_height);
 
         // Maximize window if necessary
@@ -121,6 +124,8 @@ public class Torrential.MainWindow : Gtk.Window {
         set_titlebar (headerbar);
         show_all ();
 
+        launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("com.github.davidmhewitt.torrential.desktop");
+
         var torrents = torrent_manager.get_torrents ();
         if (torrents.size > 0) {
             enable_main_view ();
@@ -137,25 +142,30 @@ public class Torrential.MainWindow : Gtk.Window {
         refresh_timer = Timeout.add_seconds (1, () => {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
+            launcher_entry.progress = torrent_manager.get_overall_progress ();
+            launcher_entry.progress_visible = true;
             return true;
         });
 
         delete_event.connect (() => {
-            Source.remove (refresh_timer);
-            torrent_manager.disconnect (torrent_completed_signal_id);
-
-            int window_width;
-            int window_height;
-            get_size (out window_width, out window_height);
-            saved_state.window_width = window_width;
-            saved_state.window_height = window_height;
-            if (is_maximized) {
-                saved_state.window_state = Settings.WindowState.MAXIMIZED;
+            if (saved_state.hide_on_close && !quitting_for_real) {
+                return hide_on_delete ();
             } else {
-                saved_state.window_state = Settings.WindowState.NORMAL;
-            }
+                Source.remove (refresh_timer);
+                torrent_manager.disconnect (torrent_completed_signal_id);
 
-            return false;
+                int window_width;
+                int window_height;
+                get_size (out window_width, out window_height);
+                saved_state.window_width = window_width;
+                saved_state.window_height = window_height;
+                if (is_maximized) {
+                    saved_state.window_state = Settings.WindowState.MAXIMIZED;
+                } else {
+                    saved_state.window_state = Settings.WindowState.NORMAL;
+                }
+                return false;
+            }
         });
     }
 
@@ -290,13 +300,21 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private Gtk.Menu build_menu () {
-        preferences_item = new Gtk.MenuItem.with_mnemonic (_("_Preferences"));
+        var app_menu = new Gtk.Menu ();
+
+        var preferences_item = new Gtk.MenuItem.with_mnemonic (_("_Preferences"));
         preferences_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
         app_menu.append (preferences_item);
 
-        about_item = new Gtk.MenuItem.with_mnemonic (_("_About"));
+        var about_item = new Gtk.MenuItem.with_mnemonic (_("_About"));
         about_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_ABOUT);
         app_menu.append (about_item);
+
+        app_menu.append (new Gtk.SeparatorMenuItem ());
+
+        var quit_item = new Gtk.MenuItem.with_mnemonic (_("_Quit"));
+        quit_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_QUIT);
+        app_menu.append (quit_item);
 
         app_menu.show_all ();
 
@@ -313,6 +331,11 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_quit (SimpleAction action) {
+        quitting_for_real = true;
+        close ();
+    }
+
+    private void on_hide (SimpleAction action) {
         close ();
     }
 

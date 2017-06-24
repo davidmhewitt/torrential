@@ -56,6 +56,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         var desktop_label = create_heading (_("Desktop Integration"));
         
         var hide_on_close_switch = create_switch ();
+        saved_state.bind_property ("hide_on_close", hide_on_close_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var hide_on_close_label = create_label (_("Continue download when closed:"));
 
         var close_button = new Gtk.Button.with_label (_("Close"));

@@ -30,6 +30,7 @@ public class Torrential.Settings : Granite.Services.Settings {
     public WindowState window_state { get; set; }
 
     public string download_folder { get; set; }
+    public bool hide_on_close { get; set; }
 
     private static Settings _settings;
     public static unowned Settings get_default () {

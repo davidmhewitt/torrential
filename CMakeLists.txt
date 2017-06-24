@@ -27,6 +27,14 @@ add_subdirectory (po)
 # now let's actually check for the required dependencies
 pkg_check_modules(DEPS REQUIRED granite)
 
+pkg_check_modules (UNITY REQUIRED unity>=4.0.0)
+if (UNITY_FOUND)
+    set (UNITY_OPTIONS -D HAVE_UNITY)
+    set (UNITY_PACKAGES unity)
+    add_definitions(${UNITY_CFLAGS})
+    link_directories(${UNITY_LIBRARY_DIRS})
+endif ()
+
 add_definitions(${DEPS_CFLAGS})
 link_directories(${DEPS_LIBRARY_DIRS})
 include_directories(${CMAKE_SOURCE_DIR})
@@ -56,6 +64,9 @@ CUSTOM_VAPIS
 # tell what libraries to use when compiling
 PACKAGES
     granite
+    ${UNITY_PACKAGES}
+OPTIONS
+    ${UNITY_OPTIONS}
 )
 
 include (GSettings)
@@ -63,7 +74,7 @@ add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 
 # tell cmake what to call the executable we just made
 add_executable(${EXEC_NAME} ${VALA_C})
-target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} libtr)
+target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} libtr)
 
 # install the binaries we just made
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)

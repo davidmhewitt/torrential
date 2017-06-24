@@ -25,6 +25,11 @@
       <summary>Where to place downloading torrents</summary>
       <description>Where to place downloading torrents</description>
     </key>
+    <key type="b" name="hide-on-close">
+      <default>false</default>
+      <summary>Whether the window should hide instead of closing the application</summary>
+      <description>Whether the window should hide instead of closing the application</description>
+    </key>
   </schema>
 </schemalist>
 

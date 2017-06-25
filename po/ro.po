@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-24 10:54+0100\n"
+"POT-Creation-Date: 2017-06-25 02:33+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
@@ -19,7 +19,7 @@ msgstr ""
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:120 ../src/MainWindow.vala:226
+#: ../src/Widgets/TorrentListRow.vala:120 ../src/MainWindow.vala:248
 msgid "Paused"
 msgstr ""
 
@@ -55,7 +55,7 @@ msgstr[2] ""
 msgid "Next Warning"
 msgstr ""
 
-#: ../src/Widgets/MultiInfoBar.vala:35 ../src/PreferencesWindow.vala:61
+#: ../src/Widgets/MultiInfoBar.vala:35 ../src/PreferencesWindow.vala:49
 msgid "Close"
 msgstr ""
 
@@ -74,139 +74,171 @@ msgstr ""
 msgid "Show in File Browser"
 msgstr ""
 
-#: ../src/Application.vala:46
+#: ../src/Application.vala:49
 msgid "translator-credits"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:28 ../src/MainWindow.vala:271
+#: ../src/PreferencesWindow.vala:30 ../src/MainWindow.vala:301
 msgid "Preferences"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:36
+#: ../src/PreferencesWindow.vala:39
+msgid "General"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:40
+msgid "Advanced"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:75
+msgid "Security"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:79
+msgid "Only connect to encrypted peers:"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:83
+msgid "Randomise BitTorrent port on launch:"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:88
+msgid "Port number:"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:108
 msgid "Download Location"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:38
+#: ../src/PreferencesWindow.vala:110
 msgid "Select Download Folder…"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:45
-msgid "Download Management"
+#: ../src/PreferencesWindow.vala:120
+msgid "Limits"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:48
-msgid "Delete imported .torrent files:"
+#: ../src/PreferencesWindow.vala:124
+msgid "Max simultaneous downloads:"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:51
-msgid "Force encryption:"
+#: ../src/PreferencesWindow.vala:127 ../src/PreferencesWindow.vala:132
+msgid "0 means unlimited"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:54
-msgid "Randomise port on every launch:"
+#: ../src/PreferencesWindow.vala:129
+msgid "Download speed limit (KBps):"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:56
+#: ../src/PreferencesWindow.vala:134
+msgid "Upload speed limit (KBps):"
+msgstr ""
+
+#: ../src/PreferencesWindow.vala:136
 msgid "Desktop Integration"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:59
-msgid "Continue download when closed:"
+#: ../src/PreferencesWindow.vala:140
+msgid "Continue downloads when closed:"
 msgstr ""
 
-#: ../src/MainWindow.vala:131
+#: ../src/MainWindow.vala:136
 msgid "Torrent Complete"
 msgstr ""
 
-#: ../src/MainWindow.vala:132
+#: ../src/MainWindow.vala:137
 msgid "“%s” has finished downloading"
 msgstr ""
 
-#: ../src/MainWindow.vala:192
+#: ../src/MainWindow.vala:202
 msgid "Application menu"
 msgstr ""
 
-#: ../src/MainWindow.vala:201
+#: ../src/MainWindow.vala:211
 msgid "Search Torrents"
 msgstr ""
 
-#: ../src/MainWindow.vala:217
+#: ../src/MainWindow.vala:227
 msgid "All"
 msgstr ""
 
-#: ../src/MainWindow.vala:220
+#: ../src/MainWindow.vala:234
 msgid "Downloading"
 msgstr ""
 
-#: ../src/MainWindow.vala:223
+#: ../src/MainWindow.vala:241
 msgid "Seeding"
 msgstr ""
 
-#: ../src/MainWindow.vala:229
+#: ../src/MainWindow.vala:255
 msgid "Search Results"
 msgstr ""
 
-#: ../src/MainWindow.vala:269
+#: ../src/MainWindow.vala:299
 msgid "No Torrents Added"
 msgstr ""
 
-#: ../src/MainWindow.vala:269
+#: ../src/MainWindow.vala:299
 msgid "Add a torrent file to begin downloading."
 msgstr ""
 
-#: ../src/MainWindow.vala:270
+#: ../src/MainWindow.vala:300
 msgid "Open Torrent"
 msgstr ""
 
-#: ../src/MainWindow.vala:270
+#: ../src/MainWindow.vala:300
 msgid "Open a torrent file from your computer."
 msgstr ""
 
-#: ../src/MainWindow.vala:271
+#: ../src/MainWindow.vala:301
 msgid "Set download folder and other preferences."
 msgstr ""
 
-#: ../src/MainWindow.vala:293
+#: ../src/MainWindow.vala:325
 msgid "_Preferences"
 msgstr ""
 
-#: ../src/MainWindow.vala:297
+#: ../src/MainWindow.vala:329
 msgid "_About"
 msgstr ""
 
-#: ../src/MainWindow.vala:320
+#: ../src/MainWindow.vala:335
+msgid "_Quit"
+msgstr ""
+
+#: ../src/MainWindow.vala:366
 msgid "Open some torrents"
 msgstr ""
 
-#: ../src/MainWindow.vala:322
+#: ../src/MainWindow.vala:368
 msgid "Cancel"
 msgstr ""
 
-#: ../src/MainWindow.vala:323
+#: ../src/MainWindow.vala:369
 msgid "Open"
 msgstr ""
 
-#: ../src/MainWindow.vala:328
+#: ../src/MainWindow.vala:374
 msgid "All files"
 msgstr ""
 
-#: ../src/MainWindow.vala:331
+#: ../src/MainWindow.vala:377
 msgid "Torrent files"
 msgstr ""
 
-#: ../src/MainWindow.vala:353
+#: ../src/MainWindow.vala:405
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
 msgstr ""
 
-#: ../src/MainWindow.vala:356
+#: ../src/MainWindow.vala:408
 msgid "Didn’t add “%s”. An identical torrent has already been added."
 msgstr ""
 
-#: ../src/MainWindow.vala:376
+#: ../src/MainWindow.vala:428
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
 msgstr ""
 
-#: ../src/MainWindow.vala:379
+#: ../src/MainWindow.vala:431
 msgid "Didn’t add magnet link. An identical torrent has already been added."
 msgstr ""
 

@@ -80,13 +80,11 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
             blocklist_state.set_text (_("Blocklist last downloaded: never"));
         } else {
             var time = new DateTime.from_unix_local (saved_state.blocklist_updated_timestamp);
-            blocklist_state.set_text (_("Blocklist last downloaded: %s").printf (time.format (_("%a %e, %b %H:%M"))));
+            blocklist_state.set_text (_("Last downloaded: %s").printf (time.format (_("%a %e, %b %H:%M"))));
         }
     }
 
     private Gtk.Grid create_advanced_settings_widgets () {
-        var download_heading = create_heading (_("Security"));
-
         var force_encryption_switch = create_switch ();
         saved_state.bind_property ("force_encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var force_encryption_label = create_label (_("Only connect to encrypted peers:"));
@@ -129,17 +127,18 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         advanced_grid.column_spacing = 12;
         advanced_grid.row_spacing = 6;
 
-        advanced_grid.attach (download_heading, 0, 2, 1, 1);
+        advanced_grid.attach (create_heading (_("Security")), 0, 2, 1, 1);
         advanced_grid.attach (force_encryption_label, 0, 3, 1, 1);
         advanced_grid.attach (force_encryption_switch, 1, 3, 1, 1);
         advanced_grid.attach (randomise_port_label, 0, 4, 1, 1);
         advanced_grid.attach (randomise_port_switch, 1, 4, 1, 1);
         advanced_grid.attach (port_label, 0, 5, 1, 1);
         advanced_grid.attach (port_entry, 1, 5, 1, 1);
-        advanced_grid.attach (blocklist_label, 0, 6, 1, 1);
-        advanced_grid.attach (blocklist_entry, 1, 6, 1, 1);
-        advanced_grid.attach (blocklist_state, 0, 7, 1, 1);
-        advanced_grid.attach (update_blocklist_stack, 1, 7, 1, 1);
+        advanced_grid.attach (create_heading (_("Blocklist")), 0, 6, 1, 1);
+        advanced_grid.attach (blocklist_label, 0, 7, 1, 1);
+        advanced_grid.attach (blocklist_entry, 1, 7, 1, 1);
+        advanced_grid.attach (blocklist_state, 0, 8, 1, 1);
+        advanced_grid.attach (update_blocklist_stack, 1, 8, 1, 1);
 
         return advanced_grid;
     }

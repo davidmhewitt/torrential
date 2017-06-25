@@ -1,3 +1,9 @@
+com.github.davidmhewitt.torrential (1.0.3) xenial; urgency=low
+
+  * Minor design improvements.
+
+ -- David Hewitt <davidmhewitt@gmail.com>  Sun, 25 Jun 2017 16:53:58 +0000
+
 com.github.davidmhewitt.torrential (1.0.2) xenial; urgency=low
 
   * Add ability to add a blocklist.

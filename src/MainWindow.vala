@@ -28,20 +28,14 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private PreferencesWindow? prefs_window = null;
 
+    private Granite.Widgets.ModeButton view_mode;
     private Gtk.Stack stack;
     private Gtk.HeaderBar headerbar;
-    private Gtk.Paned main_pane;
     private Granite.Widgets.Welcome welcome_screen;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
+    private Gtk.ScrolledWindow list_box_scroll;
     private Unity.LauncherEntry launcher_entry;
-
-    private Granite.Widgets.SourceList sidebar;
-    private Granite.Widgets.SourceList.Item all_category;
-    private Granite.Widgets.SourceList.Item downloading_category;
-    private Granite.Widgets.SourceList.Item seeding_category;
-    private Granite.Widgets.SourceList.Item paused_category;
-    private Granite.Widgets.SourceList.Item search_category;
 
     private Gtk.SearchEntry search_entry;
 
@@ -117,7 +111,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         stack = new Gtk.Stack ();
         stack.add_named (welcome_screen, "welcome");
-        stack.add_named (main_pane, "main");
+        stack.add_named (list_box_scroll, "main");
         stack.visible_child_name = "welcome";
         grid.add (infobar);
         grid.add (stack);
@@ -185,25 +179,9 @@ public class Torrential.MainWindow : Gtk.Window {
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
         if (torrents.size == 0) {
             search_entry.sensitive = false;
+            view_mode.sensitive = false;
             stack.visible_child_name = "welcome";
         }
-
-        all_category.badge = torrents.size.to_string ();
-        uint paused = 0, downloading = 0, seeding = 0;
-        foreach (var torrent in torrents) {
-            if (torrent.paused) {
-                paused++;
-            }
-            if (torrent.downloading) {
-                downloading++;
-            }
-            if (torrent.seeding) {
-                seeding++;
-            }
-        }
-        paused_category.badge = paused.to_string ();
-        downloading_category.badge = downloading.to_string ();
-        seeding_category.badge = seeding.to_string ();
     }
 
     private void build_headerbar () {
@@ -225,87 +203,55 @@ public class Torrential.MainWindow : Gtk.Window {
         headerbar.pack_end (search_entry);
         search_entry.sensitive = false;
         search_entry.search_changed.connect (() => {
-            if (search_entry.text != "") {
-                search_category.visible = true;
-                sidebar.selected = search_category;
-                list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
-            } else {
-                search_category.visible = false;
-                sidebar.selected = all_category;
-            }
+            update_view ();
         });
+
+        view_mode = new Granite.Widgets.ModeButton ();
+        view_mode.sensitive = false;
+        view_mode.margin = 1;
+        view_mode.margin_right = 20;
+        view_mode.append_text (_("All"));
+        view_mode.append_text (_("Downloading"));
+        view_mode.append_text (_("Seeding"));
+        view_mode.append_text (_("Paused"));
+        view_mode.selected = 0;
+
+        view_mode.notify["selected"].connect (() => {
+            update_view ();
+        });
+
+        headerbar.set_custom_title (view_mode);
+    }
+
+    private void update_view () {
+        if (search_entry.text != "") {
+            list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
+            return;
+        }
+        switch (view_mode.selected) {
+            case 0:
+                list_box.filter (Widgets.TorrentListBox.FilterType.ALL, null);
+                break;
+            case 1:
+                list_box.filter (Widgets.TorrentListBox.FilterType.DOWNLOADING, null);
+                break;
+            case 2:
+                list_box.filter (Widgets.TorrentListBox.FilterType.SEEDING, null);
+                break;
+            case 3:
+                list_box.filter (Widgets.TorrentListBox.FilterType.PAUSED, null);
+                break;
+            default:
+                break;
+        }
     }
 
     private void build_main_interface () {
-        all_category = new Granite.Widgets.SourceList.Item (_("All"));
-        try {
-            all_category.icon = Icon.new_for_string ("folder");
-        } catch (Error e) {
-            warning ("Error creating icon for 'All' category: %s", e.message);
-        }
-        all_category.badge = "0";
-        downloading_category = new Granite.Widgets.SourceList.Item (_("Downloading"));
-        try {
-            downloading_category.icon = Icon.new_for_string ("go-down");
-        } catch (Error e) {
-            warning ("Error creating icon for 'Downloading' category: %s", e.message);
-        }
-        downloading_category.badge = "0";
-        seeding_category = new Granite.Widgets.SourceList.Item (_("Seeding"));
-        try {
-            seeding_category.icon = Icon.new_for_string ("go-up");
-        } catch (Error e) {
-            warning ("Error creating icon for 'Seeding' category: %s", e.message);
-        }
-        seeding_category.badge = "0";
-        paused_category = new Granite.Widgets.SourceList.Item (_("Paused"));
-        try {
-            paused_category.icon = Icon.new_for_string ("media-playback-pause");
-        } catch (Error e) {
-            warning ("Error creating icon for 'Paused' category: %s", e.message);
-        }
-        paused_category.badge = "0";
-        search_category = new Granite.Widgets.SourceList.Item (_("Search Results"));
-        try {
-            search_category.icon = Icon.new_for_string ("edit-find");
-        } catch (Error e) {
-            warning ("Error creating icon for 'Search Results' category: %s", e.message);
-        }
-        search_category.visible = false;
-
-        sidebar = new Granite.Widgets.SourceList ();
-        var root = sidebar.root;
-        root.add (all_category);
-        root.add (downloading_category);
-        root.add (seeding_category);
-        root.add (paused_category);
-        root.add (search_category);
-
-        sidebar.item_selected.connect ((item) => {
-            if (item == all_category) {
-                list_box.filter (Widgets.TorrentListBox.FilterType.ALL, null);
-            } else if (item == downloading_category) {
-                list_box.filter (Widgets.TorrentListBox.FilterType.DOWNLOADING, null);
-            } else if (item == seeding_category) {
-                list_box.filter (Widgets.TorrentListBox.FilterType.SEEDING, null);
-            } else if (item == paused_category) {
-                list_box.filter (Widgets.TorrentListBox.FilterType.PAUSED, null);
-            } else if (item == search_category) {
-                list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
-            }
-        });
-
-        main_pane = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
-        main_pane.position = 175;
-
-        main_pane.add1 (sidebar);
-
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
         list_box.open_torrent.connect ((id) => torrent_manager.open_torrent_location (id));
-        var scroll = new Gtk.ScrolledWindow (null, null);
-        scroll.add (list_box);
-        main_pane.add2 (scroll);
+        list_box_scroll = new Gtk.ScrolledWindow (null, null);
+        list_box_scroll.add (list_box);
     }
 
     private void build_welcome_screen () {
@@ -329,6 +275,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private void enable_main_view () {
         search_entry.sensitive = true;
+        view_mode.sensitive = true;
         stack.visible_child_name = "main";
     }
 

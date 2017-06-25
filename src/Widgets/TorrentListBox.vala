@@ -123,7 +123,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                 break;
             case FilterType.SEARCH:
                 set_filter_func ((item) => {
-                    return (item as TorrentListRow).name.casefold ().contains (search_term.casefold ());
+                    return (item as TorrentListRow).display_name.casefold ().contains (search_term.casefold ());
                 });
                 break;
             default:

@@ -6,7 +6,7 @@
   <name>Torrential</name>
   <summary>Download torrents in style</summary>
   <description>
-    <p>A speedy, no-frills torrent client designed for elementary OS.</p>
+    <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <custom>
      <value key="x-appcenter-color-primary">rgb(224,247,255)</value>

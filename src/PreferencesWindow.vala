@@ -100,14 +100,19 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 
+        var update_blocklist_button = create_button (_("Update Blocklist"));
         var blocklist_entry = create_entry ();
         saved_state.bind_property ("blocklist_url", blocklist_entry, "text", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        blocklist_entry.changed.connect (() => {
+            update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
+        });
         var blocklist_label = create_label (_("Blocklist URL:"));
 
         update_blocklist_stack = new Gtk.Stack ();
         var spinner = new Gtk.Spinner ();
         spinner.active = true;
-        var update_blocklist_button = create_button (_("Update Blocklist"));
+
+        update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
         update_blocklist_button.clicked.connect (() => {
             update_blocklist_stack.visible_child_name = "spinner";
             update_blocklist ();

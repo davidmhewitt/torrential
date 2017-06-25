@@ -8,6 +8,6 @@ Icon=com.github.davidmhewitt.torrential
 Terminal=false
 Type=Application
 X-GNOME-Gettext-Domain=torrential
-Keywords=Torrent;Bittorrent;Download
+Keywords=Torrent;Bittorrent;Download;
 MimeType=application/x-bittorrent;x-scheme-handler/magnet;
 X-GNOME-UsesNotifications=true

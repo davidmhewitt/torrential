@@ -27,8 +27,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label torrent_name;
     private Gtk.Button pause_button;
 
-    private const string PAUSE_ICON_NAME = "media-playback-pause";
-    private const string RESUME_ICON_NAME = "media-playback-start";
+    private const string PAUSE_ICON_NAME = "media-playback-pause-symbolic";
+    private const string RESUME_ICON_NAME = "media-playback-start-symbolic";
 
     public signal void torrent_removed (Torrent torrent);
 
@@ -37,7 +37,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         var grid = new Gtk.Grid ();
         grid.margin = 12;
-        grid.column_spacing = 8;
+        grid.margin_bottom = grid.margin_top = 6;
+        grid.column_spacing = 12;
+        grid.row_spacing = 3;
 
         add (grid);
 
@@ -62,8 +64,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         torrent_name.get_style_context ().add_class ("h3");
         grid.attach (torrent_name, 1, 0, 1, 1);
 
-        completeness = new Gtk.Label (generate_completeness_text ());
+        completeness = new Gtk.Label ("<small>%s</small>".printf (generate_completeness_text ()));
         completeness.halign = Gtk.Align.START;
+        completeness.use_markup = true;
         grid.attach (completeness, 1, 1, 1, 1);
 
         progress = new Gtk.ProgressBar ();
@@ -88,8 +91,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         });
         grid.attach (pause_button, 2, 1, 1, 4);
 
-        status = new Gtk.Label (generate_status_text ());
+        status = new Gtk.Label ("<small>%s</small>".printf (generate_status_text ()));
         status.halign = Gtk.Align.START;
+        status.use_markup = true;
         grid.attach (status, 1, 3, 1, 1);
         show_all ();
     }
@@ -97,14 +101,14 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     public void update () {
         torrent_name.label = torrent.name;
         progress.fraction = torrent.progress;
-        completeness.label = generate_completeness_text ();
-        status.label = generate_status_text ();
+        completeness.label = "<small>%s</small>".printf (generate_completeness_text ());
+        status.label = "<small>%s</small>".printf (generate_status_text ());
         pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
     }
 
     private string generate_completeness_text () {
         if (!torrent.paused) {
-            return _("%s of %s - %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
+            return _("%s of %s — %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
         } else {
             return _("%s of %s").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total));
         }

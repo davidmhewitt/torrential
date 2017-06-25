@@ -9,7 +9,7 @@
     <p>A speedy, no-frills torrent client designed for elementary OS.</p>
   </description>
   <custom>
-     <value key="x-appcenter-color-primary">rgb(160,248,164)</value>
+     <value key="x-appcenter-color-primary">rgb(224,247,255)</value>
      <value key="x-appcenter-color-primary-text">#000</value>
   </custom>
   <screenshots>

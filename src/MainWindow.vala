@@ -26,6 +26,8 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private uint refresh_timer;
 
+    private PreferencesWindow? prefs_window = null;
+
     private Gtk.Stack stack;
     private Gtk.HeaderBar headerbar;
     private Gtk.Paned main_pane;
@@ -137,6 +139,17 @@ public class Torrential.MainWindow : Gtk.Window {
             notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
             notification.set_default_action_and_target_value ("app." + ACTION_OPEN_COMPLETED_TORRENT, new Variant.int32 (torrent.id));
             app.send_notification ("app.torrent-completed", notification);
+        });
+
+        torrent_manager.blocklist_load_failed.connect (() => {
+            infobar.add_error (_("Failed to load blocklist. All torrents paused as a precaution."));
+            infobar.show ();
+        });
+
+        torrent_manager.blocklist_load_complete.connect (() => {
+            if (prefs_window != null) {
+                prefs_window.blocklist_load_complete ();
+            }
         });
 
         refresh_timer = Timeout.add_seconds (1, () => {
@@ -342,9 +355,12 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_preferences (SimpleAction action) {
-        var prefs_window = new PreferencesWindow (this);
+        prefs_window = new PreferencesWindow (this);
         prefs_window.on_close.connect (() => {
             torrent_manager.close.begin ();
+        });
+        prefs_window.update_blocklist.connect (() => {
+            torrent_manager.update_blocklists (true);
         });
         prefs_window.show_all ();
     }

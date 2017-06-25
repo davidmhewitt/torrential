@@ -29,10 +29,14 @@ pkg_check_modules(DEPS REQUIRED granite)
 
 pkg_check_modules (UNITY REQUIRED unity>=4.0.0)
 if (UNITY_FOUND)
-    set (UNITY_OPTIONS -D HAVE_UNITY)
-    set (UNITY_PACKAGES unity)
     add_definitions(${UNITY_CFLAGS})
     link_directories(${UNITY_LIBRARY_DIRS})
+endif ()
+
+pkg_check_modules (ARCHIVE REQUIRED libarchive)
+if (ARCHIVE_FOUND)
+    add_definitions(${ARCHIVE_CFLAGS})
+    link_directories(${ARCHIVE_LIBRARY_DIRS})
 endif ()
 
 add_definitions(${DEPS_CFLAGS})
@@ -64,9 +68,9 @@ CUSTOM_VAPIS
 # tell what libraries to use when compiling
 PACKAGES
     granite
-    ${UNITY_PACKAGES}
+    libarchive
+    unity
 OPTIONS
-    ${UNITY_OPTIONS}
     --fatal-warnings
     --enable-deprecated
 )
@@ -76,7 +80,7 @@ add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 
 # tell cmake what to call the executable we just made
 add_executable(${EXEC_NAME} ${VALA_C})
-target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} libtr)
+target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIVE_LIBRARIES} libtr)
 
 # install the binaries we just made
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)

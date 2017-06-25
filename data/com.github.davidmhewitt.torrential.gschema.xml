@@ -60,6 +60,16 @@
       <summary>Whether to force encryption between this device and peers</summary>
       <description>If disabled, encryption will be preferred, but not forced</description>
     </key>
+    <key type="s" name="blocklist-url">
+      <default>''</default>
+      <summary>The URL of a blocklist which specifies which peers to ignore</summary>
+      <description>The URL of a blocklist which specifies which peers to ignore</description>
+    </key>
+    <key type="x" name="blocklist-updated-timestamp">
+      <default>0</default>
+      <summary>The unix timestamp of when the blocklist was last downloaded</summary>
+      <description>The unix timestamp of when the blocklist was last downloaded</description>
+    </key>
   </schema>
 </schemalist>
 

@@ -72,8 +72,11 @@ public class Torrential.Application : Granite.Application {
         if (files[0].has_uri_scheme ("magnet")) {
             var magnet = files[0].get_uri ();
             magnet = magnet.replace ("magnet:///?", "magnet:?");
-            activate ();
+
             if (window != null) {
+                window.add_magnet (magnet);
+            } else {
+                activate ();
                 window.add_magnet (magnet);
             }
             return;
@@ -85,9 +88,7 @@ public class Torrential.Application : Granite.Application {
         }
 
         activate ();
-        if (window != null) {
-            window.add_files (uris);
-        }
+        window.add_files (uris);
     }
 
     public override void activate () {

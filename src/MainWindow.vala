@@ -27,6 +27,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private uint refresh_timer;
 
     private PreferencesWindow? prefs_window = null;
+    private Application app;
 
     private Granite.Widgets.ModeButton view_mode;
     private Gtk.Stack stack;
@@ -53,6 +54,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private const string ACTION_HIDE = "hide";
     private const string ACTION_OPEN = "open";
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
+    private const string ACTION_SHOW_WINDOW = "show-window";
 
     private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
@@ -71,6 +73,7 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public MainWindow (Application app) {
+        this.app = app;
         saved_state = Settings.get_default ();
         set_default_size (saved_state.window_width, saved_state.window_height);
 
@@ -95,6 +98,13 @@ public class Torrential.MainWindow : Gtk.Window {
             torrent_manager.open_torrent_location (parameter.get_int32 ());
         });
         app.add_action (open_torrent);
+
+        SimpleAction show_window = new SimpleAction (ACTION_SHOW_WINDOW, null);
+        show_window.activate.connect (() => {
+            present ();
+            present_with_time ((uint32)GLib.get_monotonic_time ());
+        });
+        app.add_action (show_window);
 
         torrent_manager = new TorrentManager ();
 
@@ -381,18 +391,34 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public void add_magnet (string magnet) {
-        warning ("adding magnet: %s", magnet);
         Torrent? new_torrent;
         var result = torrent_manager.add_torrent_by_magnet (magnet, out new_torrent);
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
             enable_main_view ();
+            if (!visible) {
+                var notification = new Notification (_("Magnet Link"));
+                notification.set_body (_("Successfully added magnet link"));
+                notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
+                app.send_notification ("app.magnet-added", notification);
+            }
         } else if (result == Transmission.ParseResult.ERR) {
             infobar.add_error (_("Failed to add magnet link as it doesn\u2019t appear to be valid."));
             infobar.show ();
+            send_magnet_error_notification ();
         } else {
             infobar.add_error (_("Didn\u2019t add magnet link. An identical torrent has already been added."));
             infobar.show ();
+            send_magnet_error_notification ();
+        }
+    }
+
+    private void send_magnet_error_notification () {
+        if (!visible) {
+            var notification = new Notification (_("Magnet Link"));
+            notification.set_body (_("Failed to add magnet link"));
+            notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
+            app.send_notification ("app.magnet-added", notification);
         }
     }
 }

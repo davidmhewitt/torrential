@@ -375,7 +375,7 @@ public class Torrential.TorrentManager : Object {
                                 warning ("Unable to convert path to URI to open filemanager: %s", e.message);
                                 return;
                             }
-                            files.show_folders ({  }, "torrential");
+                            files.show_folders ({ uri }, "torrential");
                         } catch (IOError e) {
                             warning ("Unable to instruct file manager to show folder. Error: %s", e.message);
                             return;

@@ -114,6 +114,7 @@ public class Torrential.TorrentManager : Object {
                     warning ("Could not delete one of the old blocklists. Error: %s", e.message);
                 }
             }
+            saved_state.blocklist_updated_timestamp = 0;
             return true;
         }
 

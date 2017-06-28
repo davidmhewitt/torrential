@@ -131,10 +131,10 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         uint hours = (totalSeconds % 86400) / 3600;
         uint days = (totalSeconds % (86400 * 30)) / 86400;
 
-        var str_days = ngettext ("%d day", "%d days", days).printf (days);
-        var str_hours = ngettext ("%d hour", "%d hours", hours).printf (hours);
-        var str_minutes = ngettext ("%d minute", "%d minutes", minutes).printf (minutes);
-        var str_seconds = ngettext ("%d second", "%d seconds", seconds).printf (seconds);
+        var str_days = ngettext ("%u day", "%u days", days).printf (days);
+        var str_hours = ngettext ("%u hour", "%u hours", hours).printf (hours);
+        var str_minutes = ngettext ("%u minute", "%u minutes", minutes).printf (minutes);
+        var str_seconds = ngettext ("%u second", "%u seconds", seconds).printf (seconds);
 
         var formatted = "";
         if (days > 0) {

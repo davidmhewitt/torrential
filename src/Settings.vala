@@ -39,6 +39,8 @@ public class Torrential.Settings : Granite.Services.Settings {
     public bool force_encryption { get; set; }
     public string blocklist_url { get; set; }
     public int64 blocklist_updated_timestamp { get; set; }
+    public bool seed_ratio_enabled { get; set; }
+    public double seed_ratio { get; set; }
 
     private static Settings _settings;
     public static unowned Settings get_default () {

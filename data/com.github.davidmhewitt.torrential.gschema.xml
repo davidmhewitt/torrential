@@ -70,6 +70,16 @@
       <summary>The unix timestamp of when the blocklist was last downloaded</summary>
       <description>The unix timestamp of when the blocklist was last downloaded</description>
     </key>
+    <key type="b" name="seed-ratio-enabled">
+      <default>false</default>
+      <summary>Whether to stop seeding once the seed limit has been reached</summary>
+      <description>Whether to stop seeding once the seed limit has been reached</description>
+    </key>
+    <key type="d" name="seed-ratio">
+      <default>2</default>
+      <summary>The ratio at which to stop seeding</summary>
+      <description>The ratio at which to stop seeding</description>
+    </key>
   </schema>
 </schemalist>
 

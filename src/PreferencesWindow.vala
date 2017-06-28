@@ -172,6 +172,13 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         saved_state.bind_property ("upload_speed_limit", upload_speed_limit_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var upload_speed_limit_label = create_label (_("Upload speed limit (KBps):"));
 
+        var seed_ratio_label = create_label (_("Seed Limit Ratio:"));
+        var seed_ratio_entry = create_spinbutton (0.1, 5, 0.1);
+        var seed_ratio_switch = create_switch ();
+        saved_state.bind_property ("seed_ratio", seed_ratio_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        saved_state.bind_property ("seed_ratio_enabled", seed_ratio_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        seed_ratio_switch.bind_property ("active", seed_ratio_entry, "sensitive", BindingFlags.SYNC_CREATE);
+
         var desktop_label = create_heading (_("Desktop Integration"));
 
         var hide_on_close_switch = create_switch ();
@@ -194,10 +201,13 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         general_grid.attach (download_speed_limit_entry, 1, 4, 1, 1);
         general_grid.attach (upload_speed_limit_label, 0, 5, 1, 1);
         general_grid.attach (upload_speed_limit_entry, 1, 5, 1, 1);
+        general_grid.attach (seed_ratio_label, 0, 6, 1, 1);
+        general_grid.attach (seed_ratio_entry, 1, 6, 1, 1);
+        general_grid.attach (seed_ratio_switch, 2, 6, 1, 1);
 
-        general_grid.attach (desktop_label, 0, 6, 1, 1);
-        general_grid.attach (hide_on_close_label, 0, 7, 1, 1);
-        general_grid.attach (hide_on_close_switch, 1, 7, 1, 1);
+        general_grid.attach (desktop_label, 0, 7, 1, 1);
+        general_grid.attach (hide_on_close_label, 0, 8, 1, 1);
+        general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
 
         return general_grid;
     }

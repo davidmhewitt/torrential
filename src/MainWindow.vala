@@ -27,7 +27,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private uint refresh_timer;
 
     private PreferencesWindow? prefs_window = null;
-    private Application app;
+    private weak Application app;
 
     private Granite.Widgets.ModeButton view_mode;
     private Gtk.Stack stack;

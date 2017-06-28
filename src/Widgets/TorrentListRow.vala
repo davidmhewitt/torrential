@@ -27,6 +27,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label torrent_name;
     private Gtk.Button pause_button;
 
+    private Gtk.CssProvider green_progress_provider;
+
     private const string PAUSE_ICON_NAME = "media-playback-pause-symbolic";
     private const string RESUME_ICON_NAME = "media-playback-start-symbolic";
 
@@ -34,6 +36,13 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
+
+        green_progress_provider = new Gtk.CssProvider ();
+        try {
+            green_progress_provider.load_from_data ("@define-color selected_bg_color @success_color;");
+        } catch (Error e) {
+            warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
+        }
 
         var grid = new Gtk.Grid ();
         grid.margin = 12;
@@ -72,6 +81,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         progress = new Gtk.ProgressBar ();
         progress.hexpand = true;
         progress.fraction = torrent.progress;
+        if (torrent.seeding) {
+            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        }
         grid.attach (progress, 1, 2, 1, 1);
 
         if (!torrent.paused) {
@@ -104,6 +116,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         completeness.label = "<small>%s</small>".printf (generate_completeness_text ());
         status.label = "<small>%s</small>".printf (generate_status_text ());
         pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
+        if (torrent.seeding) {
+            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        } else {
+            progress.get_style_context ().remove_provider (green_progress_provider);
+        }
     }
 
     private string generate_completeness_text () {

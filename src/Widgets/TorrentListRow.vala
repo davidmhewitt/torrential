@@ -124,21 +124,29 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     private string generate_completeness_text () {
-        if (!torrent.paused) {
+        if (torrent.downloading) {
             return _("%s of %s — %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
-        } else {
+        } else if (torrent.paused || torrent.waiting) {
             return _("%s of %s").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total));
+        } else if (torrent.seeding) {
+            return _("%s uploaded").printf (format_size (torrent.bytes_uploaded));
+        } else {
+            return "";
         }
     }
 
     private string generate_status_text () {
-        if (!torrent.paused) {
+        if (torrent.downloading || torrent.seeding) {
             char[40] buf = new char[40];
             var down_speed = Transmission.String.Units.speed_KBps (buf, torrent.download_speed);
             var up_speed = Transmission.String.Units.speed_KBps (buf, torrent.upload_speed);
             return _("%i of %i peers connected. \u2b07%s \u2b06%s").printf (torrent.connected_peers, torrent.total_peers, down_speed, up_speed);
-        } else {
+        } else if (torrent.paused) {
             return _("Paused");
+        } else if (torrent.waiting) {
+            return _("Waiting in queue");
+        } else {
+            return "";
         }
     }
 

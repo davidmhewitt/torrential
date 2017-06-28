@@ -58,6 +58,16 @@ public class Torrential.Torrent {
         }
     }
 
+    public uint64 bytes_uploaded {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.uploadedEver;
+            } else {
+                return 0;
+            }
+        }
+    }
+
     public uint64 bytes_total {
         get {
             if (torrent.stat_cached != null) {
@@ -114,6 +124,17 @@ public class Torrential.Torrent {
         get {
             if (torrent.stat_cached != null) {
                 return torrent.stat_cached.activity == Transmission.Activity.SEED;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public bool waiting {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.activity == Transmission.Activity.DOWNLOAD_WAIT ||
+                       torrent.stat_cached.activity == Transmission.Activity.SEED_WAIT;
             } else {
                 return false;
             }

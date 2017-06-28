@@ -1811,26 +1811,13 @@ namespace Transmission {
 	[CCode (cname = "tr_torrent_activity", cprefix = "TR_STATUS_", has_type_id = false)]
 	[Flags]
 	public enum Activity {
-		/**
-		 * Waiting in queue to check files
-		 */
-		CHECK_WAIT,
-		/**
-		 * Checking files
-		 */
-		CHECK,
-		/**
-		 * Downloading
-		 */
-		DOWNLOAD,
-		/**
-		 * Seeding
-		 */
-		SEED,
-		/**
-		 * Torrent is stopped
-		 */
-		STOPPED,
+        STOPPED,        /* Torrent is stopped */
+        CHECK_WAIT,     /* Queued to check files */
+        CHECK,          /* Checking files */
+        DOWNLOAD_WAIT,  /* Queued to download */
+        DOWNLOAD,       /* Downloading */
+        SEED_WAIT,      /* Queued to seed */
+        SEED            /* Seeding */
 	}
 
 	[CCode (cname = "int", cprefix = "TR_PEER_FROM_", has_type_id = false)]

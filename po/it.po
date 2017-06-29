@@ -20,7 +20,7 @@ msgstr "%i di %i nodi connessi. ⬇%s ⬆%s"
 
 #: ../src/Widgets/TorrentListRow.vala:124 ../src/MainWindow.vala:216
 msgid "Paused"
-msgstr "In Pausa"
+msgstr "In pausa"
 
 #: ../src/Widgets/TorrentListRow.vala:134
 msgid "%d day"
@@ -191,7 +191,7 @@ msgstr "In ricezione"
 
 #: ../src/MainWindow.vala:215
 msgid "Seeding"
-msgstr "In Distribuzione"
+msgstr "In distribuzione"
 
 #: ../src/MainWindow.vala:258
 msgid "No Torrents Added"

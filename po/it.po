@@ -20,7 +20,7 @@ msgstr "%i di %i nodi connessi. ⬇%s ⬆%s"
 
 #: ../src/Widgets/TorrentListRow.vala:124 ../src/MainWindow.vala:216
 msgid "Paused"
-msgstr "Fermato"
+msgstr "In Pausa"
 
 #: ../src/Widgets/TorrentListRow.vala:134
 msgid "%d day"
@@ -98,7 +98,7 @@ msgstr ""
 
 #: ../src/PreferencesWindow.vala:90
 msgid "Only connect to encrypted peers:"
-msgstr "Connetti solo a nodi criptati"
+msgstr "Connetti solo a nodi criptati:"
 
 #: ../src/PreferencesWindow.vala:94
 msgid "Randomise BitTorrent port on launch:"
@@ -118,7 +118,7 @@ msgstr "URL Blocklist:"
 
 #: ../src/PreferencesWindow.vala:130
 msgid "Security"
-msgstr "Sicurezza"
+msgstr "Security"
 
 #: ../src/PreferencesWindow.vala:137
 msgid "Blocklist"
@@ -129,8 +129,9 @@ msgid "Download Location"
 msgstr "Percorso Scaricati"
 
 #: ../src/PreferencesWindow.vala:149
+#, fuzzy
 msgid "Select Download Folder…"
-msgstr "Seleziona Cartella Scaricati"
+msgstr "Seleziona Cartella Scaricati…"
 
 #: ../src/PreferencesWindow.vala:159
 msgid "Limits"
@@ -182,7 +183,7 @@ msgstr "Cerca Torrent"
 
 #: ../src/MainWindow.vala:213
 msgid "All"
-msgstr "TUtti"
+msgstr "Tutti"
 
 #: ../src/MainWindow.vala:214
 msgid "Downloading"
@@ -190,7 +191,7 @@ msgstr "In ricezione"
 
 #: ../src/MainWindow.vala:215
 msgid "Seeding"
-msgstr "Distribuzione"
+msgstr "In Distribuzione"
 
 #: ../src/MainWindow.vala:258
 msgid "No Torrents Added"

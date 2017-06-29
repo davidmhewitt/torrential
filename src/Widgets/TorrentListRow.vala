@@ -124,7 +124,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     private string generate_completeness_text () {
-        if (torrent.downloading) {
+        if (!torrent.has_metadata) {
+            return _("Trying to find metadata for magnet link");
+        } else if (torrent.downloading) {
             return _("%s of %s — %s remaining").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total), time_to_string (torrent.seconds_remaining));
         } else if (torrent.paused || torrent.waiting) {
             return _("%s of %s").printf (format_size (torrent.bytes_downloaded), format_size (torrent.bytes_total));

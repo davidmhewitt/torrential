@@ -186,6 +186,10 @@ public class Torrential.MainWindow : Gtk.Window {
         });
     }
 
+    public void wait_for_close () {
+        torrent_manager.wait_for_close ();
+    }
+
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
         if (torrents.size == 0) {
             search_entry.sensitive = false;
@@ -314,7 +318,11 @@ public class Torrential.MainWindow : Gtk.Window {
     private void on_preferences (SimpleAction action) {
         prefs_window = new PreferencesWindow (this);
         prefs_window.on_close.connect (() => {
-            torrent_manager.close.begin ();
+            try {
+                torrent_manager.close ();
+            } catch (ThreadError e) {
+                warning ("Error with thread while updating session settings. Error: %s", e.message);
+            }
         });
         prefs_window.update_blocklist.connect (() => {
             torrent_manager.update_blocklists (true);

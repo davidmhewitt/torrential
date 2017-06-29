@@ -103,11 +103,16 @@ public class Torrential.Application : Granite.Application {
         window.present ();
         window.present_with_time ((uint32)GLib.get_monotonic_time ());
     }
+
+    public void wait_for_close () {
+        window.wait_for_close ();
+    }
 }
 
 int main (string[] args) {
     var app = new Torrential.Application ();
     var ret_val = app.run (args);
+    app.wait_for_close ();
     // Ensure we free the static instance of our application or else destructors won't be called
     // and libtransmission won't be shut down cleanly
     Granite.app = null;

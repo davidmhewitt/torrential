@@ -35,6 +35,8 @@ public class Torrential.TorrentManager : Object {
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
     private Settings saved_state = Settings.get_default ();
 
+    private Thread<void*>? update_session_thread = null;
+
     public signal void torrent_completed (Torrent torrent);
     public signal void blocklist_load_failed ();
     public signal void blocklist_load_complete ();
@@ -65,19 +67,20 @@ public class Torrential.TorrentManager : Object {
         session.save_settings (CONFIG_DIR, settings);
     }
 
-    public async void close () throws ThreadError {
-        SourceFunc callback = close.callback;
-
+    public void close () throws ThreadError {
         ThreadFunc<void*> run = () => {
             update_session_settings ();
             session.update_settings (settings);
 
-            Idle.add((owned) callback);
             return null;
         };
-        Thread.create<void*>(run, false);
+        update_session_thread = new Thread<void*> ("update-session-settings", run);
+    }
 
-        yield;
+    public void wait_for_close () {
+        if (update_session_thread != null) {
+            update_session_thread.join ();
+        }
     }
 
     public void update_blocklists (bool force = false) {

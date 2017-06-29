@@ -139,10 +139,13 @@ public class Torrential.MainWindow : Gtk.Window {
         }
 
         var torrent_completed_signal_id = torrent_manager.torrent_completed.connect ((torrent) => {
-            var notification = new Notification (_("Torrent Complete"));
-            notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
-            notification.set_default_action_and_target_value ("app." + ACTION_OPEN_COMPLETED_TORRENT, new Variant.int32 (torrent.id));
-            app.send_notification ("app.torrent-completed", notification);
+            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            if (!focused) {
+                var notification = new Notification (_("Torrent Complete"));
+                notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
+                notification.set_default_action_and_target_value ("app." + ACTION_OPEN_COMPLETED_TORRENT, new Variant.int32 (torrent.id));
+                app.send_notification ("app.torrent-completed", notification);
+            }
         });
 
         torrent_manager.blocklist_load_failed.connect (() => {
@@ -403,8 +406,8 @@ public class Torrential.MainWindow : Gtk.Window {
         var result = torrent_manager.add_torrent_by_magnet (magnet, out new_torrent);
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
-            enable_main_view ();
-            if (!visible) {
+            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            if (!focused) {
                 var notification = new Notification (_("Magnet Link"));
                 notification.set_body (_("Successfully added magnet link"));
                 notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
@@ -422,7 +425,8 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void send_magnet_error_notification () {
-        if (!visible) {
+        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+        if (!focused) {
             var notification = new Notification (_("Magnet Link"));
             notification.set_body (_("Failed to add magnet link"));
             notification.set_default_action ("app." + ACTION_SHOW_WINDOW);

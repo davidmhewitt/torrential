@@ -141,6 +141,16 @@ public class Torrential.Torrent {
         }
     }
 
+    public bool has_metadata {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.metadataPercentComplete == 1.0f;
+            } else {
+                return false;
+            }
+        }
+    }
+
     public int file_count {
         get {
             if (torrent.info != null) {
@@ -193,7 +203,7 @@ public class Torrential.Torrent {
 
     public string download_directory {
         get {
-            return torrent.download_dir;
+            return torrent.current_dir;
         }
     }
 

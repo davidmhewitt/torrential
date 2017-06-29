@@ -34,6 +34,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
         set_selection_mode (Gtk.SelectionMode.SINGLE);
+        activate_on_single_click = false;
 
         foreach (var torrent in torrents) {
             add_row (torrent);
@@ -103,7 +104,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {
-        open_torrent ((row as TorrentListRow).id);
+        var torrent_row = row as TorrentListRow;
+        if (torrent_row.has_metadata) {
+            open_torrent ((row as TorrentListRow).id);
+        }
     }
 
     public void filter (FilterType filter, string? search_term) {

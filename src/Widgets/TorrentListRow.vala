@@ -192,4 +192,5 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     public string display_name { get { return torrent.name; } }
     public time_t date_added { get { return torrent.date_added; } }
     public int id { get { return torrent.id; } }
+    public bool has_metadata { get { return torrent.has_metadata; } }
 }

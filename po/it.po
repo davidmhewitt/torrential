@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: morf3089@gmail.com\n"
 "POT-Creation-Date: 2017-06-25 19:12+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"

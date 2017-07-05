@@ -25,6 +25,7 @@ public class Torrential.Application : Granite.Application {
     construct {
         flags |= ApplicationFlags.HANDLES_OPEN;
         application_id = "com.github.davidmhewitt.torrential";
+        app_launcher = application_id + ".desktop";
 
         program_name = "Torrential";
         app_years = "2017";

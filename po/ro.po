@@ -1,62 +1,102 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-29 22:00+0100\n"
+"POT-Creation-Date: 2017-07-10 20:40+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
 
-#: ../src/Widgets/TorrentListRow.vala:128
-msgid "Trying to find metadata for magnet link"
+#: ../src/TorrentManager.vala:47
+msgid "KB"
+msgstr ""
+
+#: ../src/TorrentManager.vala:47
+msgid "MB"
+msgstr ""
+
+#: ../src/TorrentManager.vala:47
+msgid "GB"
+msgstr ""
+
+#: ../src/TorrentManager.vala:47
+msgid "TB"
+msgstr ""
+
+#: ../src/TorrentManager.vala:48
+msgid "KB/s"
+msgstr ""
+
+#: ../src/TorrentManager.vala:48
+msgid "MB/s"
+msgstr ""
+
+#: ../src/TorrentManager.vala:48
+msgid "GB/s"
+msgstr ""
+
+#: ../src/TorrentManager.vala:48
+msgid "TB/s"
+msgstr ""
+
+#: ../src/Widgets/TorrentListRow.vala:91
+msgid "Pause torrent"
+msgstr ""
+
+#: ../src/Widgets/TorrentListRow.vala:94
+msgid "Resume torrent"
 msgstr ""
 
 #: ../src/Widgets/TorrentListRow.vala:130
-msgid "%s of %s — %s remaining"
+msgid "Trying to find metadata for magnet link"
 msgstr ""
 
 #: ../src/Widgets/TorrentListRow.vala:132
-msgid "%s of %s"
+msgid "%s of %s — %s remaining"
 msgstr ""
 
 #: ../src/Widgets/TorrentListRow.vala:134
+msgid "%s of %s"
+msgstr ""
+
+#: ../src/Widgets/TorrentListRow.vala:136
 msgid "%s uploaded"
 msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:145
+#: ../src/Widgets/TorrentListRow.vala:147
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:147 ../src/MainWindow.vala:233
+#: ../src/Widgets/TorrentListRow.vala:149 ../src/MainWindow.vala:247
 msgid "Paused"
 msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:149
+#: ../src/Widgets/TorrentListRow.vala:151
 msgid "Waiting in queue"
 msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:161
+#: ../src/Widgets/TorrentListRow.vala:163
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../src/Widgets/TorrentListRow.vala:162
+#: ../src/Widgets/TorrentListRow.vala:164
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../src/Widgets/TorrentListRow.vala:163
+#: ../src/Widgets/TorrentListRow.vala:165
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: ../src/Widgets/TorrentListRow.vala:164
+#: ../src/Widgets/TorrentListRow.vala:166
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] ""
@@ -86,12 +126,140 @@ msgstr ""
 msgid "Show in File Browser"
 msgstr ""
 
-#: ../src/Application.vala:49
-msgid "translator-credits"
+#: ../src/MainWindow.vala:122
+msgid "No Search Results"
 msgstr ""
 
-#: ../src/PreferencesWindow.vala:33 ../src/MainWindow.vala:277
+#: ../src/MainWindow.vala:122
+msgid "Try changing search terms"
+msgstr ""
+
+#: ../src/MainWindow.vala:123
+msgid "No Torrents Here"
+msgstr ""
+
+#: ../src/MainWindow.vala:123
+msgid "Try a different category"
+msgstr ""
+
+#: ../src/MainWindow.vala:149
+msgid "Torrent Complete"
+msgstr ""
+
+#: ../src/MainWindow.vala:150
+msgid "“%s” has finished downloading"
+msgstr ""
+
+#: ../src/MainWindow.vala:157
+msgid "Failed to load blocklist. All torrents paused as a precaution."
+msgstr ""
+
+#: ../src/MainWindow.vala:223
+msgid "Application menu"
+msgstr ""
+
+#: ../src/MainWindow.vala:229
+msgid "Open .torrent file"
+msgstr ""
+
+#: ../src/MainWindow.vala:233
+msgid "Search Torrents"
+msgstr ""
+
+#: ../src/MainWindow.vala:244
+msgid "All"
+msgstr ""
+
+#: ../src/MainWindow.vala:245
+msgid "Downloading"
+msgstr ""
+
+#: ../src/MainWindow.vala:246
+msgid "Seeding"
+msgstr ""
+
+#: ../src/MainWindow.vala:299
+msgid "No Torrents Added"
+msgstr ""
+
+#: ../src/MainWindow.vala:299
+msgid "Add a torrent file to begin downloading."
+msgstr ""
+
+#: ../src/MainWindow.vala:300
+msgid "Open Torrent"
+msgstr ""
+
+#: ../src/MainWindow.vala:300
+msgid "Open a torrent file from your computer."
+msgstr ""
+
+#: ../src/MainWindow.vala:301 ../src/PreferencesWindow.vala:33
 msgid "Preferences"
+msgstr ""
+
+#: ../src/MainWindow.vala:301
+msgid "Set download folder and other preferences."
+msgstr ""
+
+#: ../src/MainWindow.vala:326
+msgid "_Preferences"
+msgstr ""
+
+#: ../src/MainWindow.vala:330
+msgid "_About"
+msgstr ""
+
+#: ../src/MainWindow.vala:336
+msgid "_Quit"
+msgstr ""
+
+#: ../src/MainWindow.vala:374
+msgid "Open some torrents"
+msgstr ""
+
+#: ../src/MainWindow.vala:376
+msgid "Cancel"
+msgstr ""
+
+#: ../src/MainWindow.vala:377
+msgid "Open"
+msgstr ""
+
+#: ../src/MainWindow.vala:382
+msgid "All files"
+msgstr ""
+
+#: ../src/MainWindow.vala:385
+msgid "Torrent files"
+msgstr ""
+
+#: ../src/MainWindow.vala:413
+msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
+msgstr ""
+
+#: ../src/MainWindow.vala:416
+msgid "Didn’t add “%s”. An identical torrent has already been added."
+msgstr ""
+
+#: ../src/MainWindow.vala:436 ../src/MainWindow.vala:455
+msgid "Magnet Link"
+msgstr ""
+
+#: ../src/MainWindow.vala:437
+msgid "Successfully added magnet link"
+msgstr ""
+
+#: ../src/MainWindow.vala:442
+msgid "Failed to add magnet link as it doesn’t appear to be valid."
+msgstr ""
+
+#: ../src/MainWindow.vala:446
+msgid "Didn’t add magnet link. An identical torrent has already been added."
+msgstr ""
+
+#: ../src/MainWindow.vala:456
+msgid "Failed to add magnet link"
 msgstr ""
 
 #: ../src/PreferencesWindow.vala:42
@@ -182,146 +350,6 @@ msgstr ""
 msgid "Continue downloads when closed:"
 msgstr ""
 
-#: ../src/MainWindow.vala:144
-msgid "Torrent Complete"
-msgstr ""
-
-#: ../src/MainWindow.vala:145
-msgid "“%s” has finished downloading"
-msgstr ""
-
-#: ../src/MainWindow.vala:152
-msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
-
-#: ../src/MainWindow.vala:210
-msgid "Application menu"
-msgstr ""
-
-#: ../src/MainWindow.vala:219
-msgid "Search Torrents"
-msgstr ""
-
-#: ../src/MainWindow.vala:230
-msgid "All"
-msgstr ""
-
-#: ../src/MainWindow.vala:231
-msgid "Downloading"
-msgstr ""
-
-#: ../src/MainWindow.vala:232
-msgid "Seeding"
-msgstr ""
-
-#: ../src/MainWindow.vala:275
-msgid "No Torrents Added"
-msgstr ""
-
-#: ../src/MainWindow.vala:275
-msgid "Add a torrent file to begin downloading."
-msgstr ""
-
-#: ../src/MainWindow.vala:276
-msgid "Open Torrent"
-msgstr ""
-
-#: ../src/MainWindow.vala:276
-msgid "Open a torrent file from your computer."
-msgstr ""
-
-#: ../src/MainWindow.vala:277
-msgid "Set download folder and other preferences."
-msgstr ""
-
-#: ../src/MainWindow.vala:302
-msgid "_Preferences"
-msgstr ""
-
-#: ../src/MainWindow.vala:306
-msgid "_About"
-msgstr ""
-
-#: ../src/MainWindow.vala:312
-msgid "_Quit"
-msgstr ""
-
-#: ../src/MainWindow.vala:350
-msgid "Open some torrents"
-msgstr ""
-
-#: ../src/MainWindow.vala:352
-msgid "Cancel"
-msgstr ""
-
-#: ../src/MainWindow.vala:353
-msgid "Open"
-msgstr ""
-
-#: ../src/MainWindow.vala:358
-msgid "All files"
-msgstr ""
-
-#: ../src/MainWindow.vala:361
-msgid "Torrent files"
-msgstr ""
-
-#: ../src/MainWindow.vala:389
-msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr ""
-
-#: ../src/MainWindow.vala:392
-msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr ""
-
-#: ../src/MainWindow.vala:411 ../src/MainWindow.vala:430
-msgid "Magnet Link"
-msgstr ""
-
-#: ../src/MainWindow.vala:412
-msgid "Successfully added magnet link"
-msgstr ""
-
-#: ../src/MainWindow.vala:417
-msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr ""
-
-#: ../src/MainWindow.vala:421
-msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr ""
-
-#: ../src/MainWindow.vala:431
-msgid "Failed to add magnet link"
-msgstr ""
-
-#: ../src/TorrentManager.vala:47
-msgid "KB"
-msgstr ""
-
-#: ../src/TorrentManager.vala:47
-msgid "MB"
-msgstr ""
-
-#: ../src/TorrentManager.vala:47
-msgid "GB"
-msgstr ""
-
-#: ../src/TorrentManager.vala:47
-msgid "TB"
-msgstr ""
-
-#: ../src/TorrentManager.vala:48
-msgid "KB/s"
-msgstr ""
-
-#: ../src/TorrentManager.vala:48
-msgid "MB/s"
-msgstr ""
-
-#: ../src/TorrentManager.vala:48
-msgid "GB/s"
-msgstr ""
-
-#: ../src/TorrentManager.vala:48
-msgid "TB/s"
+#: ../src/Application.vala:50
+msgid "translator-credits"
 msgstr ""

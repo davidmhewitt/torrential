@@ -218,6 +218,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         var open_button = new Gtk.ToolButton.from_stock (Gtk.Stock.OPEN);
         open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
+        open_button.tooltip_text = _("Open .torrent file");
         headerbar.pack_start (open_button);
 
         search_entry = new Gtk.SearchEntry ();

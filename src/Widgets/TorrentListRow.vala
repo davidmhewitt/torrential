@@ -88,8 +88,10 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         if (!torrent.paused) {
             pause_button = new Gtk.Button.from_icon_name (PAUSE_ICON_NAME);
+            pause_button.tooltip_text = _("Pause torrent");
         } else {
             pause_button = new Gtk.Button.from_icon_name (RESUME_ICON_NAME);
+            pause_button.tooltip_text = _("Resume torrent");
         }
         pause_button.get_style_context ().add_class ("flat");
         pause_button.clicked.connect (() => {

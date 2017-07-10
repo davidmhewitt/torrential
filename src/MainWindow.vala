@@ -119,9 +119,14 @@ public class Torrential.MainWindow : Gtk.Window {
         infobar.no_show_all = true;
         infobar.visible = false;
 
+        var no_results_alertview = new Granite.Widgets.AlertView (_("No Search Results"), _("Try changing search terms"), "edit-find-symbolic");
+        var empty_category_alertview = new Granite.Widgets.AlertView (_("No Torrents Here"), _("Try a different category"), "edit-find-symbolic");
+
         stack = new Gtk.Stack ();
         stack.add_named (welcome_screen, "welcome");
         stack.add_named (list_box_scroll, "main");
+        stack.add_named (no_results_alertview, "no_results");
+        stack.add_named (empty_category_alertview, "empty_category");
         stack.visible_child_name = "welcome";
         grid.add (infobar);
         grid.add (stack);
@@ -243,6 +248,11 @@ public class Torrential.MainWindow : Gtk.Window {
     private void update_view () {
         if (search_entry.text != "") {
             list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
+            if (!list_box.has_visible_children ()) {
+                stack.visible_child_name = "no_results";
+            } else {
+                stack.visible_child_name = "main";
+            }
             return;
         }
         switch (view_mode.selected) {
@@ -260,6 +270,11 @@ public class Torrential.MainWindow : Gtk.Window {
                 break;
             default:
                 break;
+        }
+        if (!list_box.has_visible_children ()) {
+            stack.visible_child_name = "empty_category";
+        } else {
+            stack.visible_child_name = "main";
         }
     }
 
@@ -406,6 +421,7 @@ public class Torrential.MainWindow : Gtk.Window {
         var result = torrent_manager.add_torrent_by_magnet (magnet, out new_torrent);
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
+            enable_main_view ();
             var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
             if (!focused) {
                 var notification = new Notification (_("Magnet Link"));

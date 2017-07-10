@@ -140,6 +140,15 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         }
     }
 
+    public bool has_visible_children () {
+        foreach (var child in get_children ()) {
+            if (child.get_child_visible ()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private int sort (Gtk.ListBoxRow row1, Gtk.ListBoxRow row2) {
         var a = row1 as TorrentListRow;
         var b = row2 as TorrentListRow;

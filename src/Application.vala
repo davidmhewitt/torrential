@@ -30,7 +30,7 @@ public class Torrential.Application : Granite.Application {
         program_name = "Torrential";
         app_years = "2017";
 
-        build_version = "1.0.4";
+        build_version = "1.0.5";
         app_icon = "com.github.davidmhewitt.torrential";
         main_url = "https://github.com/davidmhewitt/torrential";
         bug_url = "https://github.com/davidmhewitt/torrential/issues";

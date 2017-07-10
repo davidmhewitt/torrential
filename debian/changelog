@@ -1,3 +1,12 @@
+com.github.davidmhewitt.torrential (1.0.5) xenial; urgency=low
+
+  * Only show progress bar in dock when necessary
+  * Alert messages when no torrents in list box
+  * Added tooltips to buttons that were missing them
+  * Added translations for some other languages and minor bug fixes
+
+ -- David Hewitt <davidmhewitt@gmail.com>  Mon, 10 Jul 2017 20:42:31 +0100
+
 com.github.davidmhewitt.torrential (1.0.4) xenial; urgency=low
 
   * Show notifications when magnet links are added in background

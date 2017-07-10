@@ -168,11 +168,19 @@ public class Torrential.MainWindow : Gtk.Window {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
             launcher_entry.progress = torrent_manager.get_overall_progress ();
-            launcher_entry.progress_visible = true;
+            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            if (!focused && list_box.has_visible_children ()) {
+                launcher_entry.progress_visible = true;
+            } else {
+                launcher_entry.progress_visible = false;
+            }
             return true;
         });
 
         delete_event.connect (() => {
+            if (!torrent_manager.has_active_torrents ()) {
+                quitting_for_real = true;
+            }
             if (saved_state.hide_on_close && !quitting_for_real) {
                 return hide_on_delete ();
             } else {

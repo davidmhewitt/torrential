@@ -96,6 +96,15 @@ public class Torrential.TorrentManager : Object {
         });
     }
 
+    public bool has_active_torrents () {
+        foreach (var torrent in get_torrents ()) {
+            if (torrent.seeding || torrent.downloading || torrent.waiting) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private async bool load_blocklists (bool force = false) {
         var dest_folder = Path.build_path (Path.DIR_SEPARATOR_S, CONFIG_DIR, "blocklists");
 

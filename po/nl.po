@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: sam@feyaerts.me\n"
 "POT-Creation-Date: 2017-07-10 20:40+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -39,14 +39,12 @@ msgid "TB/s"
 msgstr "TB/s"
 
 #: ../src/Widgets/TorrentListRow.vala:91
-#, fuzzy
 msgid "Pause torrent"
-msgstr "Open enkele torrents"
+msgstr "Pauzeer torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:94
-#, fuzzy
 msgid "Resume torrent"
-msgstr "Open enkele torrents"
+msgstr "Hervat torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:130
 msgid "Trying to find metadata for magnet link"
@@ -123,22 +121,20 @@ msgid "Show in File Browser"
 msgstr "Toon in Bestandsbrowser"
 
 #: ../src/MainWindow.vala:122
-#, fuzzy
 msgid "No Search Results"
-msgstr "Zoek Torrents"
+msgstr "Geen Zoekresultaten"
 
 #: ../src/MainWindow.vala:122
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Probeer andere zoektermen"
 
 #: ../src/MainWindow.vala:123
-#, fuzzy
 msgid "No Torrents Here"
-msgstr "Geen Torrents Toegevoegd"
+msgstr "Geen Torrents Hier"
 
 #: ../src/MainWindow.vala:123
 msgid "Try a different category"
-msgstr ""
+msgstr "Probeer een andere categorie"
 
 #: ../src/MainWindow.vala:149
 msgid "Torrent Complete"
@@ -157,9 +153,8 @@ msgid "Application menu"
 msgstr "Applicatie menu"
 
 #: ../src/MainWindow.vala:229
-#, fuzzy
 msgid "Open .torrent file"
-msgstr "Open Torrent"
+msgstr "Open .torrent bestand"
 
 #: ../src/MainWindow.vala:233
 msgid "Search Torrents"
@@ -191,7 +186,7 @@ msgstr "Open Torrent"
 
 #: ../src/MainWindow.vala:300
 msgid "Open a torrent file from your computer."
-msgstr "Open een torrent bestand vanop uw computer."
+msgstr "Open een lokaal torrent bestand."
 
 #: ../src/MainWindow.vala:301 ../src/PreferencesWindow.vala:33
 msgid "Preferences"
@@ -235,13 +230,11 @@ msgstr "Torrent bestanden"
 
 #: ../src/MainWindow.vala:413
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr ""
-"Kon “%s” niet toevoegen. Het blijkt geen geldig torrent bestand te zijn."
+msgstr "Kon “%s” niet toevoegen. Het blijkt geen geldig torrent bestand te zijn."
 
 #: ../src/MainWindow.vala:416
 msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr ""
-"De torrent “%s” werd niet toegevoegd omdat deze reeds eerder geladen werd."
+msgstr "De torrent “%s” werd niet toegevoegd omdat deze reeds eerder geladen werd."
 
 #: ../src/MainWindow.vala:436 ../src/MainWindow.vala:455
 msgid "Magnet Link"

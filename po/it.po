@@ -130,11 +130,11 @@ msgstr "Mostra nella Cartella"
 #: ../src/MainWindow.vala:122
 #, fuzzy
 msgid "No Search Results"
-msgstr "Cerca Torrent"
+msgstr "Nessun Risultato"
 
 #: ../src/MainWindow.vala:122
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Prova a cambiare i termini di ricerca"
 
 #: ../src/MainWindow.vala:123
 #, fuzzy
@@ -143,7 +143,7 @@ msgstr "Nessun Torrent Aggiunto"
 
 #: ../src/MainWindow.vala:123
 msgid "Try a different category"
-msgstr ""
+msgstr "Prova una categoria differente"
 
 #: ../src/MainWindow.vala:149
 msgid "Torrent Complete"
@@ -155,8 +155,7 @@ msgstr "“%s” è stato scaricato"
 
 #: ../src/MainWindow.vala:157
 msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
-"Caricamento blocklist fallito. Tutti i torrent fermati per precauzione."
+msgstr "Caricamento blocklist fallito. Tutti i torrent fermati per precauzione."
 
 #: ../src/MainWindow.vala:223
 msgid "Application menu"
@@ -309,7 +308,7 @@ msgstr "URL Blocklist:"
 
 #: ../src/PreferencesWindow.vala:130
 msgid "Security"
-msgstr "Security"
+msgstr "Sicurezza"
 
 #: ../src/PreferencesWindow.vala:137
 msgid "Blocklist"

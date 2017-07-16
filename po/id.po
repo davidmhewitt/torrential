@@ -85,21 +85,25 @@ msgstr "Menunggu di antrian"
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] "%u hari"
+msgstr[1] "%u hari"
 
 #: ../src/Widgets/TorrentListRow.vala:164
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u jam"
+msgstr[1] "%u jam"
 
 #: ../src/Widgets/TorrentListRow.vala:165
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] "%u menit"
+msgstr[1] "%u menit"
 
 #: ../src/Widgets/TorrentListRow.vala:166
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u detik"
+msgstr[1] "%u detik"
 
 #: ../src/Widgets/MultiInfoBar.vala:33
 msgid "Next Warning"
@@ -113,6 +117,7 @@ msgstr "Tutup"
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
 msgstr[0] "(Plus %d peringatan lebih lanjut…)"
+msgstr[1] "(Plus %d peringatan lebih lanjut…)"
 
 #: ../src/Widgets/TorrentListBox.vala:78
 msgid "Remove"

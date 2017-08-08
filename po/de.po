@@ -8,67 +8,67 @@ msgstr ""
 
 #: ../src/TorrentManager.vala:47
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #: ../src/TorrentManager.vala:47
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../src/TorrentManager.vala:47
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: ../src/TorrentManager.vala:47
 msgid "TB"
-msgstr ""
+msgstr "TB"
 
 #: ../src/TorrentManager.vala:48
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "TB/s"
-msgstr ""
+msgstr "TB/s"
 
 #: ../src/Widgets/TorrentListRow.vala:91
 msgid "Pause torrent"
-msgstr ""
+msgstr "Pausiere Torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:94
 msgid "Resume torrent"
-msgstr ""
+msgstr "Torrent fortsetzen"
 
 #: ../src/Widgets/TorrentListRow.vala:130
 msgid "Trying to find metadata for magnet link"
-msgstr ""
+msgstr "Versuche zum Magnetlink Metadaten zu finden"
 
 #: ../src/Widgets/TorrentListRow.vala:132
 msgid "%s of %s — %s remaining"
-msgstr ""
+msgstr "%s von %s - %s verbleiben"
 
 #: ../src/Widgets/TorrentListRow.vala:134
 msgid "%s of %s"
-msgstr ""
+msgstr "%s von %s"
 
 #: ../src/Widgets/TorrentListRow.vala:136
 msgid "%s uploaded"
-msgstr ""
+msgstr "%s hochgeladen"
 
 #: ../src/Widgets/TorrentListRow.vala:147
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
-msgstr ""
+msgstr "Mit %i von %i Peers verbunden. ⬇%s ⬆%s"
 
 #: ../src/Widgets/TorrentListRow.vala:149 ../src/MainWindow.vala:247
 msgid "Paused"
-msgstr ""
+msgstr "Pausiert"
 
 #: ../src/Widgets/TorrentListRow.vala:151
 msgid "Waiting in queue"

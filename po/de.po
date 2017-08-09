@@ -190,7 +190,7 @@ msgstr "Öffne eine Torrent-Datei von deinem Computer."
 
 #: ../src/MainWindow.vala:301 ../src/PreferencesWindow.vala:33
 msgid "Preferences"
-msgstr "Eigenschaften"
+msgstr "Einstellungen"
 
 #: ../src/MainWindow.vala:301
 msgid "Set download folder and other preferences."
@@ -198,7 +198,7 @@ msgstr "Lege den Downloadordner und andere Eigenschaften fest"
 
 #: ../src/MainWindow.vala:326
 msgid "_Preferences"
-msgstr "_Eigenschaften"
+msgstr "_Einstellungen"
 
 #: ../src/MainWindow.vala:330
 msgid "_About"

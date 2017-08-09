@@ -306,31 +306,31 @@ msgstr "Blockliste"
 
 #: ../src/PreferencesWindow.vala:147
 msgid "Download Location"
-msgstr ""
+msgstr "Speicherort für Downloads"
 
 #: ../src/PreferencesWindow.vala:149
 msgid "Select Download Folder…"
-msgstr ""
+msgstr "Wähle Downloadordner"
 
 #: ../src/PreferencesWindow.vala:159
 msgid "Limits"
-msgstr ""
+msgstr "Schranken"
 
 #: ../src/PreferencesWindow.vala:163
 msgid "Max simultaneous downloads:"
-msgstr ""
+msgstr "Maximale Anzahl an zeitgleichen Downloads "
 
 #: ../src/PreferencesWindow.vala:166 ../src/PreferencesWindow.vala:171
 msgid "0 means unlimited"
-msgstr ""
+msgstr "0 bedeutet ohne Beschränkungen"
 
 #: ../src/PreferencesWindow.vala:168
 msgid "Download speed limit (KBps):"
-msgstr ""
+msgstr "Schranke für die Downloadgeschwindichkeit in KB/s"
 
 #: ../src/PreferencesWindow.vala:173
 msgid "Upload speed limit (KBps):"
-msgstr ""
+msgstr "Schranke für die Uploadgeschwindigkeit in KB/s"
 
 #: ../src/PreferencesWindow.vala:175
 msgid "Seed Limit Ratio:"
@@ -338,11 +338,11 @@ msgstr ""
 
 #: ../src/PreferencesWindow.vala:182
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Desktopintegration"
 
 #: ../src/PreferencesWindow.vala:186
 msgid "Continue downloads when closed:"
-msgstr ""
+msgstr "Downloads fortführen wenn App geschlossen wird"
 
 #: ../src/Application.vala:50
 msgid "translator-credits"

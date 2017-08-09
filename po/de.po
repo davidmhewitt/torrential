@@ -342,7 +342,7 @@ msgstr "Desktopintegration"
 
 #: ../src/PreferencesWindow.vala:186
 msgid "Continue downloads when closed:"
-msgstr "Downloads fortführen wenn App geschlossen wird"
+msgstr "Downloads fortführen, wenn App geschlossen wurde"
 
 #: ../src/Application.vala:50
 msgid "translator-credits"

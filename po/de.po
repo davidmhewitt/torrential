@@ -109,8 +109,8 @@ msgstr "Schließen"
 #: ../src/Widgets/MultiInfoBar.vala:69
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
-msgstr[0] "Außerdem eine weitere Warnung..."
-msgstr[1] "Außerdem weitere %d Warnungen"
+msgstr[0] "Außerdem eine weitere Warnung…"
+msgstr[1] "Außerdem weitere %d Warnungen…"
 
 #: ../src/Widgets/TorrentListBox.vala:78
 msgid "Remove"
@@ -178,7 +178,7 @@ msgstr "Es wurden keine Torrents hinzugefügt"
 
 #: ../src/MainWindow.vala:299
 msgid "Add a torrent file to begin downloading."
-msgstr "Füge eine Torrent-Datei hinzu, damit sie runtergeladen wird."
+msgstr "Füge eine Torrent-Datei hinzu, damit sie heruntergeladen wird."
 
 #: ../src/MainWindow.vala:300
 msgid "Open Torrent"
@@ -194,7 +194,7 @@ msgstr "Einstellungen"
 
 #: ../src/MainWindow.vala:301
 msgid "Set download folder and other preferences."
-msgstr "Lege den Downloadordner und andere Eigenschaften fest"
+msgstr "Lege den Downloadordner und weitere Einstellungen fest"
 
 #: ../src/MainWindow.vala:326
 msgid "_Preferences"
@@ -230,7 +230,7 @@ msgstr "Torrent-Datei"
 
 #: ../src/MainWindow.vala:413
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr "%s hinzuzufügen ist gescheitert, da es nicht nach ein zulässiger Torrent zu sein scheint."
+msgstr "%s hinzuzufügen ist gescheitert, da es nicht ein zulässiger Torrent zu sein scheint."
 
 #: ../src/MainWindow.vala:416
 msgid "Didn’t add “%s”. An identical torrent has already been added."
@@ -298,7 +298,7 @@ msgstr "Blockliste-URL:"
 
 #: ../src/PreferencesWindow.vala:130
 msgid "Security"
-msgstr "Sicherheit:"
+msgstr "Sicherheit"
 
 #: ../src/PreferencesWindow.vala:137
 msgid "Blocklist"
@@ -310,7 +310,7 @@ msgstr "Speicherort für Downloads"
 
 #: ../src/PreferencesWindow.vala:149
 msgid "Select Download Folder…"
-msgstr "Wähle Downloadordner"
+msgstr "Wähle Downloadordner…"
 
 #: ../src/PreferencesWindow.vala:159
 msgid "Limits"

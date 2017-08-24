@@ -153,10 +153,14 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var a = row1 as TorrentListRow;
         var b = row2 as TorrentListRow;
 
-        if (a.downloading || b.downloading) {
+        if (a.downloading != b.downloading) {
             return a.downloading ? -1 : 1;
         }
 
-        return a.date_added < b.date_added ? -1 : 1;
+        if (a.date_added != b.date_added) {
+            return a.date_added > b.date_added ? -1 : 1;
+        }
+
+        return a.display_name.collate (b.display_name);
     }
 }

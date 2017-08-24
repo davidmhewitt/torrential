@@ -1,3 +1,13 @@
+com.github.davidmhewitt.torrential (1.0.6) xenial; urgency=low
+
+  * Add a toolbar button to add magnet links
+  * Single file torrents open default app when double clicked
+  * Possible fix for inconsistent sorting bug
+  * Minor metadata tweaks
+  * Updated translations
+
+ -- David Hewitt <davidmhewitt@gmail.com>  Fri, 25 Aug 2017 00:54:57 +0100
+
 com.github.davidmhewitt.torrential (1.0.5) xenial; urgency=low
 
   * Only show progress bar in dock when necessary

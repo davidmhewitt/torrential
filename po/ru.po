@@ -47,14 +47,12 @@ msgid "TB/s"
 msgstr "ТБ/С"
 
 #: ../src/Widgets/TorrentListRow.vala:91
-#, fuzzy
 msgid "Pause torrent"
-msgstr "Открыть несколько торрентов"
+msgstr "Приостановить загрузку торрента"
 
 #: ../src/Widgets/TorrentListRow.vala:94
-#, fuzzy
 msgid "Resume torrent"
-msgstr "Открыть несколько торрентов"
+msgstr "Продолжить загрузку торрента"
 
 #: ../src/Widgets/TorrentListRow.vala:130
 msgid "Trying to find metadata for magnet link"
@@ -136,22 +134,20 @@ msgid "Show in File Browser"
 msgstr "Показать в файловом менеджере"
 
 #: ../src/MainWindow.vala:122
-#, fuzzy
 msgid "No Search Results"
-msgstr "Поиск торрентов"
+msgstr "Ничего не найдено"
 
 #: ../src/MainWindow.vala:122
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Попробуйте изменить поисковый запрос"
 
 #: ../src/MainWindow.vala:123
-#, fuzzy
 msgid "No Torrents Here"
-msgstr "Нет добавленных торрентов"
+msgstr "Здесь ничего нет"
 
 #: ../src/MainWindow.vala:123
 msgid "Try a different category"
-msgstr ""
+msgstr "Попробуйте выбрать другую категорию"
 
 #: ../src/MainWindow.vala:149
 msgid "Torrent Complete"
@@ -172,9 +168,8 @@ msgid "Application menu"
 msgstr "Меню приложения"
 
 #: ../src/MainWindow.vala:229
-#, fuzzy
 msgid "Open .torrent file"
-msgstr "Открыть торрент-файл"
+msgstr "Открыть torrent-файл"
 
 #: ../src/MainWindow.vala:233
 msgid "Search Torrents"

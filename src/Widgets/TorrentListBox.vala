@@ -23,6 +23,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     public signal void torrent_removed (Torrent torrent);
     public signal void open_torrent (int id);
+    public signal void open_torrent_location (int id);
 
     public enum FilterType {
         ALL,
@@ -87,7 +88,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         open_item.activate.connect (() => {
             var selected_row = get_selected_row ();
             if (selected_row != null) {
-                open_torrent ((selected_row as TorrentListRow).id);
+                open_torrent_location ((selected_row as TorrentListRow).id);
             }
         });
         menu.add (remove_item);

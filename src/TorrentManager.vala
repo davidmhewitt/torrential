@@ -351,6 +351,39 @@ public class Torrential.TorrentManager : Object {
         }
     }
 
+    public void open_torrent (int torrent_id) {
+        foreach (unowned Transmission.Torrent torrent in added_torrents) {
+            if (torrent.id == torrent_id) {
+                if (torrent.stat.activity == Transmission.Activity.SEED && torrent.info.files.length == 1) {
+                    var files = torrent.info.files;
+                    if (files != null && files.length > 0) {
+                    bool certain = false;
+                    var content_type = ContentType.guess (files[0].name, null, out certain);
+                        var appinfo = AppInfo.get_default_for_type (content_type, true);
+                        if (appinfo != null) {
+                            var path = Path.build_path (Path.DIR_SEPARATOR_S, torrent.download_dir, files[0].name);
+                            var file = File.new_for_path (path);
+                            if (file.query_exists ()) {
+                                var file_list = new List<string> ();
+                                file_list.append (file.get_uri ());
+                                try {
+                                    appinfo.launch_uris (file_list, null);
+                                    return;
+                                } catch (Error e) {
+                                    warning ("Unable to launch default handler for %s, falling back to file manager", content_type);
+                                    open_torrent_location (torrent_id);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+
+        open_torrent_location (torrent_id);
+    }
+
     public void open_torrent_location (int torrent_id) {
         foreach (unowned Transmission.Torrent torrent in added_torrents) {
             if (torrent.id == torrent_id) {

@@ -95,7 +95,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         SimpleAction open_torrent = new SimpleAction (ACTION_OPEN_COMPLETED_TORRENT, VariantType.INT32);
         open_torrent.activate.connect ((parameter) => {
-            torrent_manager.open_torrent_location (parameter.get_int32 ());
+            torrent_manager.open_torrent (parameter.get_int32 ());
         });
         app.add_action (open_torrent);
 
@@ -290,7 +290,8 @@ public class Torrential.MainWindow : Gtk.Window {
     private void build_main_interface () {
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
-        list_box.open_torrent.connect ((id) => torrent_manager.open_torrent_location (id));
+        list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
+        list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
         list_box_scroll = new Gtk.ScrolledWindow (null, null);
         list_box_scroll.add (list_box);
     }

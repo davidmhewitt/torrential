@@ -229,6 +229,10 @@ public class Torrential.MainWindow : Gtk.Window {
         open_button.tooltip_text = _("Open .torrent file");
         headerbar.pack_start (open_button);
 
+        var magnet_image = new Gtk.Image.from_resource ("/com/github/davidmhewitt/torrential/open-magnet.svg");
+        var magnet_button = new Gtk.ToolButton (magnet_image, null);
+        headerbar.pack_start (magnet_button);
+
         search_entry = new Gtk.SearchEntry ();
         search_entry.placeholder_text = _("Search Torrents");
         headerbar.pack_end (search_entry);

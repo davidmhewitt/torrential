@@ -75,11 +75,14 @@ OPTIONS
     --enable-deprecated
 )
 
+include (GResource)
+glib_compile_resources(GLIB_RESOURCES_ICONS SOURCE data/com.github.davidmhewitt.torrential.gresource.xml)
+
 include (GSettings)
 add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 
 # tell cmake what to call the executable we just made
-add_executable(${EXEC_NAME} ${VALA_C})
+add_executable(${EXEC_NAME} ${VALA_C} ${GLIB_RESOURCES_ICONS})
 target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIVE_LIBRARIES} libtr)
 
 # install the binaries we just made

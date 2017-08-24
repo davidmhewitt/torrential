@@ -102,7 +102,7 @@ public class Torrential.Application : Granite.Application {
             add_window (window);
         }
         window.present ();
-        window.present_with_time ((uint32)GLib.get_monotonic_time ());
+        window.present_with_time (0);
     }
 
     public void wait_for_close () {

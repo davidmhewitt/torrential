@@ -53,6 +53,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private const string ACTION_QUIT = "quit";
     private const string ACTION_HIDE = "hide";
     private const string ACTION_OPEN = "open";
+    private const string ACTION_OPEN_MAGNET = "open-magnet";
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
     private const string ACTION_SHOW_WINDOW = "show-window";
 
@@ -61,7 +62,8 @@ public class Torrential.MainWindow : Gtk.Window {
         {ACTION_ABOUT,                      on_about                },
         {ACTION_QUIT,                       on_quit                 },
         {ACTION_HIDE,                       on_hide                 },
-        {ACTION_OPEN,                       on_open                 }
+        {ACTION_OPEN,                       on_open                 },
+        {ACTION_OPEN_MAGNET,                on_open_magnet          }
     };
 
     public static Gee.MultiMap<string, string> action_accelerators = new Gee.HashMultiMap<string, string> ();
@@ -70,6 +72,7 @@ public class Torrential.MainWindow : Gtk.Window {
         action_accelerators.set (ACTION_QUIT, "<Ctrl>q");
         action_accelerators.set (ACTION_HIDE, "<Ctrl>w");
         action_accelerators.set (ACTION_OPEN, "<Ctrl>o");
+        action_accelerators.set (ACTION_OPEN_MAGNET, "<Ctrl>m");
     }
 
     public MainWindow (Application app) {
@@ -102,7 +105,7 @@ public class Torrential.MainWindow : Gtk.Window {
         SimpleAction show_window = new SimpleAction (ACTION_SHOW_WINDOW, null);
         show_window.activate.connect (() => {
             present ();
-            present_with_time ((uint32)GLib.get_monotonic_time ());
+            present_with_time (0);
         });
         app.add_action (show_window);
 
@@ -231,6 +234,8 @@ public class Torrential.MainWindow : Gtk.Window {
 
         var magnet_image = new Gtk.Image.from_resource ("/com/github/davidmhewitt/torrential/open-magnet.svg");
         var magnet_button = new Gtk.ToolButton (magnet_image, null);
+        magnet_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET);
+        magnet_button.tooltip_text = _("Open magnet link");
         headerbar.pack_start (magnet_button);
 
         search_entry = new Gtk.SearchEntry ();
@@ -397,6 +402,45 @@ public class Torrential.MainWindow : Gtk.Window {
         }
 
         filech.close ();
+    }
+
+    private void on_open_magnet () {
+        Gtk.Dialog dialog = new Gtk.Dialog ();
+
+        dialog.add_buttons (Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, Gtk.Stock.OK, Gtk.ResponseType.OK);
+
+        Gtk.Entry entry = new Gtk.Entry ();
+        entry.changed.connect (() => {
+            // Only allow OK when there's text in the box.
+            dialog.set_response_sensitive (Gtk.ResponseType.OK, entry.text.strip () != "");
+        });
+
+        dialog.width_request = 350;
+        dialog.get_content_area ().spacing = 7;
+        dialog.get_content_area ().border_width = 10;
+        dialog.get_content_area ().pack_start (new Gtk.Label (_("Magnet URL:")));
+        dialog.get_content_area ().pack_start (entry);
+        dialog.get_widget_for_response (Gtk.ResponseType.OK).can_default = true;
+        dialog.set_default_response (Gtk.ResponseType.OK);
+        dialog.show_all ();
+
+        var clipboard = Gtk.Clipboard.get (Gdk.SELECTION_CLIPBOARD);
+        string? contents = clipboard.wait_for_text ();
+        if (contents != null || contents != "") {
+            entry.text = contents;
+        }
+
+        entry.activates_default = true;
+        entry.select_region (0, -1);
+
+        dialog.set_response_sensitive (Gtk.ResponseType.OK, entry.text.strip () != "");
+
+        int response = dialog.run ();
+        if (response == Gtk.ResponseType.OK) {
+            add_magnet (entry.text);
+        }
+
+        dialog.destroy ();
     }
 
     public void add_files (SList<string> uris) {

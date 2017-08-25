@@ -9,6 +9,29 @@
   <description>
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
+  <releases>
+      <release version="1.0.6" date="2017-08-25">
+        <description>
+          <ul>
+            <li>Added a toolbar button to add magnet links.</li>
+            <li>When double clicking a downloaded torrent with only a single file, the default app for that file is now launched.</li>
+            <li>Possible fix for inconsistent sorting bug.</li>
+            <li>Minor AppCenter metadata tweaks.</li>
+            <li>Updated translations.</li>
+          </ul>
+        </description>
+      </release>
+      <release version="1.0.5" date="2017-07-10">
+        <description>
+          <ul>
+            <li>Only show progress bar in dock when necessary.</li>
+            <li>Alert messages when no torrents in list box.</li>
+            <li>Added tooltips to buttons that were missing them.</li>
+            <li>Added translations for some other languages and minor bug fixes.</li>
+          </ul>
+        </description>
+      </release>
+  </releases>
   <custom>
      <value key="x-appcenter-color-primary">rgb(224,247,255)</value>
      <value key="x-appcenter-color-primary-text">#000</value>

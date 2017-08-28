@@ -19,36 +19,13 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Application : Granite.Application {
+public class Torrential.Application : Gtk.Application {
     private MainWindow? window = null;
 
     construct {
         flags |= ApplicationFlags.HANDLES_OPEN;
         application_id = "com.github.davidmhewitt.torrential";
-        app_launcher = application_id + ".desktop";
-
-        program_name = "Torrential";
-        app_years = "2017";
-
-        build_version = "1.0.6";
-        app_icon = "com.github.davidmhewitt.torrential";
-        main_url = "https://github.com/davidmhewitt/torrential";
-        bug_url = "https://github.com/davidmhewitt/torrential/issues";
-        help_url = "https://github.com/davidmhewitt/torrential/issues";
-        //translate_url = "https://l10n.elementary.io/projects/desktop/granite";
-
-        about_documenters = { null };
-        about_artists = {
-            "David Hewitt <davidmhewitt@gmail.com>",
-            "Sam Hewitt <sam@snwh.org>"
-        };
-        about_authors = {
-            "David Hewitt <davidmhewitt@gmail.com>",
-        };
-
-        about_comments = "A simple torrent client";
-        about_translators = _("translator-credits");
-        about_license_type = Gtk.License.GPL_2_0;
+        var app_launcher = application_id + ".desktop";
 
         if (AppInfo.get_default_for_uri_scheme ("magnet") == null) {
             var appinfo = new DesktopAppInfo (app_launcher);
@@ -95,10 +72,6 @@ public class Torrential.Application : Granite.Application {
     public override void activate () {
         if (window == null) {
             window = new MainWindow (this);
-            window.show_about.connect ((window) => {
-                show_about (window);
-            });
-
             add_window (window);
         }
         window.present ();
@@ -114,8 +87,6 @@ int main (string[] args) {
     var app = new Torrential.Application ();
     var ret_val = app.run (args);
     app.wait_for_close ();
-    // Ensure we free the static instance of our application or else destructors won't be called
-    // and libtransmission won't be shut down cleanly
-    Granite.app = null;
+
     return ret_val;
 }

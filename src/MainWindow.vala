@@ -20,8 +20,6 @@
 */
 
 public class Torrential.MainWindow : Gtk.Window {
-    public signal void show_about (Gtk.Window parent);
-
     private bool quitting_for_real = false;
 
     private uint refresh_timer;
@@ -48,8 +46,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
     private const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
 
-    private const string ACTION_PREFERENCES = "undo";
-    private const string ACTION_ABOUT = "redo";
+    private const string ACTION_PREFERENCES = "preferences";
     private const string ACTION_QUIT = "quit";
     private const string ACTION_HIDE = "hide";
     private const string ACTION_OPEN = "open";
@@ -59,7 +56,6 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
-        {ACTION_ABOUT,                      on_about                },
         {ACTION_QUIT,                       on_quit                 },
         {ACTION_HIDE,                       on_hide                 },
         {ACTION_OPEN,                       on_open                 },
@@ -221,11 +217,11 @@ public class Torrential.MainWindow : Gtk.Window {
         headerbar = new Gtk.HeaderBar ();
         headerbar.show_close_button = true;
 
-        var about_button = new Gtk.MenuButton ();
-        about_button.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
-        about_button.tooltip_text = _("Application menu");
-        about_button.popup = build_menu ();
-        headerbar.pack_end (about_button);
+        var menu_button = new Gtk.MenuButton ();
+        menu_button.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
+        menu_button.tooltip_text = _("Application menu");
+        menu_button.popup = build_menu ();
+        headerbar.pack_end (menu_button);
 
         var open_button = new Gtk.ToolButton.from_stock (Gtk.Stock.OPEN);
         open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
@@ -337,10 +333,6 @@ public class Torrential.MainWindow : Gtk.Window {
         preferences_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
         app_menu.append (preferences_item);
 
-        var about_item = new Gtk.MenuItem.with_mnemonic (_("_About"));
-        about_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_ABOUT);
-        app_menu.append (about_item);
-
         app_menu.append (new Gtk.SeparatorMenuItem ());
 
         var quit_item = new Gtk.MenuItem.with_mnemonic (_("_Quit"));
@@ -365,10 +357,6 @@ public class Torrential.MainWindow : Gtk.Window {
             torrent_manager.update_blocklists (true);
         });
         prefs_window.show_all ();
-    }
-
-    private void on_about (SimpleAction action) {
-        show_about (this);
     }
 
     private void on_quit (SimpleAction action) {

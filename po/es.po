@@ -175,7 +175,7 @@ msgstr "Descargando"
 
 #: ../src/MainWindow.vala:246
 msgid "Seeding"
-msgstr "Enviando"
+msgstr "Subiendo"
 
 #: ../src/MainWindow.vala:299
 msgid "No Torrents Added"

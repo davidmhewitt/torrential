@@ -89,11 +89,17 @@ target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIV
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)
 
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/16/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/16x16/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/16/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/16x16@2/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/24/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/24x24/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/24/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/24x24@2/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/32/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/32x32/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/32/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/32x32@2/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/48/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/48x48/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/48/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/48x48@2/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/64/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/64x64/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/64/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/64x64@2/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/128/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/128x128/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/128/com.github.davidmhewitt.torrential.svg DESTINATION share/icons/hicolor/128x128@2/apps)
 
 # install our .desktop file so the Applications menu will see it
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.davidmhewitt.torrential.desktop DESTINATION ${DATADIR}/applications/)

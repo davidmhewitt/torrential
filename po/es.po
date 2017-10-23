@@ -2,6 +2,9 @@ msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-07-10 20:40+0100\n"
++"Last-Translator: Marco Carrizales <tamoxin@msn.com>\n"
++"Language-Team: Spanish\n"
++"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -41,12 +44,12 @@ msgstr "TB/s"
 #: ../src/Widgets/TorrentListRow.vala:91
 #, fuzzy
 msgid "Pause torrent"
-msgstr "Abrir algunos torrents"
+msgstr "Pausar torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:94
 #, fuzzy
 msgid "Resume torrent"
-msgstr "Abrir algunos torrents"
+msgstr "Continuar descarga"
 
 #: ../src/Widgets/TorrentListRow.vala:130
 msgid "Trying to find metadata for magnet link"
@@ -125,20 +128,20 @@ msgstr "Mostrar en el explorador de archivos"
 #: ../src/MainWindow.vala:122
 #, fuzzy
 msgid "No Search Results"
-msgstr "Buscar torrents"
+msgstr "No hubo resultados de búsqueda"
 
 #: ../src/MainWindow.vala:122
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Intenta cambiar los términos de búsqueda"
 
 #: ../src/MainWindow.vala:123
 #, fuzzy
 msgid "No Torrents Here"
-msgstr "No se añadieron torrents"
+msgstr "No hubo torrents"
 
 #: ../src/MainWindow.vala:123
 msgid "Try a different category"
-msgstr ""
+msgstr "Intenta una categoría diferente"
 
 #: ../src/MainWindow.vala:149
 msgid "Torrent Complete"
@@ -150,9 +153,7 @@ msgstr "«%s» se ha terminado de descargar"
 
 #: ../src/MainWindow.vala:157
 msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
-"Fallo en la descarga de la lista de bloqueo. Todos los torrents se han "
-"bloqueado como precaución."
+msgstr "Fallo en la descarga de la lista de bloqueo. Todos los torrents se han bloqueado como precaución."
 
 #: ../src/MainWindow.vala:223
 msgid "Application menu"
@@ -161,7 +162,7 @@ msgstr "Menú de aplicación"
 #: ../src/MainWindow.vala:229
 #, fuzzy
 msgid "Open .torrent file"
-msgstr "Abrir torrent"
+msgstr "Abrir archivo .torrent"
 
 #: ../src/MainWindow.vala:233
 msgid "Search Torrents"
@@ -177,7 +178,7 @@ msgstr "Descargando"
 
 #: ../src/MainWindow.vala:246
 msgid "Seeding"
-msgstr "Sembrando"
+msgstr "Compartiendo"
 
 #: ../src/MainWindow.vala:299
 msgid "No Torrents Added"
@@ -257,8 +258,7 @@ msgstr "Fallo al añadir el enlace magnético ya que no parece ser válido."
 
 #: ../src/MainWindow.vala:446
 msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr ""
-"No se añadió el enlace magnético. Ya se ha añadido un torrent idéntico."
+msgstr "No se añadió el enlace magnético. Ya se ha añadido un torrent idéntico."
 
 #: ../src/MainWindow.vala:456
 msgid "Failed to add magnet link"

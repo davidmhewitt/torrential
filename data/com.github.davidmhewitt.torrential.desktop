@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=Torrential
 GenericName=Torrent Client
+GenericName[pt_BR]=Cliente Torrent
 Comment=Download torrent files
+Comment[pt_BR]=Faça download de arquivos torrent
 Categories=Network;
 Exec=com.github.davidmhewitt.torrential %U
 Icon=com.github.davidmhewitt.torrential

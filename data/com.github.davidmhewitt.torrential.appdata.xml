@@ -10,6 +10,15 @@
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <releases>
+      <release version="1.0.7" date="2017-11-01">
+        <description>
+          <ul>
+            <li>Improved application icon on HiDPI displays.</li>
+            <li>Fix for incompatibility with upcoming version of Granite.</li>
+            <li>Updated translations.</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.0.6" date="2017-08-25">
         <description>
           <ul>

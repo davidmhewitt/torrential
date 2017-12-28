@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Torrential
 GenericName=Torrent Client
+GenericName[lt]=Torrent kliento programa
 GenericName[pt_BR]=Cliente Torrent
 Comment=Download torrent files
+Comment[lt]=Atsisiųsti torrent failus
 Comment[pt_BR]=Faça download de arquivos torrent
 Categories=Network;
 Exec=com.github.davidmhewitt.torrential %U
@@ -11,5 +13,6 @@ Terminal=false
 Type=Application
 X-GNOME-Gettext-Domain=torrential
 Keywords=Torrent;Bittorrent;Download;
+Keywords[lt]=Torrent;Bittorrent;Atsisiųsti;
 MimeType=application/x-bittorrent;x-scheme-handler/magnet;
 X-GNOME-UsesNotifications=true

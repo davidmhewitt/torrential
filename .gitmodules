@@ -1,0 +1,3 @@
+[submodule "transmission"]
+	path = transmission
+	url = https://github.com/transmission/transmission.git

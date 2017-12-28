@@ -14,7 +14,16 @@ set (EXEC_NAME "com.github.davidmhewitt.torrential")
 # we're about to use pkgconfig to make sure dependencies are installed so let's find pkgconfig first
 find_package(PkgConfig)
 
-add_subdirectory (libtransmission)
+execute_process(COMMAND sed -i s/CMAKE_SOURCE_DIR/CMAKE_CURRENT_SOURCE_DIR/g ${CMAKE_SOURCE_DIR}/transmission/CMakeLists.txt)
+execute_process(COMMAND sed -i s/CMAKE_SOURCE_DIR/CMAKE_CURRENT_SOURCE_DIR/g ${CMAKE_SOURCE_DIR}/transmission/cmake/TrMacros.cmake)
+
+set(ENABLE_DAEMON OFF CACHE BOOL "Build daemon")
+set(ENABLE_UTILS OFF CACHE BOOL "Build utils (create, edit, show)")
+set(ENABLE_TESTS OFF CACHE BOOL "Build unit tests")
+set(ENABLE_GTK OFF CACHE BOOL "Build GTK+ client")
+set(ENABLE_QT OFF CACHE BOOL "Built Qt client")
+set(INSTALL_DOC OFF CACHE BOOL "Install documentation")
+add_subdirectory(transmission)
 
 # project name
 project (com.github.davidmhewitt.torrential)
@@ -41,7 +50,7 @@ endif ()
 
 add_definitions(${DEPS_CFLAGS})
 link_directories(${DEPS_LIBRARY_DIRS})
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/transmission)
 
 # make sure we have vala
 find_package(Vala REQUIRED)
@@ -83,7 +92,8 @@ add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 
 # tell cmake what to call the executable we just made
 add_executable(${EXEC_NAME} ${VALA_C} ${GLIB_RESOURCES_ICONS})
-target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIVE_LIBRARIES} libtr)
+add_dependencies(${EXEC_NAME} transmission)
+target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIVE_LIBRARIES} transmission)
 
 # install the binaries we just made
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)

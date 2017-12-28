@@ -1,355 +1,366 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Moo, 2017.
+#
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-10 20:40+0100\n"
+"POT-Creation-Date: 2017-12-28 12:42+0200\n"
+"PO-Revision-Date: 2017-12-28 13:15+0200\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"Last-Translator: Moo\n"
+"Language: lt\n"
 
 #: ../src/TorrentManager.vala:47
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #: ../src/TorrentManager.vala:47
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../src/TorrentManager.vala:47
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: ../src/TorrentManager.vala:47
 msgid "TB"
-msgstr ""
+msgstr "TB"
 
 #: ../src/TorrentManager.vala:48
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: ../src/TorrentManager.vala:48
 msgid "TB/s"
-msgstr ""
+msgstr "TB/s"
 
 #: ../src/Widgets/TorrentListRow.vala:91
 msgid "Pause torrent"
-msgstr ""
+msgstr "Pristabdyti torrent'ą"
 
 #: ../src/Widgets/TorrentListRow.vala:94
 msgid "Resume torrent"
-msgstr ""
+msgstr "Pratęsti torrent'ą"
 
 #: ../src/Widgets/TorrentListRow.vala:130
 msgid "Trying to find metadata for magnet link"
-msgstr ""
+msgstr "Bandoma rasti metaduomenis magnet nuorodai"
 
 #: ../src/Widgets/TorrentListRow.vala:132
 msgid "%s of %s — %s remaining"
-msgstr ""
+msgstr "%s iš %s — liko %s"
 
 #: ../src/Widgets/TorrentListRow.vala:134
 msgid "%s of %s"
-msgstr ""
+msgstr "%s iš %s"
 
 #: ../src/Widgets/TorrentListRow.vala:136
 msgid "%s uploaded"
-msgstr ""
+msgstr "%s išsiųsta"
 
 #: ../src/Widgets/TorrentListRow.vala:147
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
-msgstr ""
+msgstr "Prisijungę %i iš %i siuntėjų. ⬇%s ⬆%s"
 
 #: ../src/Widgets/TorrentListRow.vala:149 ../src/MainWindow.vala:247
 msgid "Paused"
-msgstr ""
+msgstr "Pristabdyta"
 
 #: ../src/Widgets/TorrentListRow.vala:151
 msgid "Waiting in queue"
-msgstr ""
+msgstr "Laukia eilėje"
 
 #: ../src/Widgets/TorrentListRow.vala:163
 msgid "%u day"
 msgid_plural "%u days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u diena"
+msgstr[1] "%u dienos"
+msgstr[2] "%u dienų"
 
 #: ../src/Widgets/TorrentListRow.vala:164
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u valanda"
+msgstr[1] "%u valandos"
+msgstr[2] "%u valandų"
 
 #: ../src/Widgets/TorrentListRow.vala:165
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u minutė"
+msgstr[1] "%u minutės"
+msgstr[2] "%u minučių"
 
 #: ../src/Widgets/TorrentListRow.vala:166
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%u sekundė"
+msgstr[1] "%u sekundės"
+msgstr[2] "%u sekundžių"
 
 #: ../src/Widgets/MultiInfoBar.vala:33
 msgid "Next Warning"
-msgstr ""
+msgstr "Kitas įspėjimas"
 
 #: ../src/Widgets/MultiInfoBar.vala:35 ../src/PreferencesWindow.vala:52
 msgid "Close"
-msgstr ""
+msgstr "Užverti"
 
 #: ../src/Widgets/MultiInfoBar.vala:69
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(Bei dar %d įspėjimas…)"
+msgstr[1] "(Bei dar %d įspėjimai…)"
+msgstr[2] "(Bei dar %d įspėjimų…)"
 
 #: ../src/Widgets/TorrentListBox.vala:78
 msgid "Remove"
-msgstr ""
+msgstr "Šalinti"
 
 #: ../src/Widgets/TorrentListBox.vala:86
 msgid "Show in File Browser"
-msgstr ""
+msgstr "Rodyti failų naršyklėje"
 
 #: ../src/MainWindow.vala:122
 msgid "No Search Results"
-msgstr ""
+msgstr "Nėra paieškos rezultatų"
 
 #: ../src/MainWindow.vala:122
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Pabandykite pakeisti paieškos žodžius"
 
 #: ../src/MainWindow.vala:123
 msgid "No Torrents Here"
-msgstr ""
+msgstr "Čia torrent'ų nėra"
 
 #: ../src/MainWindow.vala:123
 msgid "Try a different category"
-msgstr ""
+msgstr "Pabandykite kitą kategoriją"
 
 #: ../src/MainWindow.vala:149
 msgid "Torrent Complete"
-msgstr ""
+msgstr "Torrent užbaigtas"
 
 #: ../src/MainWindow.vala:150
 msgid "“%s” has finished downloading"
-msgstr ""
+msgstr "\"%s\" atsiuntimas užbaigtas"
 
 #: ../src/MainWindow.vala:157
 msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
+msgstr "Nepavyko įkelti blokavimo sąrašo. Atsargumo sumetimais visi torrent'ai pristabdyti."
 
 #: ../src/MainWindow.vala:223
 msgid "Application menu"
-msgstr ""
+msgstr "Programos meniu"
 
 #: ../src/MainWindow.vala:229
 msgid "Open .torrent file"
-msgstr ""
+msgstr "Atverti .torrent failą"
 
 #: ../src/MainWindow.vala:233
 msgid "Search Torrents"
-msgstr ""
+msgstr "Ieškoti torrent'us"
 
 #: ../src/MainWindow.vala:244
 msgid "All"
-msgstr ""
+msgstr "Visi"
 
 #: ../src/MainWindow.vala:245
 msgid "Downloading"
-msgstr ""
+msgstr "Atsiunčiama"
 
 #: ../src/MainWindow.vala:246
 msgid "Seeding"
-msgstr ""
+msgstr "Skleidžiama"
 
 #: ../src/MainWindow.vala:299
 msgid "No Torrents Added"
-msgstr ""
+msgstr "Nėra pridėta jokių torrent'ų"
 
 #: ../src/MainWindow.vala:299
 msgid "Add a torrent file to begin downloading."
-msgstr ""
+msgstr "Norėdami pradėti atsiuntimą, pridėkite torrent failą."
 
 #: ../src/MainWindow.vala:300
 msgid "Open Torrent"
-msgstr ""
+msgstr "Atverti torrent"
 
 #: ../src/MainWindow.vala:300
 msgid "Open a torrent file from your computer."
-msgstr ""
+msgstr "Atverkite torrent failą iš savo kompiuterio."
 
 #: ../src/MainWindow.vala:301 ../src/PreferencesWindow.vala:33
 msgid "Preferences"
-msgstr ""
+msgstr "Nuostatos"
 
 #: ../src/MainWindow.vala:301
 msgid "Set download folder and other preferences."
-msgstr ""
+msgstr "Nustatykite atsiuntimo aplanką bei kitas nuostatas."
 
 #: ../src/MainWindow.vala:326
 msgid "_Preferences"
-msgstr ""
+msgstr "_Nuostatos"
 
 #: ../src/MainWindow.vala:330
 msgid "_About"
-msgstr ""
+msgstr "_Apie"
 
 #: ../src/MainWindow.vala:336
 msgid "_Quit"
-msgstr ""
+msgstr "_Išeiti"
 
 #: ../src/MainWindow.vala:374
 msgid "Open some torrents"
-msgstr ""
+msgstr "Atverti kažkokius torrent'us"
 
 #: ../src/MainWindow.vala:376
 msgid "Cancel"
-msgstr ""
+msgstr "Atsisakyti"
 
 #: ../src/MainWindow.vala:377
 msgid "Open"
-msgstr ""
+msgstr "Atverti"
 
 #: ../src/MainWindow.vala:382
 msgid "All files"
-msgstr ""
+msgstr "Visi failai"
 
 #: ../src/MainWindow.vala:385
 msgid "Torrent files"
-msgstr ""
+msgstr "Torrent failai"
 
 #: ../src/MainWindow.vala:413
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr ""
+msgstr "Nepavyko pridėti \"%s\", nes jis neatrodo kaip teisingas torrent failas."
 
 #: ../src/MainWindow.vala:416
 msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr ""
+msgstr "\"%s\" nepridėtas. Toks pats torrent jau yra pridėtas."
 
 #: ../src/MainWindow.vala:436 ../src/MainWindow.vala:455
 msgid "Magnet Link"
-msgstr ""
+msgstr "Magnet nuoroda"
 
 #: ../src/MainWindow.vala:437
 msgid "Successfully added magnet link"
-msgstr ""
+msgstr "Magnet nuoroda sėkmingai pridėta"
 
 #: ../src/MainWindow.vala:442
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr ""
+msgstr "Nepavyko pridėti magnet nuorodos, nes atrodo, kad ji yra neteisinga."
 
 #: ../src/MainWindow.vala:446
 msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr ""
+msgstr "Magnet nuoroda nepridėta. Toks pats torrent jau yra pridėtas."
 
 #: ../src/MainWindow.vala:456
 msgid "Failed to add magnet link"
-msgstr ""
+msgstr "Nepavyko pridėti magnet nuorodos"
 
 #: ../src/PreferencesWindow.vala:42
 msgid "General"
-msgstr ""
+msgstr "Bendra"
 
 #: ../src/PreferencesWindow.vala:43
 msgid "Advanced"
-msgstr ""
+msgstr "Išplėstiniai"
 
 #: ../src/PreferencesWindow.vala:80
 msgid "Blocklist last downloaded: never"
-msgstr ""
+msgstr "Blokavimo sąrašas paskutinį kartą atsiųstas: niekada"
 
 #: ../src/PreferencesWindow.vala:83
 msgid "Last downloaded: %s"
-msgstr ""
+msgstr "Paskutinį kartą atsiųstas: %s"
 
 #: ../src/PreferencesWindow.vala:83
 msgid "%a %e, %b %H:%M"
-msgstr ""
+msgstr "%b %e, %a, %H:%M"
 
 #: ../src/PreferencesWindow.vala:90
 msgid "Only connect to encrypted peers:"
-msgstr ""
+msgstr "Prisijungti tik prie šifruotų siuntėjų:"
 
 #: ../src/PreferencesWindow.vala:94
 msgid "Randomise BitTorrent port on launch:"
-msgstr ""
+msgstr "Paleidus, atsitiktinai parinkti BitTorrent prievadą:"
 
 #: ../src/PreferencesWindow.vala:99
 msgid "Port number:"
-msgstr ""
+msgstr "Prievado numeris:"
 
 #: ../src/PreferencesWindow.vala:101
 msgid "Update Blocklist"
-msgstr ""
+msgstr "Atnaujinti blokavimo sąrašą"
 
 #: ../src/PreferencesWindow.vala:107
 msgid "Blocklist URL:"
-msgstr ""
+msgstr "Blokavimo sąrašo URL:"
 
 #: ../src/PreferencesWindow.vala:130
 msgid "Security"
-msgstr ""
+msgstr "Saugumas"
 
 #: ../src/PreferencesWindow.vala:137
 msgid "Blocklist"
-msgstr ""
+msgstr "Blokavimo sąrašas"
 
 #: ../src/PreferencesWindow.vala:147
 msgid "Download Location"
-msgstr ""
+msgstr "Atsiuntimo vieta"
 
 #: ../src/PreferencesWindow.vala:149
 msgid "Select Download Folder…"
-msgstr ""
+msgstr "Pasirinkti atsiuntimo aplanką…"
 
 #: ../src/PreferencesWindow.vala:159
 msgid "Limits"
-msgstr ""
+msgstr "Apribojimai"
 
 #: ../src/PreferencesWindow.vala:163
 msgid "Max simultaneous downloads:"
-msgstr ""
+msgstr "Daugiausia atsiuntimų vienu metu:"
 
 #: ../src/PreferencesWindow.vala:166 ../src/PreferencesWindow.vala:171
 msgid "0 means unlimited"
-msgstr ""
+msgstr "0 reiškia neribota"
 
 #: ../src/PreferencesWindow.vala:168
 msgid "Download speed limit (KBps):"
-msgstr ""
+msgstr "Atsiuntimo spartos apribojimas (KBps):"
 
 #: ../src/PreferencesWindow.vala:173
 msgid "Upload speed limit (KBps):"
-msgstr ""
+msgstr "Išsiuntimo spartos apribojimas (KBps):"
 
 #: ../src/PreferencesWindow.vala:175
 msgid "Seed Limit Ratio:"
-msgstr ""
+msgstr "Skleidimo santykio apribojimas:"
 
 #: ../src/PreferencesWindow.vala:182
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Darbalaukio integracija"
 
 #: ../src/PreferencesWindow.vala:186
 msgid "Continue downloads when closed:"
-msgstr ""
+msgstr "Užvėrus, tęsti atsiuntimus:"
 
 #: ../src/Application.vala:50
 msgid "translator-credits"
-msgstr ""
+msgstr "Moo"

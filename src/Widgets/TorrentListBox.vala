@@ -159,7 +159,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         }
 
         if (a.date_added != b.date_added) {
-            return a.date_added > b.date_added ? -1 : 1;
+            return a.date_added.compare (b.date_added);
         }
 
         return a.display_name.collate (b.display_name);

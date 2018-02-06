@@ -191,12 +191,12 @@ public class Torrential.Torrent {
         }
     }
 
-    public time_t date_added {
-        get {
+    public DateTime date_added {
+        owned get {
             if (torrent.stat_cached != null) {
-                return torrent.stat_cached.addedDate;
+                return new DateTime.from_unix_utc (torrent.stat_cached.addedDate);
             } else {
-                return time_t ();
+                return new DateTime.from_unix_utc (time_t ());
             }
         }
     }
@@ -224,7 +224,7 @@ public class Torrential.Torrent {
     public void remove () {
         torrent.remove (false, null);
     }
-    
+
     public Torrent (Transmission.Torrent torrent) {
         this.torrent = torrent;
     }

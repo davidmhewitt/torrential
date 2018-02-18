@@ -10,6 +10,16 @@
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <releases>
+      <release version="1.0.8" date="2018-02-18">
+        <description>
+          <ul>
+            <li>Added quit option to right click menu in dock.</li>
+            <li>Multiple torrent can now be selected in the list box.</li>
+            <li>Underlying libtransmission version updated.</li>
+            <li>Updated translations.</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.0.7" date="2017-11-01">
         <description>
           <ul>

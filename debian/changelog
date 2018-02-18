@@ -1,3 +1,12 @@
+com.github.davidmhewitt.torrential (1.0.8) xenial; urgency=low
+
+  * Added quit option to right click menu in dock
+  * Multiple torrent can now be selected in the list box
+  * Underlying libtransmission version updated
+  * Updated translations
+
+ -- David Hewitt <davidmhewitt@gmail.com>  Sun, 18 Feb 2018 18:20:24 +0000
+
 com.github.davidmhewitt.torrential (1.0.7) xenial; urgency=low
 
   * Remove about dialog

@@ -34,7 +34,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     }
 
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
-        set_selection_mode (Gtk.SelectionMode.SINGLE);
+        set_selection_mode (Gtk.SelectionMode.MULTIPLE);
         activate_on_single_click = false;
 
         foreach (var torrent in torrents) {
@@ -66,7 +66,24 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     private bool on_button_press (Gdk.EventButton event) {
         if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == Gdk.BUTTON_SECONDARY) {
-            select_row (get_row_at_y ((int)event.y));
+            var clicked_row = get_row_at_y ((int)event.y);
+            var rows = get_selected_rows ();
+            var found = false;
+            foreach (var row in rows) {
+                if (clicked_row == row) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                selected_foreach ((box, row) => {
+                    unselect_row (row);
+                });
+
+                select_row (clicked_row);
+            }
+
             popup_menu ();
             return true;
         }
@@ -76,11 +93,35 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     private bool on_popup_menu () {
         Gdk.Event event = Gtk.get_current_event ();
         var menu = new Gtk.Menu ();
+
+        var items = get_selected_rows ();
+        var all_paused = true;
+
+        foreach (var selected_row in items) {
+            if (!(selected_row as TorrentListRow).paused) {
+                all_paused = false;
+                break;
+            }
+        }
+
         var remove_item = new Gtk.MenuItem.with_label (_("Remove"));
         remove_item.activate.connect (() => {
-            var selected_row = get_selected_row ();
-            if (selected_row != null) {
+            foreach (var selected_row in items) {
                 (selected_row as TorrentListRow).remove_torrent ();
+            }
+        });
+
+        var pause_item = new Gtk.MenuItem.with_label (_("Pause"));
+        pause_item.activate.connect (() => {
+            foreach (var selected_row in items) {
+                (selected_row as TorrentListRow).pause_torrent ();
+            }
+        });
+
+        var unpause_item = new Gtk.MenuItem.with_label (_("Resume"));
+        unpause_item.activate.connect (() => {
+            foreach (var selected_row in items) {
+                (selected_row as TorrentListRow).resume_torrent ();
             }
         });
 
@@ -91,8 +132,17 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                 open_torrent_location ((selected_row as TorrentListRow).id);
             }
         });
+
         menu.add (remove_item);
-        menu.add (open_item);
+        if (all_paused) {
+            menu.add (unpause_item);
+        } else {
+            menu.add (pause_item);
+        }
+
+        if (items.length () < 2) {
+            menu.add (open_item);
+        }
 
         menu.set_screen (null);
         menu.attach_to_widget (this, null);

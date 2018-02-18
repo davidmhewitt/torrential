@@ -14,15 +14,13 @@ set (EXEC_NAME "com.github.davidmhewitt.torrential")
 # we're about to use pkgconfig to make sure dependencies are installed so let's find pkgconfig first
 find_package(PkgConfig)
 
-execute_process(COMMAND sed -i s/CMAKE_SOURCE_DIR/CMAKE_CURRENT_SOURCE_DIR/g ${CMAKE_SOURCE_DIR}/transmission/CMakeLists.txt)
-execute_process(COMMAND sed -i s/CMAKE_SOURCE_DIR/CMAKE_CURRENT_SOURCE_DIR/g ${CMAKE_SOURCE_DIR}/transmission/cmake/TrMacros.cmake)
-
 set(ENABLE_DAEMON OFF CACHE BOOL "Build daemon")
 set(ENABLE_UTILS OFF CACHE BOOL "Build utils (create, edit, show)")
 set(ENABLE_TESTS OFF CACHE BOOL "Build unit tests")
 set(ENABLE_GTK OFF CACHE BOOL "Build GTK+ client")
 set(ENABLE_QT OFF CACHE BOOL "Built Qt client")
 set(INSTALL_DOC OFF CACHE BOOL "Install documentation")
+set(WITH_SYSTEMD OFF CACHE BOOL "Systemd support")
 add_subdirectory(transmission)
 
 # project name

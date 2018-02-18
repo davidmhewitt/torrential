@@ -21,9 +21,9 @@ You'll need the following dependencies to build:
 
 ## How To Build
 
-    git clone https://github.com/davidmhewitt/torrential
+    git clone --recurse-submodules https://github.com/davidmhewitt/torrential
     cd torrential
-    mkdir build && cd build 
+    mkdir build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=/usr ..
     make
     sudo make install

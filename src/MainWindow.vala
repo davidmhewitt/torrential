@@ -39,7 +39,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.SearchEntry search_entry;
 
     private SimpleActionGroup actions = new SimpleActionGroup ();
-    
+
     private TorrentManager torrent_manager;
     private Settings saved_state;
 
@@ -359,9 +359,14 @@ public class Torrential.MainWindow : Gtk.Window {
         prefs_window.show_all ();
     }
 
-    private void on_quit (SimpleAction action) {
+    public void quit () {
+        launcher_entry.progress_visible = false;
         quitting_for_real = true;
         close ();
+    }
+
+    private void on_quit (SimpleAction action) {
+        quit ();
     }
 
     private void on_hide (SimpleAction action) {

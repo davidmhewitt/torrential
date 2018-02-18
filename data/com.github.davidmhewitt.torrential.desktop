@@ -11,8 +11,13 @@ Exec=com.github.davidmhewitt.torrential %U
 Icon=com.github.davidmhewitt.torrential
 Terminal=false
 Type=Application
+Actions=Quit;
 X-GNOME-Gettext-Domain=torrential
 Keywords=Torrent;Bittorrent;Download;
 Keywords[lt]=Torrent;Bittorrent;Atsisiųsti;
 MimeType=application/x-bittorrent;x-scheme-handler/magnet;
 X-GNOME-UsesNotifications=true
+
+[Desktop Action Quit]
+Exec=com.github.davidmhewitt.torrential --quit
+Name=Quit

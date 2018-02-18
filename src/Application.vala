@@ -24,6 +24,8 @@ public class Torrential.Application : Gtk.Application {
 
     construct {
         flags |= ApplicationFlags.HANDLES_OPEN;
+        flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
+
         application_id = "com.github.davidmhewitt.torrential";
         var app_launcher = application_id + ".desktop";
 
@@ -74,12 +76,63 @@ public class Torrential.Application : Gtk.Application {
             window = new MainWindow (this);
             add_window (window);
         }
+
         window.present ();
         window.present_with_time (0);
     }
 
+    public override int command_line (ApplicationCommandLine cmd_line) {
+        bool quit = false;
+
+        OptionEntry[] options = new OptionEntry[1];
+        options[0] = { "quit", 0, 0, OptionArg.NONE, ref quit, "Quit running instance", null };
+
+        // We have to make an extra copy of the array, since .parse assumes
+        // that it can remove strings from the array without freeing them.
+        string[] args = cmd_line.get_arguments ();
+        string*[] _args = new string[args.length];
+        for (int i = 0; i < args.length; i++) {
+            _args[i] = args[i];
+        }
+
+        unowned string[] tmp = _args;
+
+        try {
+            var opt_context = new OptionContext ("- Torrential");
+            opt_context.set_help_enabled (true);
+            opt_context.add_main_entries (options, null);
+            opt_context.set_ignore_unknown_options (true);
+            opt_context.parse (ref tmp);
+        } catch (OptionError e) {
+            cmd_line.print ("error: %s\n", e.message);
+            cmd_line.print ("Run '%s --help' to see a full list of available command line options.\n", args[0]);
+            return 0;
+        }
+
+        if (quit) {
+            if (window != null) {
+                window.quit ();
+            }
+        }
+
+        File[] files = {};
+        for (int i = 1; i < tmp.length; i++) {
+            files += File.new_for_commandline_arg (tmp[i]);
+        }
+
+        if (files.length > 0) {
+            open (files, "");
+            return 0;
+        }
+
+        activate ();
+        return 0;
+    }
+
     public void wait_for_close () {
-        window.wait_for_close ();
+        if (window != null) {
+            window.wait_for_close ();
+        }
     }
 }
 

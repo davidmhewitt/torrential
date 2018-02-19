@@ -72,6 +72,8 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public MainWindow (Application app) {
+        Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
+
         this.app = app;
         saved_state = Settings.get_default ();
         set_default_size (saved_state.window_width, saved_state.window_height);
@@ -228,7 +230,7 @@ public class Torrential.MainWindow : Gtk.Window {
         open_button.tooltip_text = _("Open .torrent file");
         headerbar.pack_start (open_button);
 
-        var magnet_image = new Gtk.Image.from_resource ("/com/github/davidmhewitt/torrential/open-magnet.svg");
+        var magnet_image = new Gtk.Image.from_icon_name ("open-magnet", Gtk.IconSize.LARGE_TOOLBAR);
         var magnet_button = new Gtk.ToolButton (magnet_image, null);
         magnet_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET);
         magnet_button.tooltip_text = _("Open magnet link");

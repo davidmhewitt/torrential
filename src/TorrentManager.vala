@@ -131,6 +131,7 @@ public class Torrential.TorrentManager : Object {
             });
         } else {
             Idle.add (() => {
+                saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
                 blocklist_load_complete (rulecount);
                 return Source.REMOVE;
             });

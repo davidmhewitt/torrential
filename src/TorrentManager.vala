@@ -29,6 +29,8 @@ const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
 const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
 
 public class Torrential.TorrentManager : Object {
+    public bool blocklist_updating { get; private set; default = false; }
+
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
@@ -39,7 +41,6 @@ public class Torrential.TorrentManager : Object {
 
     public signal void torrent_completed (Torrent torrent);
     public signal void blocklist_load_failed ();
-    public signal void blocklist_load_complete (int64 rulecount);
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
@@ -104,6 +105,7 @@ public class Torrential.TorrentManager : Object {
         session.blocklist.url = saved_state.blocklist_url.strip ();
 
         next_tag++;
+        blocklist_updating = true;
 
         var request = Transmission.variant_dict (2);
         request.add_str (Transmission.Prefs.method, "blocklist-update");
@@ -132,10 +134,11 @@ public class Torrential.TorrentManager : Object {
         } else {
             Idle.add (() => {
                 saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
-                blocklist_load_complete (rulecount);
                 return Source.REMOVE;
             });
         }
+
+        blocklist_updating = false;
     }
 
     private void update_session_settings () {

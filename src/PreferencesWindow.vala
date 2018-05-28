@@ -72,7 +72,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         ((Gtk.Container) get_content_area ()).add (content_grid);
 
-        parent_window.torrent_manager.blocklist_load_complete.connect (blocklist_load_complete);
+        parent_window.torrent_manager.notify["blocklist-updating"].connect (on_blocklist_state_change);
 
         saved_state.changed.connect (on_saved_settings_changed);
     }
@@ -80,6 +80,14 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private void on_saved_settings_changed () {
         location_chooser.set_current_folder (saved_state.download_folder);
         update_blocklist_label ();
+    }
+
+    private void on_blocklist_state_change () {
+        if (parent_window.torrent_manager.blocklist_updating) {
+            update_blocklist_stack.visible_child_name = "spinner";
+        } else {
+            update_blocklist_stack.visible_child_name = "button";
+        }
     }
 
     private void update_blocklist_label () {
@@ -146,6 +154,11 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         advanced_grid.attach (blocklist_entry, 1, 7, 1, 1);
         advanced_grid.attach (blocklist_state, 0, 8, 1, 1);
         advanced_grid.attach (update_blocklist_stack, 1, 8, 1, 1);
+
+        if (parent_window.torrent_manager.blocklist_updating) {
+            update_blocklist_stack.show_all ();
+            update_blocklist_stack.visible_child_name = "spinner";
+        }
 
         return advanced_grid;
     }
@@ -217,10 +230,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
 
         return general_grid;
-    }
-
-    public void blocklist_load_complete (int64 count) {
-        update_blocklist_stack.visible_child_name = "button";
     }
 
     private Gtk.Label create_heading (string text) {

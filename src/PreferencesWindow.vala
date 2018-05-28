@@ -29,7 +29,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private Gtk.Stack update_blocklist_stack;
 
     public PreferencesWindow (Torrential.MainWindow parent) {
-        // Window properties        
+        // Window properties
         title = _("Preferences");
         set_size_request (MIN_WIDTH, MIN_HEIGHT);
         resizable = false;
@@ -212,7 +212,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         return general_grid;
     }
 
-    public void blocklist_load_complete () {
+    public void blocklist_load_complete (int64 count) {
         update_blocklist_stack.visible_child_name = "button";
     }
 

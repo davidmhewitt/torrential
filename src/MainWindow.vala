@@ -107,18 +107,18 @@ public class Torrential.MainWindow : Gtk.Window {
         });
         app.add_action (show_window);
 
-        torrent_manager = new TorrentManager ();
-
-        build_headerbar ();
-        build_main_interface ();
-        build_welcome_screen ();
-
         var grid = new Gtk.Grid ();
         grid.orientation = Gtk.Orientation.VERTICAL;
         infobar = new Widgets.MultiInfoBar ();
         infobar.set_message_type (Gtk.MessageType.WARNING);
         infobar.no_show_all = true;
         infobar.visible = false;
+
+        torrent_manager = new TorrentManager ();
+
+        build_headerbar ();
+        build_main_interface ();
+        build_welcome_screen ();
 
         var no_results_alertview = new Granite.Widgets.AlertView (_("No Search Results"), _("Try changing search terms"), "edit-find-symbolic");
         var empty_category_alertview = new Granite.Widgets.AlertView (_("No Torrents Here"), _("Try a different category"), "edit-find-symbolic");
@@ -159,9 +159,9 @@ public class Torrential.MainWindow : Gtk.Window {
             infobar.show ();
         });
 
-        torrent_manager.blocklist_load_complete.connect (() => {
+        torrent_manager.blocklist_load_complete.connect ((count) => {
             if (prefs_window != null) {
-                prefs_window.blocklist_load_complete ();
+                prefs_window.blocklist_load_complete (count);
             }
         });
 
@@ -355,9 +355,12 @@ public class Torrential.MainWindow : Gtk.Window {
                 warning ("Error with thread while updating session settings. Error: %s", e.message);
             }
         });
+
         prefs_window.update_blocklist.connect (() => {
-            torrent_manager.update_blocklists (true);
+            torrent_manager.update_blocklist ();
         });
+
+
         prefs_window.show_all ();
     }
 

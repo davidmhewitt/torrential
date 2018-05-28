@@ -40,12 +40,6 @@ if (UNITY_FOUND)
     link_directories(${UNITY_LIBRARY_DIRS})
 endif ()
 
-pkg_check_modules (ARCHIVE REQUIRED libarchive)
-if (ARCHIVE_FOUND)
-    add_definitions(${ARCHIVE_CFLAGS})
-    link_directories(${ARCHIVE_LIBRARY_DIRS})
-endif ()
-
 add_definitions(${DEPS_CFLAGS})
 link_directories(${DEPS_LIBRARY_DIRS})
 include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/transmission)
@@ -75,7 +69,6 @@ CUSTOM_VAPIS
 # tell what libraries to use when compiling
 PACKAGES
     granite
-    libarchive
     unity
 OPTIONS
     --fatal-warnings
@@ -91,7 +84,7 @@ add_schema (data/com.github.davidmhewitt.torrential.gschema.xml)
 # tell cmake what to call the executable we just made
 add_executable(${EXEC_NAME} ${VALA_C} ${GLIB_RESOURCES_ICONS})
 add_dependencies(${EXEC_NAME} transmission)
-target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} ${ARCHIVE_LIBRARIES} transmission)
+target_link_libraries(${EXEC_NAME} ${DEPS_LIBRARIES} ${UNITY_LIBRARIES} transmission)
 
 # install the binaries we just made
 install (TARGETS ${EXEC_NAME} RUNTIME DESTINATION bin)

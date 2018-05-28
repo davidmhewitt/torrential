@@ -433,7 +433,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
         int response = dialog.run ();
         if (response == Gtk.ResponseType.OK) {
-            add_magnet (entry.text);
+            add_magnet (entry.text, true);
         }
 
         dialog.destroy ();
@@ -509,14 +509,14 @@ public class Torrential.MainWindow : Gtk.Window {
         }
     }
 
-    public void add_magnet (string magnet) {
+    public void add_magnet (string magnet, bool silent = false) {
         Torrent? new_torrent;
         var result = torrent_manager.add_torrent_by_magnet (magnet, out new_torrent);
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
             enable_main_view ();
             var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
-            if (!focused) {
+            if (!focused && !silent) {
                 var notification = new Notification (_("Magnet Link"));
                 notification.set_body (_("Successfully added magnet link"));
                 notification.set_default_action ("app." + ACTION_SHOW_WINDOW);

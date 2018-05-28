@@ -21,8 +21,8 @@
 
 [DBus (name = "org.freedesktop.FileManager1")]
 interface DBus.Files : Object {
-    public abstract void show_items (string[] uris, string startup_id) throws IOError;
-    public abstract void show_folders (string[] uris, string startup_id) throws IOError;
+    public abstract void show_items (string[] uris, string startup_id) throws IOError, DBusError;
+    public abstract void show_folders (string[] uris, string startup_id) throws IOError, DBusError;
 }
 
 const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
@@ -56,7 +56,7 @@ public class Torrential.TorrentManager : Object {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
-            transmission_torrents[i].set_completeness_callback (on_completeness_changed); 
+            transmission_torrents[i].set_completeness_callback (on_completeness_changed);
             added_torrents.add (transmission_torrents[i]);
         }
 
@@ -301,7 +301,7 @@ public class Torrential.TorrentManager : Object {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_file (path);
         torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
-        
+
         Transmission.ParseResult result;
         int duplicate_id;
         unowned Transmission.Torrent torrent = torrent_constructor.instantiate (out result, out duplicate_id);
@@ -400,7 +400,7 @@ public class Torrential.TorrentManager : Object {
                     info (file.get_uri ());
                     try {
                         files.show_items ({ file.get_uri () }, "torrential");
-                    } catch (IOError e) {
+                    } catch (Error e) {
                         warning ("Unable to instruct file manager to show file. Error: %s", e.message);
                         return;
                     }
@@ -410,7 +410,7 @@ public class Torrential.TorrentManager : Object {
                     if (file.query_exists ()) {
                         try {
                             files.show_items ({ file.get_uri () }, "torrential");
-                        } catch (IOError e) {
+                        } catch (Error e) {
                             warning ("Unable to instruct file manager to show file. Error: %s", e.message);
                             return;
                         }
@@ -425,7 +425,7 @@ public class Torrential.TorrentManager : Object {
                                 return;
                             }
                             files.show_folders ({ uri }, "torrential");
-                        } catch (IOError e) {
+                        } catch (Error e) {
                             warning ("Unable to instruct file manager to show folder. Error: %s", e.message);
                             return;
                         }

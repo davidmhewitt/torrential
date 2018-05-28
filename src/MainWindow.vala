@@ -42,6 +42,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
     public TorrentManager torrent_manager;
     private Settings saved_state;
+    private FileMonitor download_monitor;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
     private const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
@@ -195,6 +196,14 @@ public class Torrential.MainWindow : Gtk.Window {
                 return false;
             }
         });
+
+        var download_folder = File.new_for_path (Environment.get_user_special_dir (UserDirectory.DOWNLOAD));
+        try {
+            download_monitor = download_folder.monitor (FileMonitorFlags.NONE, null);
+            download_monitor.changed.connect (on_download_folder_changed);
+        } catch (Error e) {
+            warning ("Error setting up watchfolder on Download folder: %s", e.message);
+        }
     }
 
     public void wait_for_close () {
@@ -428,6 +437,45 @@ public class Torrential.MainWindow : Gtk.Window {
         }
 
         dialog.destroy ();
+    }
+
+    private void on_download_folder_changed (File file, File? other_file, FileMonitorEvent event) {
+        if (event == FileMonitorEvent.CREATED) {
+            if (ContentType.guess (file.get_basename (), null, null) == "application/x-bittorrent") {
+                add_monitored_file (file.get_path ());
+            }
+        }
+    }
+
+    private void add_monitored_file (string path) {
+        Gee.ArrayList<string> errors = new Gee.ArrayList<string> ();
+        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+
+        Torrent? new_torrent;
+        var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
+        if (result == Transmission.ParseResult.OK) {
+            list_box.add_torrent (new_torrent);
+            if (!focused) {
+                var notification = new Notification (_("Torrent Added"));
+                notification.set_body (_("Successfully added torrent file from Downloads"));
+                notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
+                app.send_notification ("app.torrent-added", notification);
+            }
+        } else if (result == Transmission.ParseResult.ERR) {
+            var basename = Filename.display_basename (path);
+            errors.add (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
+            if (!focused) {
+                var notification = new Notification (_("Failed to Add Torrent"));
+                notification.set_body (_("Something went wrong when adding a torrent file from Downloads"));
+                notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
+                app.send_notification ("app.torrent-added", notification);
+            }
+        }
+
+        if (errors.size > 0) {
+            infobar.add_errors (errors);
+            infobar.show ();
+        }
     }
 
     public void add_files (SList<string> uris) {

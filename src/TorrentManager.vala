@@ -100,6 +100,8 @@ public class Torrential.TorrentManager : Object {
             return;
         }
 
+        settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
+
         next_tag++;
 
         var request = Transmission.variant_dict (2);

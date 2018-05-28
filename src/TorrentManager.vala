@@ -101,6 +101,7 @@ public class Torrential.TorrentManager : Object {
         }
 
         settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
+        session.blocklist.url = saved_state.blocklist_url.strip ();
 
         next_tag++;
 

@@ -13,6 +13,7 @@ You'll need the following dependencies to build:
 * valac
 * libgranite-dev
 * libunity-dev
+* libevent-dev
 * libcurl4-openssl-dev
 * libssl-dev
 * automake

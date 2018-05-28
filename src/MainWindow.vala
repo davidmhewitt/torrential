@@ -40,7 +40,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private SimpleActionGroup actions = new SimpleActionGroup ();
 
-    private TorrentManager torrent_manager;
+    public TorrentManager torrent_manager;
     private Settings saved_state;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
@@ -157,12 +157,6 @@ public class Torrential.MainWindow : Gtk.Window {
         torrent_manager.blocklist_load_failed.connect (() => {
             infobar.add_error (_("Failed to load blocklist. All torrents paused as a precaution."));
             infobar.show ();
-        });
-
-        torrent_manager.blocklist_load_complete.connect ((count) => {
-            if (prefs_window != null) {
-                prefs_window.blocklist_load_complete (count);
-            }
         });
 
         refresh_timer = Timeout.add_seconds (1, () => {
@@ -355,11 +349,6 @@ public class Torrential.MainWindow : Gtk.Window {
                 warning ("Error with thread while updating session settings. Error: %s", e.message);
             }
         });
-
-        prefs_window.update_blocklist.connect (() => {
-            torrent_manager.update_blocklist ();
-        });
-
 
         prefs_window.show_all ();
     }

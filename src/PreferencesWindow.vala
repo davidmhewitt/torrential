@@ -17,7 +17,6 @@
 public class Torrential.PreferencesWindow : Gtk.Dialog {
 
     public signal void on_close ();
-    public signal void update_blocklist ();
 
     private const int MIN_WIDTH = 420;
     private const int MIN_HEIGHT = 300;
@@ -28,7 +27,13 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private Gtk.Label blocklist_state;
     private Gtk.Stack update_blocklist_stack;
 
+    public weak MainWindow parent_window { private get; construct; }
+
     public PreferencesWindow (Torrential.MainWindow parent) {
+        Object (parent_window: parent);
+    }
+
+    construct {
         // Window properties
         title = _("Preferences");
         set_size_request (MIN_WIDTH, MIN_HEIGHT);
@@ -36,7 +41,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         deletable = false;
         destroy_with_parent = true;
         window_position = Gtk.WindowPosition.CENTER;
-        set_transient_for (parent);
+        set_transient_for (parent_window);
 
         var stack = new Gtk.Stack ();
         stack.add_titled (create_general_settings_widgets (), "general", _("General"));
@@ -66,6 +71,8 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         content_grid.attach (button_box, 0, 2, 1, 1);
 
         ((Gtk.Container) get_content_area ()).add (content_grid);
+
+        parent_window.torrent_manager.blocklist_load_complete.connect (blocklist_load_complete);
 
         saved_state.changed.connect (on_saved_settings_changed);
     }
@@ -113,7 +120,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
         update_blocklist_button.clicked.connect (() => {
             update_blocklist_stack.visible_child_name = "spinner";
-            update_blocklist ();
+            parent_window.torrent_manager.update_blocklist ();
         });
         update_blocklist_stack.add_named (update_blocklist_button, "button");
         update_blocklist_stack.add_named (spinner, "spinner");

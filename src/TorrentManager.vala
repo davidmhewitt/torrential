@@ -95,6 +95,11 @@ public class Torrential.TorrentManager : Object {
     }
 
     public void update_blocklist () {
+        // Only update the blocklist if we have one set
+        if (saved_state.blocklist_url.strip ().length == 0) {
+            return;
+        }
+
         next_tag++;
 
         var request = Transmission.variant_dict (2);

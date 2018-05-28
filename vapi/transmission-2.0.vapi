@@ -622,7 +622,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantDictFindList")]
 		public bool find_list (Prefs key, out unowned variant? val);
 		[CCode (cname = "tr_variantDictFindDict")]
-		public bool find_doc (Prefs key, out unowned variant? val);
+		public bool find_doc (Prefs key, out unowned variant_dict? val);
 		[CCode (cname = "tr_variantDictFindInt")]
 		public bool find_int (Prefs key, out int64 val);
 		[CCode (cname = "tr_variantDictFindReal")]
@@ -1148,6 +1148,7 @@ namespace Transmission {
 		TORRENT_CHANGED,
 		TORRENT_MOVED,
 		SESSION_CHANGED,
+		SESSION_QUEUE_POSITIONS_CHANGED,
 		SESSION_CLOSE
 	}
 
@@ -2717,5 +2718,14 @@ namespace Transmission {
 			public void get_units (variant dict);
 		}
 	}
+}
+
+[CCode (cheader_filename = "libtransmission/rpcimpl.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
+namespace Transmission {
+	[CCode (cname = "tr_rpc_func", has_type_id = false)]
+	public delegate void RPCCallback (Session session, variant_dict response);
+
+	[CCode (cname ="tr_rpc_request_exec_json", has_type_id = false)]
+	public static void exec_JSON_RPC (Session session, variant request, RPCCallback callback);
 }
 

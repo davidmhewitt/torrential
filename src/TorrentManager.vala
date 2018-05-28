@@ -29,6 +29,8 @@ const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
 const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
 
 public class Torrential.TorrentManager : Object {
+    public bool blocklist_updating { get; private set; default = false; }
+
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
@@ -39,9 +41,10 @@ public class Torrential.TorrentManager : Object {
 
     public signal void torrent_completed (Torrent torrent);
     public signal void blocklist_load_failed ();
-    public signal void blocklist_load_complete ();
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
+
+    private static int next_tag = 0;
 
     public TorrentManager () {
         Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
@@ -60,7 +63,7 @@ public class Torrential.TorrentManager : Object {
             added_torrents.add (transmission_torrents[i]);
         }
 
-        update_blocklists ();
+        update_blocklist ();
     }
 
     ~TorrentManager () {
@@ -83,19 +86,6 @@ public class Torrential.TorrentManager : Object {
         }
     }
 
-    public void update_blocklists (bool force = false) {
-        load_blocklists.begin (force, (obj, res) => {
-            bool success = load_blocklists.end (res);
-            blocklist_load_complete ();
-            if (!success) {
-                foreach (unowned Transmission.Torrent torrent in added_torrents) {
-                    torrent.stop ();
-                }
-                blocklist_load_failed ();
-            }
-        });
-    }
-
     public bool has_active_torrents () {
         foreach (var torrent in get_torrents ()) {
             if (torrent.seeding || torrent.downloading || torrent.waiting) {
@@ -105,145 +95,50 @@ public class Torrential.TorrentManager : Object {
         return false;
     }
 
-    private async bool load_blocklists (bool force = false) {
-        var dest_folder = Path.build_path (Path.DIR_SEPARATOR_S, CONFIG_DIR, "blocklists");
-
-        // Delete any old blocklists if there's no blocklist specified anymore
+    public void update_blocklist () {
+        // Only update the blocklist if we have one set
         if (saved_state.blocklist_url.strip ().length == 0) {
-            Dir d;
-            try {
-                d = Dir.open (dest_folder);
-            } catch (FileError e) {
-                warning ("Could not open blocklists folder for deletion of old blocklists. Error: %s", e.message);
-                return true;
-            }
-            unowned string? name;
-            while ((name = d.read_name ()) != null) {
-                try {
-                    string path = Path.build_filename(dest_folder, name);
-                    yield File.new_for_path (path).delete_async ();
-                } catch (Error e) {
-                    warning ("Could not delete one of the old blocklists. Error: %s", e.message);
+            return;
+        }
+
+        settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
+        session.blocklist.url = saved_state.blocklist_url.strip ();
+
+        next_tag++;
+        blocklist_updating = true;
+
+        var request = Transmission.variant_dict (2);
+        request.add_str (Transmission.Prefs.method, "blocklist-update");
+        request.add_int (Transmission.Prefs.tag, next_tag);
+
+        Transmission.exec_JSON_RPC (session, request, on_blocklist_response);
+    }
+
+    private void on_blocklist_response (Transmission.Session session, Transmission.variant_dict response) {
+        int64 rulecount = 0;
+        Transmission.variant_dict args;
+
+        if (!response.find_doc (Transmission.Prefs.arguments, out args) || !args.find_int (Transmission.Prefs.blocklist_size, out rulecount)) {
+            rulecount = -1;
+        }
+
+        if (rulecount == -1) {
+            Idle.add (() => {
+                blocklist_load_failed ();
+                foreach (unowned Transmission.Torrent torrent in added_torrents) {
+                    torrent.stop ();
                 }
-            }
-            saved_state.blocklist_updated_timestamp = 0;
-            return true;
+
+                return Source.REMOVE;
+            });
+        } else {
+            Idle.add (() => {
+                saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
+                return Source.REMOVE;
+            });
         }
 
-        int blocklist_count = 0;
-        try {
-            var d = Dir.open (dest_folder);
-            unowned string? name;
-            while ((name = d.read_name ()) != null) {
-                blocklist_count++;
-            }
-        } catch (FileError e) {
-            warning ("Could not open blocklists folder for checking blocklists. Error: %s", e.message);
-        }
-
-        if (blocklist_count == 0) force = true;
-
-        // Don't update if we downloaded within the last day
-        if (!force && new DateTime.now_local ().to_unix () - saved_state.blocklist_updated_timestamp < 86400) {
-            return true;
-        }
-
-        var archive_filename = saved_state.blocklist_url.substring (saved_state.blocklist_url.last_index_of ("/"));
-        var dest_file = Path.build_path (Path.DIR_SEPARATOR_S, dest_folder, archive_filename);
-
-        var source = File.new_for_uri (saved_state.blocklist_url);
-        var dest = File.new_for_path (dest_file);
-        try {
-            yield source.copy_async (dest, FileCopyFlags.OVERWRITE);
-        } catch (Error e) {
-            critical ("Failed to download blocklist '%s'. Error: %s", source.get_uri (), e.message);
-            return false;
-        }
-
-        SourceFunc callback = load_blocklists.callback;
-        bool thread_output = false;
-
-        ThreadFunc<void*> run = () => {
-            // initialize the archive
-            var archive = new Archive.Read();
-
-            // automatically detect archive type
-            archive.support_compression_all();
-            archive.support_format_all();
-            archive.support_format_raw ();
-
-            // open the archive
-            if (archive.open_filename(dest_file, 4096) != Archive.Result.OK) {
-                critical ("Failed to extract blocklist. Error: %s", archive.error_string ());
-                Idle.add ((owned) callback);
-                return null;
-            }
-
-            // extract the archive
-            weak Archive.Entry entry;
-            while (archive.next_header (out entry) == Archive.Result.OK) {
-                var fpath = Path.build_filename (dest_folder, entry.pathname ());
-                var file = GLib.File.new_for_path (fpath);
-
-                if (Posix.S_ISDIR (entry.mode ())) {
-                    try {
-                        file.make_directory_with_parents (null);
-                    } catch (Error e) {
-                        critical ("Failed to extract blocklist. Error: %s", e.message);
-                        Idle.add ((owned) callback);
-                        return null;
-                    }
-                } else {
-                    var parent = file.get_parent ();
-                    if (!parent.query_exists (null)) {
-                        try {
-                            parent.make_directory_with_parents (null);
-                        } catch (Error e) {
-                            critical ("Failed to extract blocklist. Error: %s", e.message);
-                            Idle.add ((owned) callback);
-                            return null;
-                        }
-                    }
-
-                    try {
-                        if (!file.query_exists (null)) {
-                            file.create (FileCreateFlags.REPLACE_DESTINATION, null);
-                        }
-                    } catch (Error e) {
-                        critical ("Failed to extract blocklist. Error: %s", e.message);
-                        Idle.add ((owned) callback);
-                        return null;
-                    }
-                    int fd = Posix.open (fpath, Posix.O_WRONLY, 0644);
-                    archive.read_data_into_fd (fd);
-                    Posix.close (fd);
-                }
-            }
-            thread_output = true;
-            Idle.add ((owned) callback);
-            return null;
-        };
-        try {
-            Thread.create<void*>(run, false);
-        } catch (ThreadError e) {
-            critical ("Failed to start thread to extract blocklist. Error: %s", e.message);
-            return false;
-        }
-
-        yield;
-
-        if (!thread_output) {
-            return false;
-        }
-
-        try {
-            yield File.new_for_path (dest_file).delete_async ();
-        } catch (Error e) {
-            warning ("Failed to delete extracted blocklist archive. Error: %s", e.message);
-        }
-        session.reload_block_lists ();
-        saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
-        return true;
+        blocklist_updating = false;
     }
 
     private void update_session_settings () {
@@ -281,6 +176,7 @@ public class Torrential.TorrentManager : Object {
 
         if (saved_state.blocklist_url.strip ().length > 0) {
             settings.add_bool (Transmission.Prefs.blocklist_enabled, true);
+            settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
         } else {
             settings.add_bool (Transmission.Prefs.blocklist_enabled, false);
         }

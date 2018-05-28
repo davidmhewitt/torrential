@@ -40,7 +40,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private SimpleActionGroup actions = new SimpleActionGroup ();
 
-    private TorrentManager torrent_manager;
+    public TorrentManager torrent_manager;
     private Settings saved_state;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
@@ -107,18 +107,18 @@ public class Torrential.MainWindow : Gtk.Window {
         });
         app.add_action (show_window);
 
-        torrent_manager = new TorrentManager ();
-
-        build_headerbar ();
-        build_main_interface ();
-        build_welcome_screen ();
-
         var grid = new Gtk.Grid ();
         grid.orientation = Gtk.Orientation.VERTICAL;
         infobar = new Widgets.MultiInfoBar ();
         infobar.set_message_type (Gtk.MessageType.WARNING);
         infobar.no_show_all = true;
         infobar.visible = false;
+
+        torrent_manager = new TorrentManager ();
+
+        build_headerbar ();
+        build_main_interface ();
+        build_welcome_screen ();
 
         var no_results_alertview = new Granite.Widgets.AlertView (_("No Search Results"), _("Try changing search terms"), "edit-find-symbolic");
         var empty_category_alertview = new Granite.Widgets.AlertView (_("No Torrents Here"), _("Try a different category"), "edit-find-symbolic");
@@ -157,12 +157,6 @@ public class Torrential.MainWindow : Gtk.Window {
         torrent_manager.blocklist_load_failed.connect (() => {
             infobar.add_error (_("Failed to load blocklist. All torrents paused as a precaution."));
             infobar.show ();
-        });
-
-        torrent_manager.blocklist_load_complete.connect (() => {
-            if (prefs_window != null) {
-                prefs_window.blocklist_load_complete ();
-            }
         });
 
         refresh_timer = Timeout.add_seconds (1, () => {
@@ -355,9 +349,7 @@ public class Torrential.MainWindow : Gtk.Window {
                 warning ("Error with thread while updating session settings. Error: %s", e.message);
             }
         });
-        prefs_window.update_blocklist.connect (() => {
-            torrent_manager.update_blocklists (true);
-        });
+
         prefs_window.show_all ();
     }
 

@@ -12,7 +12,6 @@ You'll need the following dependencies to build:
 * libgtk-3-dev
 * valac
 * libgranite-dev
-* libarchive-dev
 * libunity-dev
 * libcurl4-openssl-dev
 * libssl-dev

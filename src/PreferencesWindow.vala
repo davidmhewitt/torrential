@@ -17,7 +17,6 @@
 public class Torrential.PreferencesWindow : Gtk.Dialog {
 
     public signal void on_close ();
-    public signal void update_blocklist ();
 
     private const int MIN_WIDTH = 420;
     private const int MIN_HEIGHT = 300;
@@ -28,15 +27,21 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private Gtk.Label blocklist_state;
     private Gtk.Stack update_blocklist_stack;
 
+    public weak MainWindow parent_window { private get; construct; }
+
     public PreferencesWindow (Torrential.MainWindow parent) {
-        // Window properties        
+        Object (parent_window: parent);
+    }
+
+    construct {
+        // Window properties
         title = _("Preferences");
         set_size_request (MIN_WIDTH, MIN_HEIGHT);
         resizable = false;
         deletable = false;
         destroy_with_parent = true;
         window_position = Gtk.WindowPosition.CENTER;
-        set_transient_for (parent);
+        set_transient_for (parent_window);
 
         var stack = new Gtk.Stack ();
         stack.add_titled (create_general_settings_widgets (), "general", _("General"));
@@ -67,12 +72,22 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         ((Gtk.Container) get_content_area ()).add (content_grid);
 
+        parent_window.torrent_manager.notify["blocklist-updating"].connect (on_blocklist_state_change);
+
         saved_state.changed.connect (on_saved_settings_changed);
     }
 
     private void on_saved_settings_changed () {
         location_chooser.set_current_folder (saved_state.download_folder);
         update_blocklist_label ();
+    }
+
+    private void on_blocklist_state_change () {
+        if (parent_window.torrent_manager.blocklist_updating) {
+            update_blocklist_stack.visible_child_name = "spinner";
+        } else {
+            update_blocklist_stack.visible_child_name = "button";
+        }
     }
 
     private void update_blocklist_label () {
@@ -113,7 +128,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
         update_blocklist_button.clicked.connect (() => {
             update_blocklist_stack.visible_child_name = "spinner";
-            update_blocklist ();
+            parent_window.torrent_manager.update_blocklist ();
         });
         update_blocklist_stack.add_named (update_blocklist_button, "button");
         update_blocklist_stack.add_named (spinner, "spinner");
@@ -139,6 +154,11 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         advanced_grid.attach (blocklist_entry, 1, 7, 1, 1);
         advanced_grid.attach (blocklist_state, 0, 8, 1, 1);
         advanced_grid.attach (update_blocklist_stack, 1, 8, 1, 1);
+
+        if (parent_window.torrent_manager.blocklist_updating) {
+            update_blocklist_stack.show_all ();
+            update_blocklist_stack.visible_child_name = "spinner";
+        }
 
         return advanced_grid;
     }
@@ -210,10 +230,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
 
         return general_grid;
-    }
-
-    public void blocklist_load_complete () {
-        update_blocklist_stack.visible_child_name = "button";
     }
 
     private Gtk.Label create_heading (string text) {

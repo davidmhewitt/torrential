@@ -455,26 +455,13 @@ public class Torrential.MainWindow : Gtk.Window {
         var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
+            enable_main_view ();
             if (!focused) {
                 var notification = new Notification (_("Torrent Added"));
                 notification.set_body (_("Successfully added torrent file from Downloads"));
                 notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
                 app.send_notification ("app.torrent-added", notification);
             }
-        } else if (result == Transmission.ParseResult.ERR) {
-            var basename = Filename.display_basename (path);
-            errors.add (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
-            if (!focused) {
-                var notification = new Notification (_("Failed to Add Torrent"));
-                notification.set_body (_("Something went wrong when adding a torrent file from Downloads"));
-                notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
-                app.send_notification ("app.torrent-added", notification);
-            }
-        }
-
-        if (errors.size > 0) {
-            infobar.add_errors (errors);
-            infobar.show ();
         }
     }
 

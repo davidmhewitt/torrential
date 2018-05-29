@@ -63,7 +63,10 @@ public class Torrential.TorrentManager : Object {
             added_torrents.add (transmission_torrents[i]);
         }
 
-        update_blocklist ();
+        // Only auto-update blocklist once every day
+        if (new DateTime.now_local ().to_unix () - saved_state.blocklist_updated_timestamp > 3600 * 24) {
+            update_blocklist ();
+        }
     }
 
     ~TorrentManager () {

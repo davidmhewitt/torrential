@@ -448,7 +448,6 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void add_monitored_file (string path) {
-        Gee.ArrayList<string> errors = new Gee.ArrayList<string> ();
         var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
 
         Torrent? new_torrent;

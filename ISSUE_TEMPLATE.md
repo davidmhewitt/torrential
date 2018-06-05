@@ -1,0 +1,2 @@
+## Extra information required for bug reports
+If your issue is a bug, especially one relating to download speeds/times, please provide debugging output by running Torrential from the terminal with `com.github.davidmhewitt.torrential` and copying the output. Leave torrential running for at least a few minutes before copying the output, especially if your issue relates to the speed at which Torrential discovers peers or starts downloading.

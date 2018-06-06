@@ -15,9 +15,10 @@ You'll need the following dependencies to build:
 * libunity-dev
 * libevent-dev
 * libcurl4-openssl-dev
+* libminiupnpc-dev
+* libnatpmp-dev
+* libb64-dev
 * libssl-dev
-* automake
-* libtool
 
 ## How To Build
 

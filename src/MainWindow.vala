@@ -215,8 +215,13 @@ public class Torrential.MainWindow : Gtk.Window {
             warning ("Error setting up watchfolder on Download folder: %s", e.message);
         }
 
+#if VALA_0_40
         int_sig = Unix.signal_add (Posix.Signal.INT, quit_source_func, Priority.HIGH);
         term_sig = Unix.signal_add (Posix.Signal.TERM, quit_source_func, Priority.HIGH);
+#else
+        int_sig = Unix.signal_add (Posix.SIGINT, quit_source_func, Priority.HIGH);
+        term_sig = Unix.signal_add (Posix.SIGTERM, quit_source_func, Priority.HIGH);
+#endif
     }
 
     public bool quit_source_func () {

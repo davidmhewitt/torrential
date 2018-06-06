@@ -17,6 +17,7 @@ You'll need the following dependencies to build:
 * libcurl4-openssl-dev
 * libminiupnpc-dev
 * libnatpmp-dev
+* libb64-dev
 * libssl-dev
 * automake
 * libtool

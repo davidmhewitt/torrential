@@ -1,175 +1,170 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 20:10+0100\n"
+"POT-Creation-Date: 2018-06-06 20:47+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../src/MainWindow.vala:124
+#: ../src/MainWindow.vala:128
 msgid "No Search Results"
 msgstr "Geen Zoekresultaten"
 
-#: ../src/MainWindow.vala:124
+#: ../src/MainWindow.vala:128
 msgid "Try changing search terms"
 msgstr "Probeer andere zoektermen"
 
-#: ../src/MainWindow.vala:125
+#: ../src/MainWindow.vala:129
 msgid "No Torrents Here"
 msgstr "Geen Torrents Hier"
 
-#: ../src/MainWindow.vala:125
+#: ../src/MainWindow.vala:129
 msgid "Try a different category"
 msgstr "Probeer een andere categorie"
 
-#: ../src/MainWindow.vala:151
+#: ../src/MainWindow.vala:161
 msgid "Torrent Complete"
 msgstr "Torrent Voltooid"
 
-#: ../src/MainWindow.vala:152
+#: ../src/MainWindow.vala:162
 msgid "“%s” has finished downloading"
 msgstr "“%s” is klaar met downloaden"
 
-#: ../src/MainWindow.vala:159
+#: ../src/MainWindow.vala:169
 msgid "Failed to load blocklist. All torrents paused as a precaution."
 msgstr "Blocklist laden mislukt. Alle torrents werden uit voorzorg gepauzeerd."
 
-#: ../src/MainWindow.vala:227
+#: ../src/MainWindow.vala:250
 msgid "Application menu"
 msgstr "Applicatie menu"
 
-#: ../src/MainWindow.vala:233
+#: ../src/MainWindow.vala:256
 msgid "Open .torrent file"
 msgstr "Open .torrent bestand"
 
-#: ../src/MainWindow.vala:239
+#: ../src/MainWindow.vala:262
 #, fuzzy
 msgid "Open magnet link"
 msgstr "Magnet Link"
 
-#: ../src/MainWindow.vala:243
+#: ../src/MainWindow.vala:266
 msgid "Search Torrents"
 msgstr "Zoek Torrents"
 
-#: ../src/MainWindow.vala:254
+#: ../src/MainWindow.vala:277
 msgid "All"
 msgstr "Alle"
 
-#: ../src/MainWindow.vala:255
+#: ../src/MainWindow.vala:278
 msgid "Downloading"
 msgstr "Downloaden"
 
-#: ../src/MainWindow.vala:256
+#: ../src/MainWindow.vala:279
 msgid "Seeding"
 msgstr "Seeden"
 
-#: ../src/MainWindow.vala:257 ../src/Widgets/TorrentListRow.vala:144
+#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:144
 msgid "Paused"
 msgstr "Gepauzeerd"
 
-#: ../src/MainWindow.vala:310
+#: ../src/MainWindow.vala:334
 msgid "No Torrents Added"
 msgstr "Geen Torrents Toegevoegd"
 
-#: ../src/MainWindow.vala:310
+#: ../src/MainWindow.vala:334
 msgid "Add a torrent file to begin downloading."
 msgstr "Voeg een torrent bestand toe om te beginnen downloaden."
 
-#: ../src/MainWindow.vala:311
+#: ../src/MainWindow.vala:335
 msgid "Open Torrent"
 msgstr "Open Torrent"
 
-#: ../src/MainWindow.vala:311
+#: ../src/MainWindow.vala:335
 msgid "Open a torrent file from your computer."
 msgstr "Open een lokaal torrent bestand."
 
-#: ../src/MainWindow.vala:312 ../src/PreferencesWindow.vala:38
+#: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: ../src/MainWindow.vala:312
+#: ../src/MainWindow.vala:336
 msgid "Set download folder and other preferences."
 msgstr "Stel download map en andere voorkeuren in."
 
-#: ../src/MainWindow.vala:337
+#: ../src/MainWindow.vala:361
 msgid "_Preferences"
 msgstr "_Voorkeuren"
 
-#: ../src/MainWindow.vala:343
+#: ../src/MainWindow.vala:367
 msgid "_Quit"
 msgstr "_Afsluiten"
 
-#: ../src/MainWindow.vala:380
+#: ../src/MainWindow.vala:377
+msgid "Magnet Link Copied To Clipboard"
+msgstr ""
+
+#: ../src/MainWindow.vala:412
 msgid "Open some torrents"
 msgstr "Open enkele torrents"
 
-#: ../src/MainWindow.vala:382
+#: ../src/MainWindow.vala:414
 msgid "Cancel"
 msgstr "Annuleer"
 
-#: ../src/MainWindow.vala:383
+#: ../src/MainWindow.vala:415
 msgid "Open"
 msgstr "Openen"
 
-#: ../src/MainWindow.vala:388
+#: ../src/MainWindow.vala:420
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../src/MainWindow.vala:391
+#: ../src/MainWindow.vala:423
 msgid "Torrent files"
 msgstr "Torrent bestanden"
 
-#: ../src/MainWindow.vala:417
+#: ../src/MainWindow.vala:449
 #, fuzzy
 msgid "Magnet URL:"
 msgstr "Magnet Link"
 
-#: ../src/MainWindow.vala:459
+#: ../src/MainWindow.vala:491
 #, fuzzy
 msgid "Torrent Added"
 msgstr "Geen Torrents Toegevoegd"
 
-#: ../src/MainWindow.vala:460
+#: ../src/MainWindow.vala:492
 #, fuzzy
 msgid "Successfully added torrent file from Downloads"
 msgstr "Magnet link succesvol toegevoegd"
 
-#: ../src/MainWindow.vala:466 ../src/MainWindow.vala:497
+#: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
 msgstr ""
 "Kon “%s” niet toevoegen. Het blijkt geen geldig torrent bestand te zijn."
 
-#: ../src/MainWindow.vala:468
-#, fuzzy
-msgid "Failed to Add Torrent"
-msgstr "Kon magnet link niet openen"
-
-#: ../src/MainWindow.vala:469
-msgid "Something went wrong when adding a torrent file from Downloads"
-msgstr ""
-
-#: ../src/MainWindow.vala:500
+#: ../src/MainWindow.vala:518
 msgid "Didn’t add “%s”. An identical torrent has already been added."
 msgstr ""
 "De torrent “%s” werd niet toegevoegd omdat deze reeds eerder geladen werd."
 
-#: ../src/MainWindow.vala:520 ../src/MainWindow.vala:539
+#: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
 msgid "Magnet Link"
 msgstr "Magnet Link"
 
-#: ../src/MainWindow.vala:521
+#: ../src/MainWindow.vala:539
 msgid "Successfully added magnet link"
 msgstr "Magnet link succesvol toegevoegd"
 
-#: ../src/MainWindow.vala:526
+#: ../src/MainWindow.vala:544
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
 msgstr "Kon magnet link niet openen omdat deze niet geldig lijkt te zijn."
 
-#: ../src/MainWindow.vala:530
+#: ../src/MainWindow.vala:548
 msgid "Didn’t add magnet link. An identical torrent has already been added."
 msgstr "De magnet link werd niet geopend omdat deze reeds eerder geladen werd."
 
-#: ../src/MainWindow.vala:540
+#: ../src/MainWindow.vala:558
 msgid "Failed to add magnet link"
 msgstr "Kon magnet link niet openen"
 
@@ -307,23 +302,28 @@ msgid_plural "(Plus %d more warnings…)"
 msgstr[0] "(En %d andere waarschuwing…)"
 msgstr[1] "(En %d andere waarschuwingen…)"
 
-#: ../src/Widgets/TorrentListBox.vala:107
+#: ../src/Widgets/TorrentListBox.vala:108
 msgid "Remove"
 msgstr "Verwijder"
 
-#: ../src/Widgets/TorrentListBox.vala:114
+#: ../src/Widgets/TorrentListBox.vala:115
 #, fuzzy
 msgid "Pause"
 msgstr "Gepauzeerd"
 
-#: ../src/Widgets/TorrentListBox.vala:121
+#: ../src/Widgets/TorrentListBox.vala:122
 #, fuzzy
 msgid "Resume"
 msgstr "Hervat torrent"
 
-#: ../src/Widgets/TorrentListBox.vala:128
+#: ../src/Widgets/TorrentListBox.vala:129
 msgid "Show in File Browser"
 msgstr "Toon in Bestandsbrowser"
+
+#: ../src/Widgets/TorrentListBox.vala:137
+#, fuzzy
+msgid "Copy Magnet Link"
+msgstr "Magnet Link"
 
 #: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
 #: ../src/Widgets/TorrentListRow.vala:209
@@ -382,6 +382,10 @@ msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u seconde"
 msgstr[1] "%u seconden"
+
+#, fuzzy
+#~ msgid "Failed to Add Torrent"
+#~ msgstr "Kon magnet link niet openen"
 
 #~ msgid "_About"
 #~ msgstr "_Over"

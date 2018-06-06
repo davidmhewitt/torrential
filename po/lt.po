@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-28 20:10+0100\n"
+"POT-Creation-Date: 2018-06-06 20:47+0100\n"
 "PO-Revision-Date: 2017-12-28 13:15+0200\n"
 "Last-Translator: Moo\n"
 "Language-Team: \n"
@@ -19,171 +19,166 @@ msgstr ""
 "%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: ../src/MainWindow.vala:124
+#: ../src/MainWindow.vala:128
 msgid "No Search Results"
 msgstr "Nėra paieškos rezultatų"
 
-#: ../src/MainWindow.vala:124
+#: ../src/MainWindow.vala:128
 msgid "Try changing search terms"
 msgstr "Pabandykite pakeisti paieškos žodžius"
 
-#: ../src/MainWindow.vala:125
+#: ../src/MainWindow.vala:129
 msgid "No Torrents Here"
 msgstr "Čia torrent'ų nėra"
 
-#: ../src/MainWindow.vala:125
+#: ../src/MainWindow.vala:129
 msgid "Try a different category"
 msgstr "Pabandykite kitą kategoriją"
 
-#: ../src/MainWindow.vala:151
+#: ../src/MainWindow.vala:161
 msgid "Torrent Complete"
 msgstr "Torrent užbaigtas"
 
-#: ../src/MainWindow.vala:152
+#: ../src/MainWindow.vala:162
 msgid "“%s” has finished downloading"
 msgstr "\"%s\" atsiuntimas užbaigtas"
 
-#: ../src/MainWindow.vala:159
+#: ../src/MainWindow.vala:169
 msgid "Failed to load blocklist. All torrents paused as a precaution."
 msgstr ""
 "Nepavyko įkelti blokavimo sąrašo. Atsargumo sumetimais visi torrent'ai "
 "pristabdyti."
 
-#: ../src/MainWindow.vala:227
+#: ../src/MainWindow.vala:250
 msgid "Application menu"
 msgstr "Programos meniu"
 
-#: ../src/MainWindow.vala:233
+#: ../src/MainWindow.vala:256
 msgid "Open .torrent file"
 msgstr "Atverti .torrent failą"
 
-#: ../src/MainWindow.vala:239
+#: ../src/MainWindow.vala:262
 #, fuzzy
 msgid "Open magnet link"
 msgstr "Magnet nuoroda"
 
-#: ../src/MainWindow.vala:243
+#: ../src/MainWindow.vala:266
 msgid "Search Torrents"
 msgstr "Ieškoti torrent'us"
 
-#: ../src/MainWindow.vala:254
+#: ../src/MainWindow.vala:277
 msgid "All"
 msgstr "Visi"
 
-#: ../src/MainWindow.vala:255
+#: ../src/MainWindow.vala:278
 msgid "Downloading"
 msgstr "Atsiunčiama"
 
-#: ../src/MainWindow.vala:256
+#: ../src/MainWindow.vala:279
 msgid "Seeding"
 msgstr "Skleidžiama"
 
-#: ../src/MainWindow.vala:257 ../src/Widgets/TorrentListRow.vala:144
+#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:144
 msgid "Paused"
 msgstr "Pristabdyta"
 
-#: ../src/MainWindow.vala:310
+#: ../src/MainWindow.vala:334
 msgid "No Torrents Added"
 msgstr "Nėra pridėta jokių torrent'ų"
 
-#: ../src/MainWindow.vala:310
+#: ../src/MainWindow.vala:334
 msgid "Add a torrent file to begin downloading."
 msgstr "Norėdami pradėti atsiuntimą, pridėkite torrent failą."
 
-#: ../src/MainWindow.vala:311
+#: ../src/MainWindow.vala:335
 msgid "Open Torrent"
 msgstr "Atverti torrent"
 
-#: ../src/MainWindow.vala:311
+#: ../src/MainWindow.vala:335
 msgid "Open a torrent file from your computer."
 msgstr "Atverkite torrent failą iš savo kompiuterio."
 
-#: ../src/MainWindow.vala:312 ../src/PreferencesWindow.vala:38
+#: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
 msgid "Preferences"
 msgstr "Nuostatos"
 
-#: ../src/MainWindow.vala:312
+#: ../src/MainWindow.vala:336
 msgid "Set download folder and other preferences."
 msgstr "Nustatykite atsiuntimo aplanką bei kitas nuostatas."
 
-#: ../src/MainWindow.vala:337
+#: ../src/MainWindow.vala:361
 msgid "_Preferences"
 msgstr "_Nuostatos"
 
-#: ../src/MainWindow.vala:343
+#: ../src/MainWindow.vala:367
 msgid "_Quit"
 msgstr "_Išeiti"
 
-#: ../src/MainWindow.vala:380
+#: ../src/MainWindow.vala:377
+msgid "Magnet Link Copied To Clipboard"
+msgstr ""
+
+#: ../src/MainWindow.vala:412
 msgid "Open some torrents"
 msgstr "Atverti kažkokius torrent'us"
 
-#: ../src/MainWindow.vala:382
+#: ../src/MainWindow.vala:414
 msgid "Cancel"
 msgstr "Atsisakyti"
 
-#: ../src/MainWindow.vala:383
+#: ../src/MainWindow.vala:415
 msgid "Open"
 msgstr "Atverti"
 
-#: ../src/MainWindow.vala:388
+#: ../src/MainWindow.vala:420
 msgid "All files"
 msgstr "Visi failai"
 
-#: ../src/MainWindow.vala:391
+#: ../src/MainWindow.vala:423
 msgid "Torrent files"
 msgstr "Torrent failai"
 
-#: ../src/MainWindow.vala:417
+#: ../src/MainWindow.vala:449
 #, fuzzy
 msgid "Magnet URL:"
 msgstr "Magnet nuoroda"
 
-#: ../src/MainWindow.vala:459
+#: ../src/MainWindow.vala:491
 #, fuzzy
 msgid "Torrent Added"
 msgstr "Nėra pridėta jokių torrent'ų"
 
-#: ../src/MainWindow.vala:460
+#: ../src/MainWindow.vala:492
 #, fuzzy
 msgid "Successfully added torrent file from Downloads"
 msgstr "Magnet nuoroda sėkmingai pridėta"
 
-#: ../src/MainWindow.vala:466 ../src/MainWindow.vala:497
+#: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
 msgstr ""
 "Nepavyko pridėti \"%s\", nes jis neatrodo kaip teisingas torrent failas."
 
-#: ../src/MainWindow.vala:468
-#, fuzzy
-msgid "Failed to Add Torrent"
-msgstr "Nepavyko pridėti magnet nuorodos"
-
-#: ../src/MainWindow.vala:469
-msgid "Something went wrong when adding a torrent file from Downloads"
-msgstr ""
-
-#: ../src/MainWindow.vala:500
+#: ../src/MainWindow.vala:518
 msgid "Didn’t add “%s”. An identical torrent has already been added."
 msgstr "\"%s\" nepridėtas. Toks pats torrent jau yra pridėtas."
 
-#: ../src/MainWindow.vala:520 ../src/MainWindow.vala:539
+#: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
 msgid "Magnet Link"
 msgstr "Magnet nuoroda"
 
-#: ../src/MainWindow.vala:521
+#: ../src/MainWindow.vala:539
 msgid "Successfully added magnet link"
 msgstr "Magnet nuoroda sėkmingai pridėta"
 
-#: ../src/MainWindow.vala:526
+#: ../src/MainWindow.vala:544
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
 msgstr "Nepavyko pridėti magnet nuorodos, nes atrodo, kad ji yra neteisinga."
 
-#: ../src/MainWindow.vala:530
+#: ../src/MainWindow.vala:548
 msgid "Didn’t add magnet link. An identical torrent has already been added."
 msgstr "Magnet nuoroda nepridėta. Toks pats torrent jau yra pridėtas."
 
-#: ../src/MainWindow.vala:540
+#: ../src/MainWindow.vala:558
 msgid "Failed to add magnet link"
 msgstr "Nepavyko pridėti magnet nuorodos"
 
@@ -322,23 +317,28 @@ msgstr[0] "(Bei dar %d įspėjimas…)"
 msgstr[1] "(Bei dar %d įspėjimai…)"
 msgstr[2] "(Bei dar %d įspėjimų…)"
 
-#: ../src/Widgets/TorrentListBox.vala:107
+#: ../src/Widgets/TorrentListBox.vala:108
 msgid "Remove"
 msgstr "Šalinti"
 
-#: ../src/Widgets/TorrentListBox.vala:114
+#: ../src/Widgets/TorrentListBox.vala:115
 #, fuzzy
 msgid "Pause"
 msgstr "Pristabdyta"
 
-#: ../src/Widgets/TorrentListBox.vala:121
+#: ../src/Widgets/TorrentListBox.vala:122
 #, fuzzy
 msgid "Resume"
 msgstr "Pratęsti torrent'ą"
 
-#: ../src/Widgets/TorrentListBox.vala:128
+#: ../src/Widgets/TorrentListBox.vala:129
 msgid "Show in File Browser"
 msgstr "Rodyti failų naršyklėje"
+
+#: ../src/Widgets/TorrentListBox.vala:137
+#, fuzzy
+msgid "Copy Magnet Link"
+msgstr "Magnet nuoroda"
 
 #: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
 #: ../src/Widgets/TorrentListRow.vala:209
@@ -401,6 +401,10 @@ msgid_plural "%u seconds"
 msgstr[0] "%u sekundė"
 msgstr[1] "%u sekundės"
 msgstr[2] "%u sekundžių"
+
+#, fuzzy
+#~ msgid "Failed to Add Torrent"
+#~ msgstr "Nepavyko pridėti magnet nuorodos"
 
 #~ msgid "_About"
 #~ msgstr "_Apie"

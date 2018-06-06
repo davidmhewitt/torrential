@@ -24,6 +24,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     public signal void torrent_removed (Torrent torrent);
     public signal void open_torrent (int id);
     public signal void open_torrent_location (int id);
+    public signal void link_copied ();
 
     public enum FilterType {
         ALL,
@@ -133,6 +134,15 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             }
         });
 
+        var copy_magnet_item = new Gtk.MenuItem.with_label (_("Copy Magnet Link"));
+        copy_magnet_item.activate.connect (() => {
+            var selected_row = get_selected_row () as TorrentListRow;
+            if (selected_row != null) {
+                selected_row.copy_magnet_link ();
+                link_copied ();
+            }
+        });
+
         menu.add (remove_item);
         if (all_paused) {
             menu.add (unpause_item);
@@ -141,6 +151,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         }
 
         if (items.length () < 2) {
+            menu.add (copy_magnet_item);
             menu.add (open_item);
         }
 

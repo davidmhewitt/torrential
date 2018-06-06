@@ -31,6 +31,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private Gtk.Stack stack;
     private Gtk.HeaderBar headerbar;
     private Granite.Widgets.Welcome welcome_screen;
+    private Granite.Widgets.Toast toast;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
     private Gtk.ScrolledWindow list_box_scroll;
@@ -132,7 +133,13 @@ public class Torrential.MainWindow : Gtk.Window {
         stack.visible_child_name = "welcome";
         grid.add (infobar);
         grid.add (stack);
-        add (grid);
+
+        var overlay = new Gtk.Overlay ();
+        toast = new Granite.Widgets.Toast ("");
+        overlay.add_overlay (grid);
+        overlay.add_overlay (toast);
+
+        add (overlay);
 
         set_titlebar (headerbar);
         show_all ();
@@ -302,6 +309,7 @@ public class Torrential.MainWindow : Gtk.Window {
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
         list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
         list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
+        list_box.link_copied.connect (on_link_copied);
         list_box_scroll = new Gtk.ScrolledWindow (null, null);
         list_box_scroll.add (list_box);
     }
@@ -347,6 +355,11 @@ public class Torrential.MainWindow : Gtk.Window {
         app_menu.show_all ();
 
         return app_menu;
+    }
+
+    private void on_link_copied () {
+        toast.title = _("Magnet Link Copied To Clipboard");
+        toast.send_notification ();
     }
 
     private void on_preferences (SimpleAction action) {

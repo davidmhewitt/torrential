@@ -209,6 +209,12 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         pause_button.tooltip_text = _("Pause torrent");
     }
 
+    public void copy_magnet_link () {
+        var link = torrent.magnet_link;
+        var clipboard = Gtk.Clipboard.get_for_display (get_display (), Gdk.SELECTION_CLIPBOARD);
+        clipboard.set_text (link, -1);
+    }
+
     public bool downloading { get { return torrent.downloading; } }
     public bool seeding { get { return torrent.seeding; } }
     public bool paused { get { return torrent.paused; } }

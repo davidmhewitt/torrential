@@ -207,6 +207,12 @@ public class Torrential.Torrent {
         }
     }
 
+    public string magnet_link {
+        owned get {
+            return torrent.magnet_link;
+        }
+    }
+
     public int id {
         get {
             return torrent.id;

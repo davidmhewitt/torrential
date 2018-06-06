@@ -1,6 +1,6 @@
 com.github.davidmhewitt.torrential (1.0.9) xenial; urgency=low
 
-  * Torrential now watches your download folder for new torrent files while it's running
+  * Torrential now watches your downloads folder for new torrent files while it's running
   * Torrent files are now moved to the trash after they have been added
   * Added a copy magnet link entry to the right click menu
   * Minor quality of life improvements and code cleanup

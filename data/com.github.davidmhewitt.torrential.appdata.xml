@@ -13,7 +13,7 @@
       <release version="1.0.9" date="2018-06-06">
         <description>
           <ul>
-            <li>Torrential now watches your download folder for new torrent files while it's running.</li>
+            <li>Torrential now watches your downloads folder for new torrent files while it's running.</li>
             <li>Torrent files are now moved to the trash after they have been added.</li>
             <li>Added a copy magnet link entry to the right click menu.</li>
             <li>Minor quality of life improvements and code cleanup.</li>

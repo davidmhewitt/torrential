@@ -56,6 +56,9 @@ public class Torrential.MainWindow : Gtk.Window {
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
     private const string ACTION_SHOW_WINDOW = "show-window";
 
+    private uint int_sig;
+    private uint term_sig;
+
     private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
         {ACTION_QUIT,                       on_quit                 },
@@ -211,6 +214,14 @@ public class Torrential.MainWindow : Gtk.Window {
         } catch (Error e) {
             warning ("Error setting up watchfolder on Download folder: %s", e.message);
         }
+
+        int_sig = Unix.signal_add (Posix.Signal.INT, quit_source_func, Priority.HIGH);
+        term_sig = Unix.signal_add (Posix.Signal.TERM, quit_source_func, Priority.HIGH);
+    }
+
+    public bool quit_source_func () {
+        quit ();
+        return false;
     }
 
     public void wait_for_close () {
@@ -376,6 +387,9 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     public void quit () {
+        Source.remove (int_sig);
+        Source.remove (term_sig);
+
         launcher_entry.progress_visible = false;
         quitting_for_real = true;
         close ();

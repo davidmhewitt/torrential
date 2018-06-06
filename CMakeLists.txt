@@ -70,6 +70,7 @@ CUSTOM_VAPIS
 PACKAGES
     granite
     unity
+    posix
 OPTIONS
     --fatal-warnings
     --enable-deprecated

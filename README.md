@@ -19,8 +19,6 @@ You'll need the following dependencies to build:
 * libnatpmp-dev
 * libb64-dev
 * libssl-dev
-* automake
-* libtool
 
 ## How To Build
 

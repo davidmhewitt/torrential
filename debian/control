@@ -13,9 +13,7 @@ Build-Depends: cmake (>= 2.8),
                libnatpmp-dev,
                libb64-dev,
                libcurl4-openssl-dev,
-               libssl-dev,
-               automake,
-               libtool
+               libssl-dev
 Standards-Version: 3.9.3
 
 Package: com.github.davidmhewitt.torrential

@@ -208,6 +208,8 @@ public class Torrential.TorrentManager : Object {
             torrent.set_completeness_callback (on_completeness_changed);
             created_torrent = new Torrent (torrent);
             added_torrents.add (torrent);
+
+            check_trash ();
         } else {
             created_torrent = null;
         }
@@ -227,11 +229,27 @@ public class Torrential.TorrentManager : Object {
             torrent.set_completeness_callback (on_completeness_changed);
             created_torrent = new Torrent (torrent);
             added_torrents.add (torrent);
+
+            check_trash ();
         } else {
             created_torrent = null;
         }
 
         return result;
+    }
+
+    private void check_trash () {
+        if (Settings.get_default ().trash_original_torrents) {
+            var path = torrent_constructor.source_file;
+            if (path != null && !path.has_prefix (CONFIG_DIR)) {
+                var file = File.new_for_path (path);
+                try {
+                    file.trash ();
+                } catch (Error e) {
+                    warning ("An error occured while trying to trash the original torrent file");
+                }
+            }
+        }
     }
 
     public void remove_torrent (Torrent to_remove) {

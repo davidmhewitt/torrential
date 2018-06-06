@@ -31,6 +31,7 @@ public class Torrential.Settings : Granite.Services.Settings {
 
     public string download_folder { get; set; }
     public bool hide_on_close { get; set; }
+    public bool trash_original_torrents { get; set; }
     public int max_downloads { get; set; }
     public int download_speed_limit { get; set; }
     public int upload_speed_limit { get; set; }

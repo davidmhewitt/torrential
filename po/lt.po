@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-06 20:47+0100\n"
-"PO-Revision-Date: 2017-12-28 13:15+0200\n"
+"PO-Revision-Date: 2018-06-12 11:17+0300\n"
 "Last-Translator: Moo\n"
 "Language-Team: \n"
 "Language: lt\n"
@@ -58,13 +58,12 @@ msgid "Open .torrent file"
 msgstr "Atverti .torrent failą"
 
 #: ../src/MainWindow.vala:262
-#, fuzzy
 msgid "Open magnet link"
-msgstr "Magnet nuoroda"
+msgstr "Atverti Magnet nuorodą"
 
 #: ../src/MainWindow.vala:266
 msgid "Search Torrents"
-msgstr "Ieškoti torrent'us"
+msgstr "Ieškoti torrent'ų"
 
 #: ../src/MainWindow.vala:277
 msgid "All"
@@ -116,7 +115,7 @@ msgstr "_Išeiti"
 
 #: ../src/MainWindow.vala:377
 msgid "Magnet Link Copied To Clipboard"
-msgstr ""
+msgstr "Magnet nuoroda nukopijuota į iškarpinę"
 
 #: ../src/MainWindow.vala:412
 msgid "Open some torrents"
@@ -139,19 +138,16 @@ msgid "Torrent files"
 msgstr "Torrent failai"
 
 #: ../src/MainWindow.vala:449
-#, fuzzy
 msgid "Magnet URL:"
-msgstr "Magnet nuoroda"
+msgstr "Magnet URL:"
 
 #: ../src/MainWindow.vala:491
-#, fuzzy
 msgid "Torrent Added"
-msgstr "Nėra pridėta jokių torrent'ų"
+msgstr "Torrent'as pridėtas"
 
 #: ../src/MainWindow.vala:492
-#, fuzzy
 msgid "Successfully added torrent file from Downloads"
-msgstr "Magnet nuoroda sėkmingai pridėta"
+msgstr "Torrent failas sėkmingai pridėtas iš Atsiuntimų"
 
 #: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
@@ -322,23 +318,20 @@ msgid "Remove"
 msgstr "Šalinti"
 
 #: ../src/Widgets/TorrentListBox.vala:115
-#, fuzzy
 msgid "Pause"
-msgstr "Pristabdyta"
+msgstr "Pristabdyti"
 
 #: ../src/Widgets/TorrentListBox.vala:122
-#, fuzzy
 msgid "Resume"
-msgstr "Pratęsti torrent'ą"
+msgstr "Pratęsti"
 
 #: ../src/Widgets/TorrentListBox.vala:129
 msgid "Show in File Browser"
 msgstr "Rodyti failų naršyklėje"
 
 #: ../src/Widgets/TorrentListBox.vala:137
-#, fuzzy
 msgid "Copy Magnet Link"
-msgstr "Magnet nuoroda"
+msgstr "Kopijuoti Magnet nuorodą"
 
 #: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
 #: ../src/Widgets/TorrentListRow.vala:209

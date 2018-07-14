@@ -120,6 +120,13 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         }
     }
 
+    public void edit_files () {
+        var dialog = new Dialogs.FileSelectDialog ();
+        dialog.show_all ();
+        dialog.run ();
+        dialog.destroy ();
+    }
+
     private string generate_completeness_text () {
         if (!torrent.has_metadata) {
             return _("Trying to find metadata for magnet link");

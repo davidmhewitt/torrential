@@ -60,6 +60,8 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/TorrentManager.vala
     src/Torrent.vala
     src/Settings.vala
+    src/Dialogs/FileSelectDialog.vala
+    src/Widgets/FileSelectTreeView.vala
     src/Widgets/MultiInfoBar.vala
     src/Widgets/TorrentListBox.vala
     src/Widgets/TorrentListRow.vala

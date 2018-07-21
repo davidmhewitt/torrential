@@ -20,6 +20,9 @@
 */
 
 public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
+    private static Icon FOLDER_ICON;
+    private static Icon TORRENT_ICON;
+
     private enum Columns {
         ACTIVE,
         NAME,
@@ -28,6 +31,11 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
     }
 
     private Gtk.TreeStore tree_store;
+
+    static construct {
+        FOLDER_ICON = ContentType.get_icon ("inode/directory");
+        TORRENT_ICON = ContentType.get_icon ("application/x-bittorrent");
+    }
 
     construct {
         tree_store = new Gtk.TreeStore (Columns.N_COLUMNS, typeof (bool), typeof (string), typeof (Icon));
@@ -51,17 +59,30 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
         insert_column_with_attributes (-1, "", cell, "markup", Columns.NAME);
     }
 
-    public void add_file (string name) {
-        var content_type = ContentType.guess (name, null, null);
-        var icon = ContentType.get_icon (content_type);
+    public void populate_from_tree_node (Node<Dialogs.FileSelectDialog.FileRow?> node, Gtk.TreeIter? parent = null) {
+        Gtk.TreeIter child_iter;
 
-        add_to_treestore (tree_store, name, icon);
-    }
+        var row_data = node.data;
+        var name = Markup.escape_text (row_data.name);
 
-    private void add_to_treestore (Gtk.TreeStore tree_store, string name, Icon icon) {
-        Gtk.TreeIter iter;
-        tree_store.append (out iter, null);
-        tree_store.set (iter, Columns.ACTIVE, false, Columns.NAME, name,
-                        Columns.ICON, icon);
+        Icon icon;
+
+        if (node.parent == null) {
+            icon = TORRENT_ICON;
+        } else if (node.children != null) {
+            icon = FOLDER_ICON;
+        } else {
+            var content_type = ContentType.guess (row_data.name, null, null);
+            icon = ContentType.get_icon (content_type);
+        }
+
+        tree_store.append (out child_iter, parent);
+        tree_store.set (child_iter, Columns.ACTIVE, false, Columns.NAME, name, Columns.ICON, icon);
+
+        if (node.children != null) {
+            node.children_foreach (TraverseFlags.ALL, (child_node) => {
+                populate_from_tree_node (child_node, child_iter);
+            });
+        }
     }
 }

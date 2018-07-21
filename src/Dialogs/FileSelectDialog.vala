@@ -26,18 +26,17 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
         Object (torrent: torrent);
     }
 
+    public struct FileRow {
+        int index;
+        string name;
+        string path;
+        uint64 length;
+    }
+
     construct {
         deletable = false;
 
         var view = new Widgets.FileSelectTreeView ();
-
-        var files = torrent.files;
-        if (files != null) {
-            foreach (var file in files) {
-                view.add_file (file.name);
-            }
-        }
-
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.shadow_type = Gtk.ShadowType.IN;
         scrolled.expand = true;
@@ -48,6 +47,77 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
 
         get_header_bar ().visible = false;
         add_button (_("Close"), 0);
+
+        var files = torrent.files;
+        if (files != null) {
+            Node<FileRow?> root;
+
+            var root_data = FileRow ();
+            root_data.name = torrent.name;
+            root_data.index = -1;
+            root_data.length = 0;
+
+            root = new Node<FileRow?> (root_data);
+
+            for (int i = 0; i < torrent.file_count; i++) {
+                unowned Node<FileRow?> parent = root;
+                var file = torrent.files [i];
+                var path_parts = file.name.split (Path.DIR_SEPARATOR_S);
+
+                for (int j = 0; j < path_parts.length; j++) {
+                    bool is_leaf = path_parts[j + 1] == null;
+                    var name = path_parts[j];
+
+                    string path;
+                    unowned Node<FileRow?>? node;
+                    if (j > 0) {
+                        path = string.joinv (Path.DIR_SEPARATOR_S, path_parts[0:j+1]);
+                    } else {
+                        path = path_parts[0];
+                    }
+
+                    warning ("For file %s, looking for %s", file.name, path);
+                    node = find_child (parent, path);
+
+                    if (node == null) {
+                        var new_data = FileRow ();
+                        new_data.name = name;
+                        if (j == 0) {
+                            new_data.path = name;
+                        } else {
+                            new_data.path = string.joinv (Path.DIR_SEPARATOR_S, path_parts[0:j+1]);
+                        }
+
+                        new_data.index = is_leaf ? i : -1;
+                        new_data.length = is_leaf ? file.length : 0;
+
+                        var new_node = new Node<FileRow?> (new_data);
+                        node = new_node;
+                        parent.append ((owned)new_node);
+                        warning ("Added %s", new_data.path);
+                    } else {
+                        warning ("found!");
+                    }
+
+                    parent = node;
+                }
+            }
+
+            view.populate_from_tree_node (root);
+        }
+    }
+
+    private static unowned Node<FileRow?>? find_child (Node<FileRow?> parent, string path) {
+        unowned Node<FileRow?>? child = null;
+
+        parent.children_foreach (TraverseFlags.ALL, (node) => {
+           if (((Node<FileRow?>)node).data.path == path) {
+               child = node;
+               return;
+           }
+        });
+
+        return child;
     }
 }
 

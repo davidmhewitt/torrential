@@ -27,8 +27,10 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
         N_COLUMNS
     }
 
+    private Gtk.TreeStore tree_store;
+
     construct {
-        var tree_store = new Gtk.TreeStore (Columns.N_COLUMNS, typeof (bool), typeof (string), typeof (string));
+        tree_store = new Gtk.TreeStore (Columns.N_COLUMNS, typeof (bool), typeof (string), typeof (Icon));
 
         model = tree_store;
         vexpand = true;
@@ -45,19 +47,18 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
         var cell = new Gtk.CellRendererText ();
         var cellpixbuf = new Gtk.CellRendererPixbuf ();
         insert_column_with_attributes (-1, "", celltoggle, "active", Columns.ACTIVE);
-        insert_column_with_attributes (-1, "", cellpixbuf, "icon-name", Columns.ICON);
+        insert_column_with_attributes (-1, "", cellpixbuf, "gicon", Columns.ICON);
         insert_column_with_attributes (-1, "", cell, "markup", Columns.NAME);
-
-        add_to_treestore (tree_store, _("Chat Logs"), "internet-chat");
-        add_to_treestore (tree_store, _("Documents"), "x-office-document");
-        add_to_treestore (tree_store, _("Music"), "audio-x-generic");
-        add_to_treestore (tree_store, _("Pictures"), "image-x-generic");
-        add_to_treestore (tree_store, _("Presentations"), "x-office-presentation");
-        add_to_treestore (tree_store, _("Spreadsheets"), "x-office-spreadsheet");
-        add_to_treestore (tree_store, _("Videos"), "video-x-generic");
     }
 
-    private void add_to_treestore (Gtk.TreeStore tree_store, string name, string icon) {
+    public void add_file (string name) {
+        var content_type = ContentType.guess (name, null, null);
+        var icon = ContentType.get_icon (content_type);
+
+        add_to_treestore (tree_store, name, icon);
+    }
+
+    private void add_to_treestore (Gtk.TreeStore tree_store, string name, Icon icon) {
         Gtk.TreeIter iter;
         tree_store.append (out iter, null);
         tree_store.set (iter, Columns.ACTIVE, false, Columns.NAME, name,

@@ -20,10 +20,23 @@
 */
 
 public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
+    public Torrent torrent { construct; private get; }
+
+    public FileSelectDialog (Torrent torrent) {
+        Object (torrent: torrent);
+    }
+
     construct {
         deletable = false;
 
         var view = new Widgets.FileSelectTreeView ();
+
+        var files = torrent.files;
+        if (files != null) {
+            foreach (var file in files) {
+                view.add_file (file.name);
+            }
+        }
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.shadow_type = Gtk.ShadowType.IN;

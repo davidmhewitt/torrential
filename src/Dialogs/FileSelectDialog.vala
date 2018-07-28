@@ -36,8 +36,9 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
     construct {
         deletable = false;
 
-        var view = new Widgets.FileSelectTreeView ();
+        var view = new Widgets.FileSelectTreeView (torrent);
         var scrolled = new Gtk.ScrolledWindow (null, null);
+        scrolled.margin = 6;
         scrolled.shadow_type = Gtk.ShadowType.IN;
         scrolled.expand = true;
         scrolled.add (view);
@@ -45,7 +46,6 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
         Gtk.Box content = get_content_area () as Gtk.Box;
         content.pack_start (scrolled, true, true, 0);
 
-        get_header_bar ().visible = false;
         add_button (_("Close"), 0);
 
         var files = torrent.files;
@@ -76,9 +76,7 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
                         path = path_parts[0];
                     }
 
-                    warning ("For file %s, looking for %s", file.name, path);
                     node = find_child (parent, path);
-
                     if (node == null) {
                         var new_data = FileRow ();
                         new_data.name = name;
@@ -94,9 +92,6 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
                         var new_node = new Node<FileRow?> (new_data);
                         node = new_node;
                         parent.append ((owned)new_node);
-                        warning ("Added %s", new_data.path);
-                    } else {
-                        warning ("found!");
                     }
 
                     parent = node;

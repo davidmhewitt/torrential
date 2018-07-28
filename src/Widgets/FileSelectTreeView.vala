@@ -43,7 +43,6 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
     private delegate void PostorderForeachFunc (Gtk.TreeModel model, Gtk.TreeIter iter);
 
     private Gtk.TreeStore tree_store;
-    private Gee.HashSet<int> searched_indicies = new Gee.HashSet<int> ();
 
     public FileSelectTreeView (Torrent torrent) {
         Object (torrent: torrent);
@@ -82,6 +81,14 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
                 }
 
                 update_checked_states ();
+            } else {
+                if (enabled.get_int () == ActiveState.DISABLED) {
+                    recursively_set_active (iter, true);
+                } else {
+                    recursively_set_active (iter, false);
+                }
+
+                update_checked_states ();
             }
         });
 
@@ -110,6 +117,26 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
                 renderer.active = false;
                 renderer.inconsistent = false;
                 break;
+        }
+    }
+
+    private void recursively_set_active (Gtk.TreeIter parent, bool enabled) {
+        Gtk.TreeIter child;
+
+        if (tree_store.iter_children (out child, parent)) {
+            do {
+                Value node_index;
+                tree_store.get_value (child, Columns.INDEX, out node_index);
+                int index = node_index.get_int ();
+
+                if (index >= 0) {
+                    tree_store.set (child, Columns.ACTIVE, enabled ? ActiveState.ENABLED : ActiveState.DISABLED);
+                    torrent.files[index].dnd = enabled ? 0 : 1;
+                } else {
+                    recursively_set_active (child, enabled);
+                }
+
+            } while (tree_store.iter_next (ref child));
         }
     }
 
@@ -148,8 +175,6 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
     }
 
     private void update_checked_states () {
-        searched_indicies.clear ();
-
         foreach_postorder (model, (model, iter) => {
             Value file_index;
             model.get_value (iter, Columns.INDEX, out file_index);

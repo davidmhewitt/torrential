@@ -74,10 +74,10 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
             if (index >= 0) {
                 if (enabled.get_int () == ActiveState.ENABLED) {
                     tree_store.set (iter, Columns.ACTIVE, ActiveState.DISABLED);
-                    torrent.files[index].dnd = 1;
+                    torrent.set_file_download (index, false);
                 } else {
                     tree_store.set (iter, Columns.ACTIVE, ActiveState.ENABLED);
-                    torrent.files[index].dnd = 0;
+                    torrent.set_file_download (index, true);
                 }
 
                 update_checked_states ();
@@ -131,7 +131,7 @@ public class Torrential.Widgets.FileSelectTreeView : Gtk.TreeView {
 
                 if (index >= 0) {
                     tree_store.set (child, Columns.ACTIVE, enabled ? ActiveState.ENABLED : ActiveState.DISABLED);
-                    torrent.files[index].dnd = enabled ? 0 : 1;
+                    torrent.set_file_download (index, enabled);
                 } else {
                     recursively_set_active (child, enabled);
                 }

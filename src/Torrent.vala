@@ -31,7 +31,7 @@ public class Torrential.Torrent {
     public float progress {
         get {
             if (torrent.stat_cached != null) {
-                return torrent.stat_cached.percentComplete;
+                return torrent.stat_cached.percentDone;
             } else {
                 return 0.0f;
             }
@@ -217,6 +217,10 @@ public class Torrential.Torrent {
         get {
             return torrent.id;
         }
+    }
+
+    public void set_file_download (uint32 index, bool download) {
+        torrent.set_file_downloads ({index}, download);
     }
 
     public void pause () {

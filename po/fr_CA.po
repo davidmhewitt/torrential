@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-06 20:47+0100\n"
+"POT-Creation-Date: 2018-07-30 00:43+0100\n"
 "PO-Revision-Date: 2017-10-29 02:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,6 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.8.7.1\n"
+
+#: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
+#: ../src/Widgets/MultiInfoBar.vala:35
+msgid "Close"
+msgstr "Fermer"
 
 #: ../src/MainWindow.vala:128
 msgid "No Search Results"
@@ -77,7 +82,7 @@ msgstr "Téléchargements"
 msgid "Seeding"
 msgstr "Partages"
 
-#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:144
+#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
 msgid "Paused"
 msgstr "En pause"
 
@@ -187,10 +192,6 @@ msgstr "Général"
 #: ../src/PreferencesWindow.vala:48
 msgid "Advanced"
 msgstr "Avancé"
-
-#: ../src/PreferencesWindow.vala:57 ../src/Widgets/MultiInfoBar.vala:35
-msgid "Close"
-msgstr "Fermer"
 
 #: ../src/PreferencesWindow.vala:95
 msgid "Blocklist last downloaded: never"
@@ -329,67 +330,73 @@ msgid "Resume"
 msgstr "Reprendre le torrent"
 
 #: ../src/Widgets/TorrentListBox.vala:129
+#, fuzzy
+msgid "Select Files to Download"
+msgstr "Choisir le dossier de téléchargement..."
+
+#: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
 msgstr "Afficher dans le gestionnaire de fichiers"
 
-#: ../src/Widgets/TorrentListBox.vala:137
+#: ../src/Widgets/TorrentListBox.vala:145
 #, fuzzy
 msgid "Copy Magnet Link"
 msgstr "Lien magnet"
 
-#: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
-#: ../src/Widgets/TorrentListRow.vala:209
+#: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
+#: ../src/Widgets/TorrentListRow.vala:222
 msgid "Pause torrent"
 msgstr "Suspendre le torrent"
 
-#: ../src/Widgets/TorrentListRow.vala:94 ../src/Widgets/TorrentListRow.vala:187
-#: ../src/Widgets/TorrentListRow.vala:203
+#: ../src/Widgets/TorrentListRow.vala:100
+#: ../src/Widgets/TorrentListRow.vala:200
+#: ../src/Widgets/TorrentListRow.vala:216
 msgid "Resume torrent"
 msgstr "Reprendre le torrent"
 
-#: ../src/Widgets/TorrentListRow.vala:125
+#: ../src/Widgets/TorrentListRow.vala:138
 msgid "Trying to find metadata for magnet link"
 msgstr "Recherche de métadonnées pour le lien magnet"
 
-#: ../src/Widgets/TorrentListRow.vala:127
+#: ../src/Widgets/TorrentListRow.vala:140
 msgid "%s of %s — %s remaining"
 msgstr "%s sur %s — %s restantes"
 
-#: ../src/Widgets/TorrentListRow.vala:129
+#: ../src/Widgets/TorrentListRow.vala:142
 msgid "%s of %s"
 msgstr "%s sur %s"
 
-#: ../src/Widgets/TorrentListRow.vala:131
+#: ../src/Widgets/TorrentListRow.vala:144
 msgid "%s uploaded"
 msgstr "%s téléversés"
 
-#: ../src/Widgets/TorrentListRow.vala:142
+#: ../src/Widgets/TorrentListRow.vala:155
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr "%i sur %i pairs connectés. ⬇%s ⬆%s"
 
-#: ../src/Widgets/TorrentListRow.vala:146
+#: ../src/Widgets/TorrentListRow.vala:159
 msgid "Waiting in queue"
 msgstr "En attente"
 
-#: ../src/Widgets/TorrentListRow.vala:158
+#: ../src/Widgets/TorrentListRow.vala:171
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] "%u jour"
 msgstr[1] "%u jours"
 
-#: ../src/Widgets/TorrentListRow.vala:159
+#: ../src/Widgets/TorrentListRow.vala:172
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u heure"
 msgstr[1] "%u heures"
 
-#: ../src/Widgets/TorrentListRow.vala:160
+#: ../src/Widgets/TorrentListRow.vala:173
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] "%u minute"
 msgstr[1] "%u minutes"
 
-#: ../src/Widgets/TorrentListRow.vala:161
+#: ../src/Widgets/TorrentListRow.vala:174
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u seconde"

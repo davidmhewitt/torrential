@@ -1,10 +1,15 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-06 20:47+0100\n"
+"POT-Creation-Date: 2018-07-30 00:43+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
+#: ../src/Widgets/MultiInfoBar.vala:35
+msgid "Close"
+msgstr "Sluit"
 
 #: ../src/MainWindow.vala:128
 msgid "No Search Results"
@@ -63,7 +68,7 @@ msgstr "Downloaden"
 msgid "Seeding"
 msgstr "Seeden"
 
-#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:144
+#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
 msgid "Paused"
 msgstr "Gepauzeerd"
 
@@ -175,10 +180,6 @@ msgstr "Algemeen"
 #: ../src/PreferencesWindow.vala:48
 msgid "Advanced"
 msgstr "Geavanceerd"
-
-#: ../src/PreferencesWindow.vala:57 ../src/Widgets/MultiInfoBar.vala:35
-msgid "Close"
-msgstr "Sluit"
 
 #: ../src/PreferencesWindow.vala:95
 msgid "Blocklist last downloaded: never"
@@ -317,67 +318,73 @@ msgid "Resume"
 msgstr "Hervat torrent"
 
 #: ../src/Widgets/TorrentListBox.vala:129
+#, fuzzy
+msgid "Select Files to Download"
+msgstr "Selecteer Download Map…"
+
+#: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
 msgstr "Toon in Bestandsbrowser"
 
-#: ../src/Widgets/TorrentListBox.vala:137
+#: ../src/Widgets/TorrentListBox.vala:145
 #, fuzzy
 msgid "Copy Magnet Link"
 msgstr "Magnet Link"
 
-#: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
-#: ../src/Widgets/TorrentListRow.vala:209
+#: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
+#: ../src/Widgets/TorrentListRow.vala:222
 msgid "Pause torrent"
 msgstr "Pauzeer torrent"
 
-#: ../src/Widgets/TorrentListRow.vala:94 ../src/Widgets/TorrentListRow.vala:187
-#: ../src/Widgets/TorrentListRow.vala:203
+#: ../src/Widgets/TorrentListRow.vala:100
+#: ../src/Widgets/TorrentListRow.vala:200
+#: ../src/Widgets/TorrentListRow.vala:216
 msgid "Resume torrent"
 msgstr "Hervat torrent"
 
-#: ../src/Widgets/TorrentListRow.vala:125
+#: ../src/Widgets/TorrentListRow.vala:138
 msgid "Trying to find metadata for magnet link"
 msgstr "Metadata ophalen voor magnet link"
 
-#: ../src/Widgets/TorrentListRow.vala:127
+#: ../src/Widgets/TorrentListRow.vala:140
 msgid "%s of %s — %s remaining"
 msgstr "%s of %s — %s resterend"
 
-#: ../src/Widgets/TorrentListRow.vala:129
+#: ../src/Widgets/TorrentListRow.vala:142
 msgid "%s of %s"
 msgstr "%s van %s"
 
-#: ../src/Widgets/TorrentListRow.vala:131
+#: ../src/Widgets/TorrentListRow.vala:144
 msgid "%s uploaded"
 msgstr "%s geüpload"
 
-#: ../src/Widgets/TorrentListRow.vala:142
+#: ../src/Widgets/TorrentListRow.vala:155
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr "%i van %i peers verbonden. ⬇%s ⬆%s"
 
-#: ../src/Widgets/TorrentListRow.vala:146
+#: ../src/Widgets/TorrentListRow.vala:159
 msgid "Waiting in queue"
 msgstr "In wachtrij"
 
-#: ../src/Widgets/TorrentListRow.vala:158
+#: ../src/Widgets/TorrentListRow.vala:171
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] "%u dag"
 msgstr[1] "%u dagen"
 
-#: ../src/Widgets/TorrentListRow.vala:159
+#: ../src/Widgets/TorrentListRow.vala:172
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u uur"
 msgstr[1] "%u uren"
 
-#: ../src/Widgets/TorrentListRow.vala:160
+#: ../src/Widgets/TorrentListRow.vala:173
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] "%u minuut"
 msgstr[1] "%u minuten"
 
-#: ../src/Widgets/TorrentListRow.vala:161
+#: ../src/Widgets/TorrentListRow.vala:174
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u seconde"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-06 20:47+0100\n"
+"POT-Creation-Date: 2018-07-30 00:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Maxim Taranov <png2378@gmail.com>\n"
 "Language-Team: \n"
@@ -13,6 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Poedit 1.8.7.1\n"
+
+#: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
+#: ../src/Widgets/MultiInfoBar.vala:35
+msgid "Close"
+msgstr "Закрыть"
 
 #: ../src/MainWindow.vala:128
 msgid "No Search Results"
@@ -73,7 +78,7 @@ msgstr "Загрузки"
 msgid "Seeding"
 msgstr "Раздачи"
 
-#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:144
+#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
 msgid "Paused"
 msgstr "Приостановлено"
 
@@ -183,10 +188,6 @@ msgstr "Основные"
 #: ../src/PreferencesWindow.vala:48
 msgid "Advanced"
 msgstr "Дополнительные"
-
-#: ../src/PreferencesWindow.vala:57 ../src/Widgets/MultiInfoBar.vala:35
-msgid "Close"
-msgstr "Закрыть"
 
 #: ../src/PreferencesWindow.vala:95
 msgid "Blocklist last downloaded: never"
@@ -326,70 +327,76 @@ msgid "Resume"
 msgstr "Продолжить загрузку торрента"
 
 #: ../src/Widgets/TorrentListBox.vala:129
+#, fuzzy
+msgid "Select Files to Download"
+msgstr "Выбор папки загрузок…"
+
+#: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
 msgstr "Показать в файловом менеджере"
 
-#: ../src/Widgets/TorrentListBox.vala:137
+#: ../src/Widgets/TorrentListBox.vala:145
 #, fuzzy
 msgid "Copy Magnet Link"
 msgstr "Magnet-ссылка"
 
-#: ../src/Widgets/TorrentListRow.vala:91 ../src/Widgets/TorrentListRow.vala:191
-#: ../src/Widgets/TorrentListRow.vala:209
+#: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
+#: ../src/Widgets/TorrentListRow.vala:222
 msgid "Pause torrent"
 msgstr "Приостановить загрузку торрента"
 
-#: ../src/Widgets/TorrentListRow.vala:94 ../src/Widgets/TorrentListRow.vala:187
-#: ../src/Widgets/TorrentListRow.vala:203
+#: ../src/Widgets/TorrentListRow.vala:100
+#: ../src/Widgets/TorrentListRow.vala:200
+#: ../src/Widgets/TorrentListRow.vala:216
 msgid "Resume torrent"
 msgstr "Продолжить загрузку торрента"
 
-#: ../src/Widgets/TorrentListRow.vala:125
+#: ../src/Widgets/TorrentListRow.vala:138
 msgid "Trying to find metadata for magnet link"
 msgstr "Попытка найти метаданные для magnet-ссылки"
 
-#: ../src/Widgets/TorrentListRow.vala:127
+#: ../src/Widgets/TorrentListRow.vala:140
 msgid "%s of %s — %s remaining"
 msgstr "%s из %s — осталось %s"
 
-#: ../src/Widgets/TorrentListRow.vala:129
+#: ../src/Widgets/TorrentListRow.vala:142
 msgid "%s of %s"
 msgstr "%s из %s"
 
-#: ../src/Widgets/TorrentListRow.vala:131
+#: ../src/Widgets/TorrentListRow.vala:144
 msgid "%s uploaded"
 msgstr "%s отдано"
 
-#: ../src/Widgets/TorrentListRow.vala:142
+#: ../src/Widgets/TorrentListRow.vala:155
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr "%i из %i участников подключено. ⬇%s ⬆%s"
 
-#: ../src/Widgets/TorrentListRow.vala:146
+#: ../src/Widgets/TorrentListRow.vala:159
 msgid "Waiting in queue"
 msgstr "Ожидание в очереди"
 
-#: ../src/Widgets/TorrentListRow.vala:158
+#: ../src/Widgets/TorrentListRow.vala:171
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] "%u день"
 msgstr[1] "%u дня"
 msgstr[2] "%u дней"
 
-#: ../src/Widgets/TorrentListRow.vala:159
+#: ../src/Widgets/TorrentListRow.vala:172
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u час"
 msgstr[1] "%u часа"
 msgstr[2] "%u часов"
 
-#: ../src/Widgets/TorrentListRow.vala:160
+#: ../src/Widgets/TorrentListRow.vala:173
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] "%u минута"
 msgstr[1] "%u минуты"
 msgstr[2] "%u минут"
 
-#: ../src/Widgets/TorrentListRow.vala:161
+#: ../src/Widgets/TorrentListRow.vala:174
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u секунда"

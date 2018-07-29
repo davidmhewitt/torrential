@@ -35,6 +35,7 @@ public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
 
     construct {
         deletable = false;
+        set_default_size (450, 300);
 
         var view = new Widgets.FileSelectTreeView (torrent);
         var scrolled = new Gtk.ScrolledWindow (null, null);

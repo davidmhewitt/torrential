@@ -158,8 +158,6 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             menu.add (pause_item);
         }
 
-
-
         if (items.length () < 2) {
             var selected_row = get_selected_row () as TorrentListRow;
 

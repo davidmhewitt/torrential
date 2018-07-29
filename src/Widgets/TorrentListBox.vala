@@ -158,8 +158,15 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             menu.add (pause_item);
         }
 
+
+
         if (items.length () < 2) {
-            menu.add (edit_files_item);
+            var selected_row = get_selected_row () as TorrentListRow;
+
+            if (selected_row != null && selected_row.multi_file_torrent) {
+                menu.add (edit_files_item);
+            }
+
             menu.add (copy_magnet_item);
             menu.add (open_item);
         }

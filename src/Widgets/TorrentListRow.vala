@@ -34,6 +34,12 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public signal void torrent_removed (Torrent torrent);
 
+    public bool multi_file_torrent {
+        get {
+            return torrent.file_count > 1;
+        }
+    }
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
 

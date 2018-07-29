@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2017 David Hewitt <davidmhewitt@gmail.com> -->
 <component type="desktop">
-  <id>com.github.davidmhewitt.torrential.desktop</id>
+  <id>com.github.davidmhewitt.torrential</id>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>Torrential</name>
@@ -10,6 +10,14 @@
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <releases>
+      <release version="1.1.0" date="2018-07-30">
+        <description>
+          <ul>
+            <li>Hello Juno support!</li>
+            <li>Torrential now also lets you pick which files within the torrent you want to download.</li>
+          </ul>
+        </description>
+      </release>
       <release version="1.0.9" date="2018-06-06">
         <description>
           <ul>
@@ -64,6 +72,7 @@
   <custom>
      <value key="x-appcenter-color-primary">rgb(224,247,255)</value>
      <value key="x-appcenter-color-primary-text">#000</value>
+     <value key="x-appcenter-suggested-price">3</value>
   </custom>
   <screenshots>
     <screenshot type="default">

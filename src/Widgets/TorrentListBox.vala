@@ -126,6 +126,14 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             }
         });
 
+        var edit_files_item = new Gtk.MenuItem.with_label (_("Select Files to Download"));
+        edit_files_item.activate.connect (() => {
+            var selected_row = get_selected_row () as TorrentListRow;
+            if (selected_row != null) {
+                selected_row.edit_files ();
+            }
+        });
+
         var open_item = new Gtk.MenuItem.with_label (_("Show in File Browser"));
         open_item.activate.connect (() => {
             var selected_row = get_selected_row ();
@@ -151,6 +159,12 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         }
 
         if (items.length () < 2) {
+            var selected_row = get_selected_row () as TorrentListRow;
+
+            if (selected_row != null && selected_row.multi_file_torrent) {
+                menu.add (edit_files_item);
+            }
+
             menu.add (copy_magnet_item);
             menu.add (open_item);
         }

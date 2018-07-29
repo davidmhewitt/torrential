@@ -34,6 +34,12 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public signal void torrent_removed (Torrent torrent);
 
+    public bool multi_file_torrent {
+        get {
+            return torrent.file_count > 1;
+        }
+    }
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
 
@@ -118,6 +124,13 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         } else {
             progress.get_style_context ().remove_provider (green_progress_provider);
         }
+    }
+
+    public void edit_files () {
+        var dialog = new Dialogs.FileSelectDialog (torrent);
+        dialog.show_all ();
+        dialog.run ();
+        dialog.destroy ();
     }
 
     private string generate_completeness_text () {

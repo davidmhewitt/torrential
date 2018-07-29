@@ -9,7 +9,7 @@ namespace Transmission {
 	public const string RPC_SESSION_ID_HEADER;
 
 	[SimpleType]
-	[CCode (cname = "tr_file_index", has_type_id = false)]
+	[CCode (cname = "tr_file_index_t", has_type_id = false)]
 	public struct file_index : uint32 {}
 
 	//TODO unused

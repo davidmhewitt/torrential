@@ -19,6 +19,7 @@ You'll need the following dependencies to build:
 * libnatpmp-dev
 * libb64-dev
 * libssl-dev
+* libtransmission
 
 ## How To Build
 

@@ -714,7 +714,7 @@ namespace Transmission {
 		 * Use of the incomplete download folder
 		 */
 		public bool use_incomplete_dir {
-			[CCode (cname = "tr_seesionSetIncompleteDirEnabled")]
+			[CCode (cname = "tr_sessionSetIncompleteDirEnabled")]
 			set;
 			[CCode (cname = "tr_sessionIsIncompleteDirEnabled")]
 			get;

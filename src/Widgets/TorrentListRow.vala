@@ -174,23 +174,22 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         var str_seconds = ngettext ("%u second", "%u seconds", seconds).printf (seconds);
 
         var formatted = "";
-        if (days > 0) {
+        if (totalSeconds == -1) {
+            formatted = "...";
+        }
+        else if (days > 0) {
             formatted = "%s, %s, %s, %s".printf (str_days, str_hours, str_minutes, str_seconds);
-            return formatted;
         }
-        if (hours > 0) {
+        else if (hours > 0) {
             formatted = "%s, %s, %s".printf (str_hours, str_minutes, str_seconds);
-            return formatted;
         }
-        if (minutes > 0) {
+        else if (minutes > 0) {
             formatted = "%s, %s".printf (str_minutes, str_seconds);
-            return formatted;
         }
-        if (seconds > 0) {
+        else if (seconds > 0) {
             formatted = str_seconds;
-            return formatted;
         }
-        return "";
+        return formatted;
     }
 
     private void toggle_pause () {

@@ -21,7 +21,7 @@
 
 public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
-    public signal void torrent_removed (Torrent torrent);
+    public signal void torrent_removed (Torrent torrent, bool delete_files);
     public signal void open_torrent (int id);
     public signal void open_torrent_location (int id);
     public signal void link_copied ();
@@ -61,7 +61,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     private void add_row (Torrent torrent) {
         var row = new TorrentListRow (torrent);
-        row.torrent_removed.connect ((torrent_to_remove) => torrent_removed (torrent_to_remove));
+        row.torrent_removed.connect ((torrent_to_remove, delete_files) => torrent_removed (torrent_to_remove, delete_files));
         add (row);
     }
 
@@ -108,7 +108,14 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var remove_item = new Gtk.MenuItem.with_label (_("Remove"));
         remove_item.activate.connect (() => {
             foreach (var selected_row in items) {
-                (selected_row as TorrentListRow).remove_torrent ();
+                (selected_row as TorrentListRow).remove_torrent (false);
+            }
+        });
+
+        var remove_with_files_item = new Gtk.MenuItem.with_label (_("Remove and delete files"));
+        remove_with_files_item.activate.connect (() => {
+            foreach (var selected_row in items) {
+                (selected_row as TorrentListRow).remove_torrent (true);
             }
         });
 
@@ -152,6 +159,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         });
 
         menu.add (remove_item);
+        menu.add (remove_with_files_item);
         if (all_paused) {
             menu.add (unpause_item);
         } else {

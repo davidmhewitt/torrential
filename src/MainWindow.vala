@@ -322,7 +322,7 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private void build_main_interface () {
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
-        list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
+        list_box.torrent_removed.connect ((torrent, delete_files) => torrent_manager.remove_torrent (torrent, delete_files));
         list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
         list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
         list_box.link_copied.connect (on_link_copied);

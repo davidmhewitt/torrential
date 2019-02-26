@@ -252,14 +252,14 @@ public class Torrential.TorrentManager : Object {
         }
     }
 
-    public void remove_torrent (Torrent to_remove) {
+    public void remove_torrent (Torrent to_remove, bool delete_files) {
         foreach (unowned Transmission.Torrent torrent in added_torrents) {
             if (torrent.id == to_remove.id) {
                 added_torrents.remove (torrent);
                 break;
             }
         }
-        to_remove.remove ();
+        to_remove.remove (delete_files);
     }
 
     private void on_completeness_changed (Transmission.Torrent torrent, Transmission.Completeness completeness, bool wasRunning) {

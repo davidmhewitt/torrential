@@ -157,6 +157,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             return _("Paused");
         } else if (torrent.waiting) {
             return _("Waiting in queue");
+        } else if (torrent.checking) {
+            return _("Checking");
         } else {
             return "";
         }

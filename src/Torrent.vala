@@ -110,6 +110,16 @@ public class Torrential.Torrent {
         }
     }
 
+    public bool checking {
+        get {
+            if (torrent.stat_cached != null) {
+                return torrent.stat_cached.activity == Transmission.Activity.CHECK;
+            } else {
+                return false;
+            }
+        }
+    }
+
     public bool downloading {
         get {
             if (torrent.stat_cached != null) {
@@ -134,7 +144,8 @@ public class Torrential.Torrent {
         get {
             if (torrent.stat_cached != null) {
                 return torrent.stat_cached.activity == Transmission.Activity.DOWNLOAD_WAIT ||
-                       torrent.stat_cached.activity == Transmission.Activity.SEED_WAIT;
+                       torrent.stat_cached.activity == Transmission.Activity.SEED_WAIT ||
+                       torrent.stat_cached.activity == Transmission.Activity.CHECK_WAIT;
             } else {
                 return false;
             }

@@ -26,8 +26,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label status;
     private Gtk.Label torrent_name;
     private Gtk.Button pause_button;
-
-    private Gtk.CssProvider green_progress_provider;
+    private Gtk.CssProvider progress_provider;
 
     private const string PAUSE_ICON_NAME = "media-playback-pause-symbolic";
     private const string RESUME_ICON_NAME = "media-playback-start-symbolic";
@@ -42,20 +41,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
-
-        green_progress_provider = new Gtk.CssProvider ();
-        try {
-            green_progress_provider.load_from_data ("@define-color selected_bg_color @success_color;");
-        } catch (Error e) {
-            warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
-        }
-
         var grid = new Gtk.Grid ();
         grid.margin = 12;
         grid.margin_bottom = grid.margin_top = 6;
         grid.column_spacing = 12;
         grid.row_spacing = 3;
-
         add (grid);
 
         Icon icon;
@@ -85,11 +75,10 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         grid.attach (completeness, 1, 1, 1, 1);
 
         progress = new Gtk.ProgressBar ();
+        progress_provider = new Gtk.CssProvider ();
         progress.hexpand = true;
         progress.fraction = torrent.progress;
-        if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-        }
+        progress.get_style_context ().add_provider (progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         grid.attach (progress, 1, 2, 1, 1);
 
         if (!torrent.paused) {
@@ -119,10 +108,17 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         completeness.label = "<small>%s</small>".printf (generate_completeness_text ());
         status.label = "<small>%s</small>".printf (generate_status_text ());
         pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
-        if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
-        } else {
-            progress.get_style_context ().remove_provider (green_progress_provider);
+
+        try {
+            if (torrent.seeding) {
+                progress_provider.load_from_data ("@define-color selected_bg_color @success_color;");
+            } else if (torrent.checking) {
+                progress_provider.load_from_data ("@define-color selected_bg_color @warning_color;");
+            } else {
+                progress_provider.load_from_data ("");
+            }
+        } catch (Error e) {
+            warning ("Failed to load custom CSS to make colored progress bars. Error: %s", e.message);
         }
     }
 
@@ -157,6 +153,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             return _("Paused");
         } else if (torrent.waiting) {
             return _("Waiting in queue");
+        } else if (torrent.checking) {
+            return _("Checking");
         } else {
             return "";
         }

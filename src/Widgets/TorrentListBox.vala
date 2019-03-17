@@ -46,6 +46,23 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         row_activated.connect (on_row_activated);
         popup_menu.connect (on_popup_menu);
         set_sort_func (sort);
+
+        key_release_event.connect ((event) => {
+            switch (event.keyval) {
+                case Gdk.Key.Delete:
+                case Gdk.Key.BackSpace:
+                    var items = get_selected_rows ();
+                    foreach (var selected_row in items) {
+                        (selected_row as TorrentListRow).remove_torrent ();
+                    }
+
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        });
     }
 
     public void update () {

@@ -455,7 +455,6 @@ public class Torrential.MainWindow : Gtk.Window {
         var clipboard = Gtk.Clipboard.get (Gdk.SELECTION_CLIPBOARD);
         string? contents = clipboard.wait_for_text ();
         if (contents != null && contents.has_prefix ("magnet:")) {
-
             entry.text = contents;
         }
 

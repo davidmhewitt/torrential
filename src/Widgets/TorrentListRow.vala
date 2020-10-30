@@ -39,6 +39,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             return torrent.file_count > 1;
         }
     }
+    public bool is_playable;
+    public string playable_file_name;
 
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
@@ -123,6 +125,26 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         } else {
             progress.get_style_context ().remove_provider (green_progress_provider);
+        }
+
+        // check for playable files
+        if (torrent.files != null && torrent.progress == 1 && !is_playable) {
+            for (int i = 0; i < torrent.file_count; i++) {
+                var file = torrent.files [i];
+                bool certain = false;
+                var content_type = ContentType.guess (file.name, null, out certain);
+                // TODO What if guessed content_type is invalid?
+                var super_type = content_type.split ("/")[0];
+                switch (super_type) {
+                    case "video":
+                        is_playable = true;
+                        // store first playable file
+                        if (playable_file_name == null) {
+                            playable_file_name = file.name;
+                        }
+                        break;
+                }
+            }
         }
     }
 

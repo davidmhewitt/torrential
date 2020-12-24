@@ -77,6 +77,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         torrent_name = new Gtk.Label (torrent.name);
         torrent_name.halign = Gtk.Align.START;
         torrent_name.get_style_context ().add_class ("h3");
+        torrent_name.ellipsize = Pango.EllipsizeMode.END;
         grid.attach (torrent_name, 1, 0, 1, 1);
 
         completeness = new Gtk.Label ("<small>%s</small>".printf (generate_completeness_text ()));

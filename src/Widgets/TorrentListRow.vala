@@ -149,7 +149,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     private string generate_status_text () {
         if (torrent.downloading || torrent.seeding) {
-            char[40] buf = new char[40];
+            char[] buf = new char[40];
             var down_speed = Transmission.String.Units.speed_KBps (buf, torrent.download_speed);
             var up_speed = Transmission.String.Units.speed_KBps (buf, torrent.upload_speed);
             return _("%i of %i peers connected. \u2b07%s \u2b06%s").printf (torrent.connected_peers, torrent.total_peers, down_speed, up_speed);

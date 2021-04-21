@@ -2,6 +2,7 @@
 <!-- Copyright 2017 David Hewitt <davidmhewitt@gmail.com> -->
 <component type="desktop">
   <id>com.github.davidmhewitt.torrential</id>
+  <launchable type="desktop-id">com.github.davidmhewitt.torrential.desktop</launchable>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <name>Torrential</name>

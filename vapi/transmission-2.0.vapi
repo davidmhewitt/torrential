@@ -487,13 +487,14 @@ namespace Transmission {
 		public static int load_file (out variant variant, VariantFormat mode, string filename);
 		[CCode (cname = "tr_variantParse")]
 		public static int parse (void* buf, void* buffend, out variant variant, out unowned uint8[] end);
-		[CCode (cname = "tr_variantLoad")]
-		public static int load ([CCode (array_lengh_type = "size_t")] uint8[] buf, out variant variant, out unowned uint8[] end);
+		//TODO unused
+		//[CCode (cname = "tr_variantLoad")]
+		//public static int load ([CCode (array_lengh_type = "size_t")] uint8[] buf, out variant variant, out unowned uint8[] end);
 
-		[CCode (cname = "tr_variantInitStr")]
-		public variant.str ([CCode (array_lengh_type = "int")] char[] raw);
-		[CCode (cname = "tr_variantInitRaw")]
-		public variant.raw ([CCode (array_lengh_type = "size_t")] uint8[] raw);
+		//[CCode (cname = "tr_variantInitStr")]
+		//public variant.str ([CCode (array_lengh_type = "int")] char[] raw);
+		//[CCode (cname = "tr_variantInitRaw")]
+		//public variant.raw ([CCode (array_lengh_type = "size_t")] uint8[] raw);
 		[CCode (cname = "tr_variantInitInt")]
 		public variant.int(int64 num);
 		[CCode (cname = "tr_variantInitBool")]
@@ -528,8 +529,9 @@ namespace Transmission {
 		 *
 		 * @return true if successful, or false if the variant could not be represented as a raw byte array
 		 */
-		[CCode (cname = "tr_variantGetRaw")]
-		public bool get_raw ([CCode (array_lengh_type = "size_t")] out uint8[] raw);
+		//TODO unused
+		//[CCode (cname = "tr_variantGetRaw")]
+		//public bool get_raw ([CCode (array_lengh_type = "size_t")] out uint8[] raw);
 
 		/**
 		 * Get a boolean from a variant object
@@ -576,8 +578,9 @@ namespace Transmission {
 		public unowned variant ListAddReal (double val);
 		[CCode (cname = "tr_variantListAddStr")]
 		public unowned variant ListAddStr (string val);
-		[CCode (cname = "tr_variantListAddRaw")]
-		public unowned variant ListAddRaw ([CCode (array_lengh_type = "size_t")] uint8[] val);
+		//TODO unused
+		//[CCode (cname = "tr_variantListAddRaw")]
+		//public unowned variant ListAddRaw ([CCode (array_lengh_type = "size_t")] uint8[] val);
 		[CCode (cname = "tr_variantListAddList")]
 		public unowned variant ListAddList (size_t reserveCount);
 		[CCode (cname = "tr_variantListAddDict")]
@@ -613,8 +616,9 @@ namespace Transmission {
 		public unowned variant? add_list (Prefs key, size_t reserve);
 		[CCode (cname = "tr_variantDictAddDict")]
 		public unowned variant? add_dict (Prefs key, size_t reserve);
-		[CCode (cname = "tr_variantDictAddRaw")]
-		public unowned variant? add_raw (Prefs key, [CCode (array_lengh_type = "size_t")] uint8[] raw);
+		//TODO unused
+		//[CCode (cname = "tr_variantDictAddRaw")]
+		//public unowned variant? add_raw (Prefs key, [CCode (array_lengh_type = "size_t")] uint8[] raw);
 		[CCode (cname = "tr_variantDictChild")]
 		public bool get_child (size_t i, out Prefs key, out variant? val);
 		[CCode (cname = "tr_variantDictFind")]
@@ -631,8 +635,9 @@ namespace Transmission {
 		public bool find_bool (Prefs key, out bool val);
 		[CCode (cname = "tr_variantDictFindStr")]
 		public bool find_str (Prefs key, out unowned string? val);
-		[CCode (cname = "tr_variantDictFindRaw")]
-		public bool find_raw (Prefs key, [CCode (array_lengh_type = "size_t")] out uint8[]? raw);
+		//TODO unused
+		//[CCode (cname = "tr_variantDictFindRaw")]
+		//public bool find_raw (Prefs key, [CCode (array_lengh_type = "size_t")] out uint8[]? raw);
 	}
 
 	[CCode (cname = "tr_session", cprefix = "tr_session", free_function = "tr_sessionClose", has_type_id = false)]
@@ -2047,15 +2052,16 @@ namespace Transmission {
 	[Compact]
 	public class Torrent {
 
-		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torerr")]
-		public void show_error (string fmt, ...);
-		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torinf")]
-		public void show_info (string fmt, ...);
-		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_tordbg")]
-		public void show_debug (string fmt, ...);
+		//TODO unused
+		//[PrintfFormat]
+		//[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torerr")]
+		//public void show_error (string fmt, ...);
+		//[PrintfFormat]
+		//[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torinf")]
+		//public void show_info (string fmt, ...);
+		//[PrintfFormat]
+		//[CCode (header_filename = "libtransmission/utils.h", cname = "tr_tordbg")]
+		//public void show_debug (string fmt, ...);
 
 		/**
 		 * Removes our .torrent and .resume files for this torrent and frees it.

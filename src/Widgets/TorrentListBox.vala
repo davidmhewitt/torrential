@@ -53,7 +53,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                 case Gdk.Key.BackSpace:
                     var items = get_selected_rows ();
                     foreach (var selected_row in items) {
-                        (selected_row as TorrentListRow).remove_torrent ();
+                        ((!)(selected_row as TorrentListRow)).remove_torrent ();
                     }
 
                     break;
@@ -67,7 +67,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
 
     public void update () {
         @foreach ((child) => {
-            (child as TorrentListRow).update ();
+            ((!)(child as TorrentListRow)).update ();
         });
         invalidate_sort ();
     }
@@ -116,7 +116,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var all_paused = true;
 
         foreach (var selected_row in items) {
-            if (!(selected_row as TorrentListRow).paused) {
+            if (!((!)(selected_row as TorrentListRow)).paused) {
                 all_paused = false;
                 break;
             }
@@ -125,21 +125,21 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var remove_item = new Gtk.MenuItem.with_label (_("Remove"));
         remove_item.activate.connect (() => {
             foreach (var selected_row in items) {
-                (selected_row as TorrentListRow).remove_torrent ();
+                ((!)(selected_row as TorrentListRow)).remove_torrent ();
             }
         });
 
         var pause_item = new Gtk.MenuItem.with_label (_("Pause"));
         pause_item.activate.connect (() => {
             foreach (var selected_row in items) {
-                (selected_row as TorrentListRow).pause_torrent ();
+                ((!)(selected_row as TorrentListRow)).pause_torrent ();
             }
         });
 
         var unpause_item = new Gtk.MenuItem.with_label (_("Resume"));
         unpause_item.activate.connect (() => {
             foreach (var selected_row in items) {
-                (selected_row as TorrentListRow).resume_torrent ();
+                ((!)(selected_row as TorrentListRow)).resume_torrent ();
             }
         });
 
@@ -155,7 +155,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         open_item.activate.connect (() => {
             var selected_row = get_selected_row ();
             if (selected_row != null) {
-                open_torrent_location ((selected_row as TorrentListRow).id);
+                open_torrent_location (((!)(selected_row as TorrentListRow)).id);
             }
         });
 
@@ -199,7 +199,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     private void on_row_activated (Gtk.ListBoxRow row) {
         var torrent_row = row as TorrentListRow;
         if (torrent_row.has_metadata) {
-            open_torrent ((row as TorrentListRow).id);
+            open_torrent (((!)(row as TorrentListRow)).id);
         }
     }
 
@@ -210,22 +210,22 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
                 break;
             case FilterType.DOWNLOADING:
                 set_filter_func ((item) => {
-                    return (item as TorrentListRow).downloading;
+                    return ((!)(item as TorrentListRow)).downloading;
                 });
                 break;
             case FilterType.SEEDING:
                 set_filter_func ((item) => {
-                    return (item as TorrentListRow).seeding;
+                    return ((!)(item as TorrentListRow)).seeding;
                 });
                 break;
             case FilterType.PAUSED:
                 set_filter_func ((item) => {
-                    return (item as TorrentListRow).paused;
+                    return ((!)(item as TorrentListRow)).paused;
                 });
                 break;
             case FilterType.SEARCH:
                 set_filter_func ((item) => {
-                    return (item as TorrentListRow).display_name.casefold ().contains (search_term.casefold ());
+                    return ((!)(item as TorrentListRow)).display_name.casefold ().contains (search_term.casefold ());
                 });
                 break;
             default:

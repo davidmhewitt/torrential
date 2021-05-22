@@ -242,8 +242,8 @@ public class Torrential.Torrent {
         torrent.start ();
     }
 
-    public void remove () {
-        torrent.remove (false, null);
+    public void remove (bool delete_files) {
+        torrent.remove (delete_files, null);
     }
 
     public Torrent (Transmission.Torrent torrent) {

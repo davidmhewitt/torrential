@@ -1,16 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# French translations for com.github.davidmhewitt.torrential package.
+# Copyright (C) 2019 THE com.github.davidmhewitt.torrential'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.davidmhewitt.torrential package.
+# NathanBnm, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-30 00:43+0100\n"
-"PO-Revision-Date: 2017-10-29 02:23+0200\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: 2019-01-26 23:36+0100\n"
+"Last-Translator: NathanBnm\n"
+"Language-Team: Français\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +45,7 @@ msgstr "Torrent terminé"
 
 #: ../src/MainWindow.vala:162
 msgid "“%s” has finished downloading"
-msgstr "“%s” a fini de télécharger"
+msgstr "« %s » a fini de télécharger"
 
 #: ../src/MainWindow.vala:169
 msgid "Failed to load blocklist. All torrents paused as a precaution."
@@ -120,7 +120,7 @@ msgstr "_Quitter"
 
 #: ../src/MainWindow.vala:377
 msgid "Magnet Link Copied To Clipboard"
-msgstr ""
+msgstr "Lien magnet copié dans le presse-papiers"
 
 #: ../src/MainWindow.vala:412
 msgid "Open some torrents"
@@ -145,7 +145,7 @@ msgstr "Fichiers torrent"
 #: ../src/MainWindow.vala:449
 #, fuzzy
 msgid "Magnet URL:"
-msgstr "Lien magnet"
+msgstr "Lien magnet :"
 
 #: ../src/MainWindow.vala:491
 #, fuzzy
@@ -159,11 +159,11 @@ msgstr "Lien magnet ajouté avec succès"
 
 #: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr "Impossible d'ajouter \"%s\", qui ne semble pas être un torrent valide."
+msgstr "Impossible d'ajouter « %s », qui ne semble pas être un torrent valide."
 
 #: ../src/MainWindow.vala:518
 msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr "\"%s\" non ajouté. Un torrent identique a déjà été ajouté."
+msgstr "« %s » non ajouté. Un torrent identique a déjà été ajouté."
 
 #: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
 msgid "Magnet Link"
@@ -239,7 +239,7 @@ msgstr "Emplacement des téléchargements"
 
 #: ../src/PreferencesWindow.vala:169
 msgid "Select Download Folder…"
-msgstr "Choisir le dossier de téléchargement..."
+msgstr "Choisir le dossier de téléchargement…"
 
 #: ../src/PreferencesWindow.vala:179
 msgid "Limits"
@@ -312,8 +312,8 @@ msgstr "Avertissement suivant"
 #: ../src/Widgets/MultiInfoBar.vala:69
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
-msgstr[0] "(et %d avertissement supplémentaire...)"
-msgstr[1] "(et %d avertissements supplémentaires...)"
+msgstr[0] "(et %d avertissement supplémentaire…)"
+msgstr[1] "(et %d avertissements supplémentaires…)"
 
 #: ../src/Widgets/TorrentListBox.vala:108
 msgid "Remove"
@@ -322,26 +322,26 @@ msgstr "Supprimer"
 #: ../src/Widgets/TorrentListBox.vala:115
 #, fuzzy
 msgid "Pause"
-msgstr "En pause"
+msgstr "Mettre en pause"
 
 #: ../src/Widgets/TorrentListBox.vala:122
 #, fuzzy
 msgid "Resume"
-msgstr "Reprendre le torrent"
+msgstr "Reprendre"
 
 #: ../src/Widgets/TorrentListBox.vala:129
 #, fuzzy
 msgid "Select Files to Download"
-msgstr "Choisir le dossier de téléchargement..."
+msgstr "Sélectionnez les fichiers à télécharger"
 
 #: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
-msgstr "Afficher dans le gestionnaire de fichiers"
+msgstr "Afficher dans l'explorateur de fichiers"
 
 #: ../src/Widgets/TorrentListBox.vala:145
 #, fuzzy
 msgid "Copy Magnet Link"
-msgstr "Lien magnet"
+msgstr "Copier le lien magnet"
 
 #: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
 #: ../src/Widgets/TorrentListRow.vala:222

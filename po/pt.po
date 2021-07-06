@@ -2,380 +2,399 @@ msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-30 00:43+0100\n"
+"Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.2.1\n"
+"Project-Id-Version: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
 
 #: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
 #: ../src/Widgets/MultiInfoBar.vala:35
 msgid "Close"
-msgstr ""
+msgstr "Fechar"
 
 #: ../src/MainWindow.vala:128
 msgid "No Search Results"
-msgstr ""
+msgstr "Sem resultados de pesquisa"
 
 #: ../src/MainWindow.vala:128
 msgid "Try changing search terms"
-msgstr ""
+msgstr "Tente trocar os termos de pesquisa"
 
 #: ../src/MainWindow.vala:129
 msgid "No Torrents Here"
-msgstr ""
+msgstr "Sem Torrents Aqui"
 
 #: ../src/MainWindow.vala:129
 msgid "Try a different category"
-msgstr ""
+msgstr "Tente uma categoria diferente"
 
 #: ../src/MainWindow.vala:161
 msgid "Torrent Complete"
-msgstr ""
+msgstr "Torrent Terminado"
 
 #: ../src/MainWindow.vala:162
 msgid "“%s” has finished downloading"
-msgstr ""
+msgstr "“%s” terminou de transferir"
 
 #: ../src/MainWindow.vala:169
 msgid "Failed to load blocklist. All torrents paused as a precaution."
 msgstr ""
+"Falhou ao carregar a lista de bloqueios. Todos os torrents estão em pausa "
+"como precaução."
 
 #: ../src/MainWindow.vala:250
 msgid "Application menu"
-msgstr ""
+msgstr "Menu do programa"
 
 #: ../src/MainWindow.vala:256
 msgid "Open .torrent file"
-msgstr ""
+msgstr "Abrir ficheiro .torrent"
 
 #: ../src/MainWindow.vala:262
 msgid "Open magnet link"
-msgstr ""
+msgstr "Abrir ligação magnet"
 
 #: ../src/MainWindow.vala:266
 msgid "Search Torrents"
-msgstr ""
+msgstr "Procurar Torrents"
 
 #: ../src/MainWindow.vala:277
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: ../src/MainWindow.vala:278
 msgid "Downloading"
-msgstr ""
+msgstr "A transferir"
 
 #: ../src/MainWindow.vala:279
 msgid "Seeding"
-msgstr ""
+msgstr "A semear"
 
 #: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
 msgid "Paused"
-msgstr ""
+msgstr "Pausa"
 
 #: ../src/MainWindow.vala:334
 msgid "No Torrents Added"
-msgstr ""
+msgstr "Sem Torrents Adicionados"
 
 #: ../src/MainWindow.vala:334
 msgid "Add a torrent file to begin downloading."
-msgstr ""
+msgstr "Adicione um ficheiro torrent para começar a transferi-lo."
 
 #: ../src/MainWindow.vala:335
 msgid "Open Torrent"
-msgstr ""
+msgstr "Abrir Torrent"
 
 #: ../src/MainWindow.vala:335
 msgid "Open a torrent file from your computer."
-msgstr ""
+msgstr "Abrir um ficheiro torrent do seu computador."
 
 #: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
 msgid "Preferences"
-msgstr ""
+msgstr "Preferências"
 
 #: ../src/MainWindow.vala:336
 msgid "Set download folder and other preferences."
-msgstr ""
+msgstr "Definir pasta de transferência e outras preferências."
 
 #: ../src/MainWindow.vala:361
 msgid "_Preferences"
-msgstr ""
+msgstr "_Preferências"
 
 #: ../src/MainWindow.vala:367
 msgid "_Quit"
-msgstr ""
+msgstr "_Sair"
 
 #: ../src/MainWindow.vala:377
 msgid "Magnet Link Copied To Clipboard"
-msgstr ""
+msgstr "Ligação magnet copiada para a área de transferência"
 
 #: ../src/MainWindow.vala:412
 msgid "Open some torrents"
-msgstr ""
+msgstr "Abrir alguns torrents"
 
 #: ../src/MainWindow.vala:414
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: ../src/MainWindow.vala:415
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: ../src/MainWindow.vala:420
 msgid "All files"
-msgstr ""
+msgstr "Todos os ficheiros"
 
 #: ../src/MainWindow.vala:423
 msgid "Torrent files"
-msgstr ""
+msgstr "Ficheiros torrent"
 
 #: ../src/MainWindow.vala:449
 msgid "Magnet URL:"
-msgstr ""
+msgstr "URL Magnet:"
 
 #: ../src/MainWindow.vala:491
 msgid "Torrent Added"
-msgstr ""
+msgstr "Torrents Adicionados"
 
 #: ../src/MainWindow.vala:492
 msgid "Successfully added torrent file from Downloads"
-msgstr ""
+msgstr "Ficheiro torrent adicionado com sucesso a partir das Transferências"
 
 #: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr ""
+msgstr "Falhou ao abrir “%s” pois não é um ficheiro torrent válido."
 
 #: ../src/MainWindow.vala:518
 msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr ""
+msgstr "Não adicionou “%s”. Um torrent idêntico já foi adicionado."
 
 #: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
 msgid "Magnet Link"
-msgstr ""
+msgstr "Ligação Magnet"
 
 #: ../src/MainWindow.vala:539
 msgid "Successfully added magnet link"
-msgstr ""
+msgstr "Adicionou a ligação magnet com sucesso"
 
 #: ../src/MainWindow.vala:544
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr ""
+msgstr "Falha ao adicionar a ligação magnet pois a mesma não é válida."
 
 #: ../src/MainWindow.vala:548
 msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr ""
+msgstr "Não adicionou a ligação magnet. Um torrent idêntico já foi adicionado."
 
 #: ../src/MainWindow.vala:558
 msgid "Failed to add magnet link"
-msgstr ""
+msgstr "Falha ao adicionar a ligação magnet"
 
 #: ../src/PreferencesWindow.vala:47
 msgid "General"
-msgstr ""
+msgstr "Geral"
 
 #: ../src/PreferencesWindow.vala:48
 msgid "Advanced"
-msgstr ""
+msgstr "Avançado"
 
 #: ../src/PreferencesWindow.vala:95
 msgid "Blocklist last downloaded: never"
-msgstr ""
+msgstr "Última lista de bloqueio transferida: nunca"
 
 #: ../src/PreferencesWindow.vala:98
 msgid "Last downloaded: %s"
-msgstr ""
+msgstr "Última transferência: %s"
 
 #: ../src/PreferencesWindow.vala:98
 msgid "%a %e, %b %H:%M"
-msgstr ""
+msgstr "%a %e, %b %H:%M"
 
 #: ../src/PreferencesWindow.vala:105
 msgid "Only connect to encrypted peers:"
-msgstr ""
+msgstr "Apenas conectar a pares encriptados:"
 
 #: ../src/PreferencesWindow.vala:109
 msgid "Randomise BitTorrent port on launch:"
-msgstr ""
+msgstr "Aleatorizar porta de BitTorrent ao abrir:"
 
 #: ../src/PreferencesWindow.vala:114
 msgid "Port number:"
-msgstr ""
+msgstr "Número da porta:"
 
 #: ../src/PreferencesWindow.vala:116
 msgid "Update Blocklist"
-msgstr ""
+msgstr "Atualizar Lista de Bloqueio"
 
 #: ../src/PreferencesWindow.vala:122
 msgid "Blocklist URL:"
-msgstr ""
+msgstr "URL da Lista de Bloqueio:"
 
 #: ../src/PreferencesWindow.vala:145
 msgid "Security"
-msgstr ""
+msgstr "Segurança"
 
 #: ../src/PreferencesWindow.vala:152
 msgid "Blocklist"
-msgstr ""
+msgstr "Lista de Bloqueio"
 
 #: ../src/PreferencesWindow.vala:167
 msgid "Download Location"
-msgstr ""
+msgstr "Local da Transferência"
 
 #: ../src/PreferencesWindow.vala:169
 msgid "Select Download Folder…"
-msgstr ""
+msgstr "Selecione Pasta de Transferência…"
 
 #: ../src/PreferencesWindow.vala:179
 msgid "Limits"
-msgstr ""
+msgstr "Limites"
 
 #: ../src/PreferencesWindow.vala:183
 msgid "Max simultaneous downloads:"
-msgstr ""
+msgstr "Máx. transferências em simultâneo:"
 
 #: ../src/PreferencesWindow.vala:186 ../src/PreferencesWindow.vala:191
 msgid "0 means unlimited"
-msgstr ""
+msgstr "0 significa infinito"
 
 #: ../src/PreferencesWindow.vala:188
 msgid "Download speed limit (KBps):"
-msgstr ""
+msgstr "Limite de velocidade da transferência (KBps):"
 
 #: ../src/PreferencesWindow.vala:193
 msgid "Upload speed limit (KBps):"
-msgstr ""
+msgstr "Limite de velocidade de transferência (KBps):"
 
 #: ../src/PreferencesWindow.vala:195
 msgid "Seed Limit Ratio:"
-msgstr ""
+msgstr "Relação do limite de sementes:"
 
 #: ../src/PreferencesWindow.vala:202
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Integração no Ambiente de Trabalho"
 
 #: ../src/PreferencesWindow.vala:206
 msgid "Continue downloads when closed:"
-msgstr ""
+msgstr "Continuar a transferir quando fechado:"
 
 #: ../src/TorrentManager.vala:50
 msgid "KB"
-msgstr ""
+msgstr "KB"
 
 #: ../src/TorrentManager.vala:50
 msgid "MB"
-msgstr ""
+msgstr "MB"
 
 #: ../src/TorrentManager.vala:50
 msgid "GB"
-msgstr ""
+msgstr "GB"
 
 #: ../src/TorrentManager.vala:50
 msgid "TB"
-msgstr ""
+msgstr "TB"
 
 #: ../src/TorrentManager.vala:51
 msgid "KB/s"
-msgstr ""
+msgstr "KB/s"
 
 #: ../src/TorrentManager.vala:51
 msgid "MB/s"
-msgstr ""
+msgstr "MB/s"
 
 #: ../src/TorrentManager.vala:51
 msgid "GB/s"
-msgstr ""
+msgstr "GB/s"
 
 #: ../src/TorrentManager.vala:51
 msgid "TB/s"
-msgstr ""
+msgstr "TB/s"
 
 #: ../src/Widgets/MultiInfoBar.vala:33
 msgid "Next Warning"
-msgstr ""
+msgstr "Próximo Aviso"
 
 #: ../src/Widgets/MultiInfoBar.vala:69
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(Mais %d aviso…)"
+msgstr[1] "(Mais %d avisos…)"
 
 #: ../src/Widgets/TorrentListBox.vala:108
 msgid "Remove"
-msgstr ""
+msgstr "Remover"
 
 #: ../src/Widgets/TorrentListBox.vala:115
 msgid "Pause"
-msgstr ""
+msgstr "Pausa"
 
 #: ../src/Widgets/TorrentListBox.vala:122
 msgid "Resume"
-msgstr ""
+msgstr "Retomar"
 
 #: ../src/Widgets/TorrentListBox.vala:129
 msgid "Select Files to Download"
-msgstr ""
+msgstr "Selecionar ficheiros a transferir"
 
 #: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
-msgstr ""
+msgstr "Mostrar no navegador de ficheiros"
 
 #: ../src/Widgets/TorrentListBox.vala:145
 msgid "Copy Magnet Link"
-msgstr ""
+msgstr "Copiar ligação magnet"
 
 #: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
 #: ../src/Widgets/TorrentListRow.vala:222
 msgid "Pause torrent"
-msgstr ""
+msgstr "Pausar torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:100
 #: ../src/Widgets/TorrentListRow.vala:200
 #: ../src/Widgets/TorrentListRow.vala:216
 msgid "Resume torrent"
-msgstr ""
+msgstr "Retomar torrent"
 
 #: ../src/Widgets/TorrentListRow.vala:138
 msgid "Trying to find metadata for magnet link"
-msgstr ""
+msgstr "A tentar encontrar meta-dados para a ligação magnet"
 
 #: ../src/Widgets/TorrentListRow.vala:140
 msgid "%s of %s — %s remaining"
-msgstr ""
+msgstr "%s de %s — %s restante"
 
 #: ../src/Widgets/TorrentListRow.vala:142
 msgid "%s of %s"
-msgstr ""
+msgstr "%s de %s"
 
 #: ../src/Widgets/TorrentListRow.vala:144
 msgid "%s uploaded"
-msgstr ""
+msgstr "%s enviado"
 
 #: ../src/Widgets/TorrentListRow.vala:155
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
-msgstr ""
+msgstr "%i de %i pares conectados. ⬇%s ⬆%s"
 
 #: ../src/Widgets/TorrentListRow.vala:159
 msgid "Waiting in queue"
-msgstr ""
+msgstr "A esperar na fila"
 
 #: ../src/Widgets/TorrentListRow.vala:171
 msgid "%u day"
 msgid_plural "%u days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u dia"
+msgstr[1] "%u dias"
 
 #: ../src/Widgets/TorrentListRow.vala:172
 msgid "%u hour"
 msgid_plural "%u hours"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u hora"
+msgstr[1] "%u horas"
 
 #: ../src/Widgets/TorrentListRow.vala:173
 msgid "%u minute"
 msgid_plural "%u minutes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u minuto"
+msgstr[1] "%u minutos"
 
 #: ../src/Widgets/TorrentListRow.vala:174
 msgid "%u second"
 msgid_plural "%u seconds"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%u segundo"
+msgstr[1] "%u segundos"
+
+#, fuzzy
+#~ msgid "Failed to Add Torrent"
+#~ msgstr "Falhou ao adicionar o link magnético"
+
+#~ msgid "_About"
+#~ msgstr "_Sobre"
+
+#~ msgid "translator-credits"
+#~ msgstr "Paulo Galardi <lainsce@airmail.cc>"

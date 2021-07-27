@@ -1,0 +1,142 @@
+# Lithuanian translations for extra package.
+# Copyright (C) 2021 THE extra'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# Automatically generated, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-27 21:11+0100\n"
+"PO-Revision-Date: 2021-07-27 21:11+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: data/com.github.davidmhewitt.torrential.desktop.in:3
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:7
+msgid "Torrential"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.desktop.in:4
+msgid "Torrent Client"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.desktop.in:5
+msgid "Download torrent files"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.desktop.in:13
+msgid "Torrent;Bittorrent;Download;"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.desktop.in:19
+msgid "Quit"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:8
+msgid "Download torrents in style"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:10
+msgid ""
+"A speedy, no-frills torrent client. Comes with a sane set of default options "
+"and none of the overwhelming information you don't need."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:16
+msgid "Hello Juno support!"
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:17
+msgid ""
+"Torrential now also lets you pick which files within the torrent you want to "
+"download."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:24
+msgid ""
+"Torrential now watches your downloads folder for new torrent files while "
+"it's running."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:25
+msgid "Torrent files are now moved to the trash after they have been added."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:26
+msgid "Added a copy magnet link entry to the right click menu."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:27
+msgid "Minor quality of life improvements and code cleanup."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:34
+msgid "Added quit option to right click menu in dock."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:35
+msgid "Multiple torrent can now be selected in the list box."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:36
+msgid "Underlying libtransmission version updated."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:37
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:46
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:57
+msgid "Updated translations."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:44
+msgid "Improved application icon on HiDPI displays."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:45
+msgid "Fix for incompatibility with upcoming version of Granite."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:53
+msgid "Added a toolbar button to add magnet links."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:54
+msgid ""
+"When double clicking a downloaded torrent with only a single file, the "
+"default app for that file is now launched."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:55
+msgid "Possible fix for inconsistent sorting bug."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:56
+msgid "Minor AppCenter metadata tweaks."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:64
+msgid "Only show progress bar in dock when necessary."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:65
+msgid "Alert messages when no torrents in list box."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:66
+msgid "Added tooltips to buttons that were missing them."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:67
+msgid "Added translations for some other languages and minor bug fixes."
+msgstr ""
+
+#: data/com.github.davidmhewitt.torrential.appdata.xml.in:82
+msgid "David Hewitt"
+msgstr ""

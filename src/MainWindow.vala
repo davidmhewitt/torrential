@@ -35,7 +35,6 @@ public class Torrential.MainWindow : Gtk.Window {
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
     private Gtk.ScrolledWindow list_box_scroll;
-    private Unity.LauncherEntry launcher_entry;
 
     private Gtk.SearchEntry search_entry;
 
@@ -147,8 +146,6 @@ public class Torrential.MainWindow : Gtk.Window {
         set_titlebar (headerbar);
         show_all ();
 
-        launcher_entry = Unity.LauncherEntry.get_for_desktop_id ("com.github.davidmhewitt.torrential.desktop");
-
         var torrents = torrent_manager.get_torrents ();
         if (torrents.size > 0) {
             enable_main_view ();
@@ -173,12 +170,12 @@ public class Torrential.MainWindow : Gtk.Window {
         refresh_timer = Timeout.add_seconds (1, () => {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
-            launcher_entry.progress = torrent_manager.get_overall_progress ();
+            Granite.Services.Application.set_progress.begin (torrent_manager.get_overall_progress ());
             var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
             if (!focused && list_box.has_visible_children ()) {
-                launcher_entry.progress_visible = true;
+                Granite.Services.Application.set_progress_visible.begin (true);
             } else {
-                launcher_entry.progress_visible = false;
+                Granite.Services.Application.set_progress_visible.begin (false);
             }
             return true;
         });
@@ -395,7 +392,7 @@ public class Torrential.MainWindow : Gtk.Window {
         Source.remove (int_sig);
         Source.remove (term_sig);
 
-        launcher_entry.progress_visible = false;
+        Granite.Services.Application.set_progress_visible.begin (false);
         quitting_for_real = true;
         close ();
     }

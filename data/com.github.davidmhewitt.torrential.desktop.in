@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Torrential
+GenericName=Torrent Client
+Comment=Download torrent files
+Categories=Network;
+Exec=com.github.davidmhewitt.torrential %U
+Icon=com.github.davidmhewitt.torrential
+Terminal=false
+Type=Application
+Actions=Quit;
+X-GNOME-Gettext-Domain=torrential
+Keywords=Torrent;Bittorrent;Download;
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+X-GNOME-UsesNotifications=true
+
+[Desktop Action Quit]
+Exec=com.github.davidmhewitt.torrential --quit
+Name=Quit

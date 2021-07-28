@@ -8,6 +8,11 @@ finish-args:
   - '--socket=fallback-x11'
   - '--socket=wayland'
   - '--share=network'
+  # Needs to detect .torrent files and write downloaded torrents to Downloads folder
+  - '--filesystem=xdg-download'
+cleanup:
+  - '/lib/*.a'
+  - '/include'
 modules:
   - name: libevent
     buildsystem: autotools
@@ -25,7 +30,14 @@ modules:
         cp third-party/natpmp/lib/libnatpmp.a /app/lib/,
         cp third-party/utp/lib/libutp.a /app/lib/
     ]
-    config-opts: [ -DENABLE_TESTS=OFF, -DENABLE_GTK=OFF, -DINSTALL_DOC=OFF, -DENABLE_DAEMON=OFF, -DENABLE_UTILS=OFF, -DINSTALL_LIB=ON ]
+    config-opts: [
+        -DENABLE_TESTS=OFF,
+        -DENABLE_GTK=OFF,
+        -DINSTALL_DOC=OFF,
+        -DENABLE_DAEMON=OFF,
+        -DENABLE_UTILS=OFF,
+        -DINSTALL_LIB=ON
+    ]
     sources:
       - type: archive
         url: https://github.com/transmission/transmission/releases/download/3.00/transmission-3.00.tar.xz

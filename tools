@@ -32,4 +32,10 @@ case $1 in
         flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
         rm -rf "$TMPDIR"
         ;;
+    build)
+        flatpak-builder --force-clean --user build $PROJECT_NAME.yml
+        ;;
+    run)
+        flatpak-builder --run build $PROJECT_NAME.yml $PROJECT_NAME
+        ;;
 esac

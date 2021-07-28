@@ -50,8 +50,8 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         var switcher = new Gtk.StackSwitcher ();
         switcher.hexpand = true;
         switcher.halign = Gtk.Align.CENTER;
-        switcher.margin_left = 20;
-        switcher.margin_right = 20;
+        switcher.margin_start = 20;
+        switcher.margin_end = 20;
         switcher.set_stack (stack);
 
         var close_button = new Gtk.Button.with_label (_("Close"));
@@ -61,7 +61,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         });
 
         var button_box = new Gtk.ButtonBox (Gtk.Orientation.HORIZONTAL);
-        button_box.margin_right = 10;
+        button_box.margin_end = 10;
         button_box.set_layout (Gtk.ButtonBoxStyle.END);
         button_box.pack_end (close_button);
 
@@ -169,8 +169,8 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         location_chooser = new Gtk.FileChooserButton (_("Select Download Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
         location_chooser.hexpand = true;
         location_chooser.halign = Gtk.Align.FILL;
-        location_chooser.margin_left = 20;
-        location_chooser.margin_right = 20;
+        location_chooser.margin_start = 20;
+        location_chooser.margin_end = 20;
         location_chooser.set_current_folder (saved_state.download_folder);
         location_chooser.file_set.connect (() => {
             saved_state.download_folder = location_chooser.get_file ().get_path ();

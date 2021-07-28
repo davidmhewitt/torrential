@@ -248,7 +248,7 @@ public class Torrential.MainWindow : Gtk.Window {
         menu_button.popup = build_menu ();
         headerbar.pack_end (menu_button);
 
-        var open_button = new Gtk.ToolButton.from_stock (Gtk.Stock.OPEN);
+        var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
         open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
         open_button.tooltip_text = _("Open .torrent file");
         headerbar.pack_start (open_button);
@@ -270,7 +270,7 @@ public class Torrential.MainWindow : Gtk.Window {
         view_mode = new Granite.Widgets.ModeButton ();
         view_mode.sensitive = false;
         view_mode.margin = 1;
-        view_mode.margin_right = 20;
+        view_mode.margin_start = 20;
         view_mode.append_text (_("All"));
         view_mode.append_text (_("Downloading"));
         view_mode.append_text (_("Seeding"));

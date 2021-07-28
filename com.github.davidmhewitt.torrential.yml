@@ -10,6 +10,8 @@ finish-args:
   - '--share=network'
   # Needs to detect .torrent files and write downloaded torrents to Downloads folder
   - '--filesystem=xdg-download'
+  # Needed to read prefer-color-scheme with Granite.Settings
+  - '--system-talk-name=org.freedesktop.Accounts'
 cleanup:
   - '/lib/*.a'
   - '/include'

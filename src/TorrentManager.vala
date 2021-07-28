@@ -80,7 +80,7 @@ public class Torrential.TorrentManager : Object {
 
             return null;
         };
-        update_session_thread = new Thread<void*> ("update-session-settings", run);
+        update_session_thread = new Thread<void*> ("update-session-settings", (owned)run);
     }
 
     public void wait_for_close () {

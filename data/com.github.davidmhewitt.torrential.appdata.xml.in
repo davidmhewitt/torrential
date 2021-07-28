@@ -74,6 +74,7 @@
      <value key="x-appcenter-color-primary">rgb(224,247,255)</value>
      <value key="x-appcenter-color-primary-text">#000</value>
      <value key="x-appcenter-suggested-price">3</value>
+     <value key="x-appcenter-stripe">pk_live_udV1gtwCOlzKm5Wvk1q9ke72</value>
   </custom>
   <screenshots>
     <screenshot type="default">

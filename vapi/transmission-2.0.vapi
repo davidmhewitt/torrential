@@ -1,4 +1,4 @@
-[CCode (cheader_filename = "libtransmission/transmission.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
+[CCode (cheader_filename = "transmission/transmission.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
 namespace Transmission {
 
 	[CCode (cname = "TR_SHA_DIGEST_LENGTH")]
@@ -462,14 +462,14 @@ namespace Transmission {
 	[CCode (cname = "tr_sessionLoadSettings")]
 	public bool load_default_settings (ref variant_dict dictionary, string config_dir, string app_name);
 
-	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/variant.h", cprefix = "TR_VARIANT_FMT_", cname = "tr_variant_fmt", has_type_id = false)]
+	[CCode (cheader_filename = "transmission/transmission.h,transmission/variant.h", cprefix = "TR_VARIANT_FMT_", cname = "tr_variant_fmt", has_type_id = false)]
 	public enum VariantFormat {
 		BENC,
 		JSON,
 		JSON_LEAN
 	}
 
-	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/error.h", cname = "tr_error", free_function = "tr_errorFree", has_type_id = false)]
+	[CCode (cheader_filename = "transmission/transmission.h,transmission/error.h", cname = "tr_error", free_function = "tr_errorFree", has_type_id = false)]
 	public struct Error {
 		int code;
 		string message;
@@ -481,7 +481,7 @@ namespace Transmission {
 	 * An object that acts like a union for integers, strings, lists, dictionaries, booleans, and floating-point numbers. The structure is named benc due to the historical reason that it was originally tightly coupled with bencoded data. It currently supports being parsed from, and serialized to, both bencoded notation and json notation.
 	 *
 	 */
-	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
+	[CCode (cheader_filename = "transmission/transmission.h,transmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
 	public struct variant {
 		[CCode (cname = "tr_variantLoadFile")]
 		public static int load_file (out variant variant, VariantFormat mode, string filename);
@@ -560,7 +560,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantIsReal")]
 		public bool is_real ();
 	}
-	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
+	[CCode (cheader_filename = "transmission/transmission.h,transmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
 	public struct variant_list : variant {
 		[CCode (cname = "tr_variantInitList")]
 		public variant_list (size_t reserveCount);
@@ -591,7 +591,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantListRemove")]
 		public bool remove (size_t n);
 	}
-	[CCode (cheader_filename = "libtransmission/transmission.h,libtransmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
+	[CCode (cheader_filename = "transmission/transmission.h,transmission/variant.h", cname = "tr_variant", free_function = "tr_variantFree", has_type_id = false)]
 	public struct variant_dict : variant {
 		[CCode (cname = "tr_variantInitDict")]
 		public variant_dict (size_t reserve_count);
@@ -1185,9 +1185,9 @@ namespace Transmission {
 		DBG;
 		[CCode (cname = "tr_setMessageLevel")]
 		public void activate ();
-		[CCode (cname = "getMessageLevel", cheader_filename = "libtransmission/utils.h")]
+		[CCode (cname = "getMessageLevel", cheader_filename = "transmission/utils.h")]
 		public static MessageLevel get_current ();
-		[CCode (cname = "msgLoggingIsActive", cheader_filename = "libtransmission/utils.h")]
+		[CCode (cname = "msgLoggingIsActive", cheader_filename = "transmission/utils.h")]
 		public bool is_logging_active ();
 	}
 
@@ -2048,13 +2048,13 @@ namespace Transmission {
 	public class Torrent {
 
 		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torerr")]
+		[CCode (header_filename = "transmission/utils.h", cname = "tr_torerr")]
 		public void show_error (string fmt, ...);
 		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_torinf")]
+		[CCode (header_filename = "transmission/utils.h", cname = "tr_torinf")]
 		public void show_info (string fmt, ...);
 		[PrintfFormat]
-		[CCode (header_filename = "libtransmission/utils.h", cname = "tr_tordbg")]
+		[CCode (header_filename = "transmission/utils.h", cname = "tr_tordbg")]
 		public void show_debug (string fmt, ...);
 
 		/**
@@ -2442,7 +2442,7 @@ namespace Transmission {
 		public void make_file (string outputFile, tracker_info[] trackers, string comment, bool is_private);
 	}
 
-	[CCode (cheader_filename = "libtransmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
+	[CCode (cheader_filename = "transmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
 	namespace Log {
 		[CCode (cname = "TR_MAX_MSG_LOG")]
 		public const int MAX_MSG_LOG;
@@ -2487,7 +2487,7 @@ namespace Transmission {
 		public unowned string get_log_time ([CCode (array_length_type = "size_t")] char[] buf);
 	}
 
-	[CCode (cheader_filename = "libtransmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
+	[CCode (cheader_filename = "transmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
 	namespace Path {
 		/**
 		 * Rich Salz's classic implementation of shell-style pattern matching for?, \, [], and * characters.
@@ -2549,7 +2549,7 @@ namespace Transmission {
 		public bool is_same_file (string filename1, string filename2);
 	}
 
-	[CCode (cheader_filename = "libtransmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
+	[CCode (cheader_filename = "transmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
 	namespace Time {
 
 		[CCode (cname = "struct event", cprefix = "tr_", has_type_id = false)]
@@ -2593,7 +2593,7 @@ namespace Transmission {
 		public time_t get_time ();
 	}
 
-	[CCode (cheader_filename = "libtransmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
+	[CCode (cheader_filename = "transmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
 	namespace Url {
 
 		/**
@@ -2616,7 +2616,7 @@ namespace Transmission {
 		public int parse (string url, int url_len, out string scheme, out string host, out int port, out string path);
 	}
 
-	[CCode (cheader_filename = "libtransmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
+	[CCode (cheader_filename = "transmission/utils.h", cprefix = "tr_", lower_case_cprefix = "tr_")]
 	namespace String {
 		/**
 		 * Make a copy of 'str' whose non-utf8 content has been corrected or stripped
@@ -2720,7 +2720,7 @@ namespace Transmission {
 	}
 }
 
-[CCode (cheader_filename = "libtransmission/rpcimpl.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
+[CCode (cheader_filename = "transmission/rpcimpl.h", lower_case_cprefix = "tr_", cprefix = "TR_")]
 namespace Transmission {
 	[CCode (cname = "tr_rpc_func", has_type_id = false)]
 	public delegate void RPCCallback (Session session, variant_dict response);

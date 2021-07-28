@@ -1,0 +1,50 @@
+app-id: com.github.davidmhewitt.torrential
+runtime: io.elementary.Platform
+runtime-version: '6'
+sdk: io.elementary.Sdk
+command: com.github.davidmhewitt.torrential
+finish-args:
+  - '--share=ipc'
+  - '--socket=fallback-x11'
+  - '--socket=wayland'
+  - '--share=network'
+  # Needs to detect .torrent files and write downloaded torrents to Downloads folder
+  - '--filesystem=xdg-download'
+cleanup:
+  - '/lib/*.a'
+  - '/include'
+modules:
+  - name: libevent
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
+        sha256: 92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb
+  - name: transmission
+    buildsystem: cmake
+    builddir: true
+    post-install: [
+        cp third-party/dht/lib/libdht.a /app/lib/,
+        cp third-party/b64/lib/libb64.a /app/lib/,
+        cp third-party/miniupnpc/lib/libminiupnpc.a /app/lib/,
+        cp third-party/natpmp/lib/libnatpmp.a /app/lib/,
+        cp third-party/utp/lib/libutp.a /app/lib/
+    ]
+    config-opts: [
+        -DENABLE_TESTS=OFF,
+        -DENABLE_GTK=OFF,
+        -DINSTALL_DOC=OFF,
+        -DENABLE_DAEMON=OFF,
+        -DENABLE_UTILS=OFF,
+        -DINSTALL_LIB=ON
+    ]
+    sources:
+      - type: archive
+        url: https://github.com/transmission/transmission/releases/download/3.00/transmission-3.00.tar.xz
+        sha256: 9144652fe742f7f7dd6657716e378da60b751aaeda8bef8344b3eefc4db255f2
+  - name: torrential
+    buildsystem: meson
+    builddir: true
+    sources:
+      - type: dir
+        path: .

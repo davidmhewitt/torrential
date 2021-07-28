@@ -24,6 +24,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     public signal void torrent_removed (Torrent torrent);
     public signal void open_torrent (int id);
     public signal void open_torrent_location (int id);
+    public signal void open_torrent_file (int id, string file_name);
     public signal void link_copied ();
 
     public enum FilterType {
@@ -151,6 +152,15 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             }
         });
 
+        var play_item = new Gtk.MenuItem.with_label (_("Play video"));
+        play_item.activate.connect (() => {
+            var selected_row = get_selected_row () as TorrentListRow;
+            if (selected_row != null) {
+                var file_name = selected_row.playable_file_name;
+                open_torrent_file (selected_row.id, file_name);
+            }
+        });
+
         var open_item = new Gtk.MenuItem.with_label (_("Show in File Browser"));
         open_item.activate.connect (() => {
             var selected_row = get_selected_row ();
@@ -178,8 +188,14 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         if (items.length () < 2) {
             var selected_row = get_selected_row () as TorrentListRow;
 
-            if (selected_row != null && selected_row.multi_file_torrent) {
-                menu.add (edit_files_item);
+            if (selected_row != null) {
+                if (selected_row.multi_file_torrent) {
+                    menu.add (edit_files_item);
+                }
+
+                if (selected_row.is_playable) {
+                    menu.add (play_item);
+                }
             }
 
             menu.add (copy_magnet_item);

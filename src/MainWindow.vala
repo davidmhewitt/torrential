@@ -322,6 +322,7 @@ public class Torrential.MainWindow : Gtk.Window {
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
         list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
         list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
+        list_box.open_torrent_file.connect ((id, file_name) => torrent_manager.open_torrent_file (id, file_name));
         list_box.link_copied.connect (on_link_copied);
         list_box_scroll = new Gtk.ScrolledWindow (null, null);
         list_box_scroll.add (list_box);

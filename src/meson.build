@@ -15,6 +15,7 @@ sources = files(
 executable(
     meson.project_name(),
     sources,
+    icons_gresource,
     dependencies: dependencies,
     install: true
 )

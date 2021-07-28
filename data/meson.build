@@ -32,3 +32,9 @@ i18n.merge_file(
     install: true,
     install_dir: join_paths(get_option('datadir'), 'metainfo')
 )
+
+icons_gresource = gnome.compile_resources(
+    'gresource_icons',
+    meson.project_name() + '.gresource.xml',
+    source_dir: 'icons'
+)

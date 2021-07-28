@@ -30,8 +30,8 @@ dependencies = [
     meson.get_compiler('c').find_library('crypto'),
 ]
 
-subdir('src')
 subdir('data')
+subdir('src')
 subdir('po')
 
 meson.add_install_script('meson/post_install.py')

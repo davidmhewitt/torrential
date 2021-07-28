@@ -1,0 +1,35 @@
+#!/bin/sh
+
+PROJECT_NAME="com.github.davidmhewitt.torrential"
+MODULE_NAME="torrential"
+
+case $1 in
+    clean)
+        rm -rf .flatpak-builder/
+        rm -rf build/
+        ;;
+    pot)
+        TMPDIR=$(basename `mktemp -u`)
+        mkdir "$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
+        echo "ninja extra-pot; ninja $PROJECT_NAME-pot" | flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        cp "$TMPDIR/build/$MODULE_NAME/po/extra/extra.pot" po/extra/
+        cp "$TMPDIR/build/$MODULE_NAME/po/$PROJECT_NAME.pot" po/
+        rm -rf "$TMPDIR"
+        ;;
+    po)
+        TMPDIR=$(basename `mktemp -u`)
+        mkdir "$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
+        echo "ninja extra-update-po; ninja $PROJECT_NAME-update-po" | flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        cp "$TMPDIR/build/$MODULE_NAME/po/extra/"*.po po/extra/
+        cp "$TMPDIR/build/$MODULE_NAME/po/"*.po po/
+        rm -rf "$TMPDIR"
+        ;;
+    shell)
+        TMPDIR=$(basename `mktemp -u`)
+        mkdir "$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        rm -rf "$TMPDIR"
+        ;;
+esac

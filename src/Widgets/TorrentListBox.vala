@@ -192,7 +192,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         menu.show_all ();
         uint button;
         event.get_button (out button);
-        menu.popup (null, null, null, button, event.get_time ());
+        menu.popup_at_pointer (event);
         return true;
     }
 

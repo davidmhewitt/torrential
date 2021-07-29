@@ -38,8 +38,6 @@ public class Torrential.Settings : Granite.Services.Settings {
     public int peer_port { get; set; }
     public bool randomize_port { get; set; }
     public bool force_encryption { get; set; }
-    public string blocklist_url { get; set; }
-    public int64 blocklist_updated_timestamp { get; set; }
     public bool seed_ratio_enabled { get; set; }
     public double seed_ratio { get; set; }
 

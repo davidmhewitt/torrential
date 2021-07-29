@@ -29,8 +29,6 @@ const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
 const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
 
 public class Torrential.TorrentManager : Object {
-    public bool blocklist_updating { get; private set; default = false; }
-
     private Transmission.variant_dict settings;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
@@ -40,11 +38,8 @@ public class Torrential.TorrentManager : Object {
     private Thread<void*>? update_session_thread = null;
 
     public signal void torrent_completed (Torrent torrent);
-    public signal void blocklist_load_failed ();
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
-
-    private static int next_tag = 0;
 
     public TorrentManager () {
         Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
@@ -55,17 +50,11 @@ public class Torrential.TorrentManager : Object {
         update_session_settings ();
 
         session = new Transmission.Session (CONFIG_DIR, false, settings);
-        info (session.blocklist.count.to_string ());
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
             transmission_torrents[i].set_completeness_callback (on_completeness_changed);
             added_torrents.add (transmission_torrents[i]);
-        }
-
-        // Only auto-update blocklist once every day
-        if (new DateTime.now_local ().to_unix () - saved_state.blocklist_updated_timestamp > 3600 * 24) {
-            update_blocklist ();
         }
     }
 
@@ -96,52 +85,6 @@ public class Torrential.TorrentManager : Object {
             }
         }
         return false;
-    }
-
-    public void update_blocklist () {
-        // Only update the blocklist if we have one set
-        if (saved_state.blocklist_url.strip ().length == 0) {
-            return;
-        }
-
-        settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
-        session.blocklist.url = saved_state.blocklist_url.strip ();
-
-        next_tag++;
-        blocklist_updating = true;
-
-        var request = Transmission.variant_dict (2);
-        request.add_str (Transmission.Prefs.method, "blocklist-update");
-        request.add_int (Transmission.Prefs.tag, next_tag);
-
-        Transmission.exec_JSON_RPC (session, request, on_blocklist_response);
-    }
-
-    private void on_blocklist_response (Transmission.Session session, Transmission.variant_dict response) {
-        int64 rulecount = 0;
-        Transmission.variant_dict args;
-
-        if (!response.find_doc (Transmission.Prefs.arguments, out args) || !args.find_int (Transmission.Prefs.blocklist_size, out rulecount)) {
-            rulecount = -1;
-        }
-
-        if (rulecount == -1) {
-            Idle.add (() => {
-                blocklist_load_failed ();
-                foreach (unowned Transmission.Torrent torrent in added_torrents) {
-                    torrent.stop ();
-                }
-
-                return Source.REMOVE;
-            });
-        } else {
-            Idle.add (() => {
-                saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
-                return Source.REMOVE;
-            });
-        }
-
-        blocklist_updating = false;
     }
 
     private void update_session_settings () {
@@ -175,13 +118,6 @@ public class Torrential.TorrentManager : Object {
             settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
         } else {
             settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
-        }
-
-        if (saved_state.blocklist_url.strip ().length > 0) {
-            settings.add_bool (Transmission.Prefs.blocklist_enabled, true);
-            settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
-        } else {
-            settings.add_bool (Transmission.Prefs.blocklist_enabled, false);
         }
 
         settings.add_bool (Transmission.Prefs.ratio_limit_enabled, saved_state.seed_ratio_enabled);

@@ -163,11 +163,6 @@ public class Torrential.MainWindow : Gtk.Window {
             }
         });
 
-        torrent_manager.blocklist_load_failed.connect (() => {
-            infobar.add_error (_("Failed to load blocklist. All torrents paused as a precaution."));
-            infobar.show ();
-        });
-
         refresh_timer = Timeout.add_seconds (1, () => {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());

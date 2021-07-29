@@ -24,8 +24,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private Settings saved_state = Settings.get_default ();
 
     private Gtk.FileChooserButton location_chooser;
-    private Gtk.Label blocklist_state;
-    private Gtk.Stack update_blocklist_stack;
 
     public weak MainWindow parent_window { private get; construct; }
 
@@ -72,31 +70,11 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
         ((Gtk.Container) get_content_area ()).add (content_grid);
 
-        parent_window.torrent_manager.notify["blocklist-updating"].connect (on_blocklist_state_change);
-
         saved_state.changed.connect (on_saved_settings_changed);
     }
 
     private void on_saved_settings_changed () {
         location_chooser.set_current_folder (saved_state.download_folder);
-        update_blocklist_label ();
-    }
-
-    private void on_blocklist_state_change () {
-        if (parent_window.torrent_manager.blocklist_updating) {
-            update_blocklist_stack.visible_child_name = "spinner";
-        } else {
-            update_blocklist_stack.visible_child_name = "button";
-        }
-    }
-
-    private void update_blocklist_label () {
-        if (saved_state.blocklist_updated_timestamp == 0) {
-            blocklist_state.set_text (_("Blocklist last downloaded: never"));
-        } else {
-            var time = new DateTime.from_unix_local (saved_state.blocklist_updated_timestamp);
-            blocklist_state.set_text (_("Last downloaded: %s").printf (time.format (_("%a %e, %b %H:%M"))));
-        }
     }
 
     private Gtk.Grid create_advanced_settings_widgets () {
@@ -113,29 +91,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 
-        var update_blocklist_button = create_button (_("Update Blocklist"));
-        var blocklist_entry = create_entry ();
-        saved_state.bind_property ("blocklist_url", blocklist_entry, "text", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
-        blocklist_entry.changed.connect (() => {
-            update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
-        });
-        var blocklist_label = create_label (_("Blocklist URL:"));
-
-        update_blocklist_stack = new Gtk.Stack ();
-        var spinner = new Gtk.Spinner ();
-        spinner.active = true;
-
-        update_blocklist_button.sensitive = blocklist_entry.text.strip ().length > 0;
-        update_blocklist_button.clicked.connect (() => {
-            update_blocklist_stack.visible_child_name = "spinner";
-            parent_window.torrent_manager.update_blocklist ();
-        });
-        update_blocklist_stack.add_named (update_blocklist_button, "button");
-        update_blocklist_stack.add_named (spinner, "spinner");
-
-        blocklist_state = create_label ("");
-        update_blocklist_label ();
-
         Gtk.Grid advanced_grid = new Gtk.Grid ();
         advanced_grid.margin = 12;
         advanced_grid.hexpand = true;
@@ -149,16 +104,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
         advanced_grid.attach (randomise_port_switch, 1, 4, 1, 1);
         advanced_grid.attach (port_label, 0, 5, 1, 1);
         advanced_grid.attach (port_entry, 1, 5, 1, 1);
-        advanced_grid.attach (create_heading (_("Blocklist")), 0, 6, 1, 1);
-        advanced_grid.attach (blocklist_label, 0, 7, 1, 1);
-        advanced_grid.attach (blocklist_entry, 1, 7, 1, 1);
-        advanced_grid.attach (blocklist_state, 0, 8, 1, 1);
-        advanced_grid.attach (update_blocklist_stack, 1, 8, 1, 1);
-
-        if (parent_window.torrent_manager.blocklist_updating) {
-            update_blocklist_stack.show_all ();
-            update_blocklist_stack.visible_child_name = "spinner";
-        }
 
         return advanced_grid;
     }
@@ -259,22 +204,6 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
     private Gtk.SpinButton create_spinbutton (double min, double max, double step) {
         var button = new Gtk.SpinButton.with_range (min, max, step);
-        button.halign = Gtk.Align.START;
-        button.hexpand = true;
-
-        return button;
-    }
-
-    private Gtk.Entry create_entry () {
-        var entry = new Gtk.Entry ();
-        entry.halign = Gtk.Align.START;
-        entry.hexpand = true;
-
-        return entry;
-    }
-
-    private Gtk.Button create_button (string label) {
-        var button = new Gtk.Button.with_label (label);
         button.halign = Gtk.Align.START;
         button.hexpand = true;
 

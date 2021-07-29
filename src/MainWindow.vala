@@ -364,12 +364,8 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_open (SimpleAction action) {
-        var filech = new Gtk.FileChooserDialog (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN);
+        var filech = new Gtk.FileChooserNative (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN, _("Open"), _("Cancel"));
         filech.set_select_multiple (true);
-        filech.add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
-        filech.add_button (_("Open"), Gtk.ResponseType.ACCEPT);
-        filech.set_default_response (Gtk.ResponseType.ACCEPT);
-        filech.set_current_folder_uri (GLib.Environment.get_home_dir ());
 
         var all_files_filter = new Gtk.FileFilter ();
         all_files_filter.set_filter_name (_("All files"));
@@ -383,8 +379,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         if (filech.run () == Gtk.ResponseType.ACCEPT) {
             add_files (filech.get_uris ());
         }
-
-        filech.close ();
     }
 
     private void on_open_magnet () {

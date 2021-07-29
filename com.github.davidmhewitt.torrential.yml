@@ -12,6 +12,8 @@ finish-args:
   - '--filesystem=xdg-download'
   # Needed to read prefer-color-scheme with Granite.Settings
   - '--system-talk-name=org.freedesktop.Accounts'
+  # Needed for "Show in file manager" action on torrents
+  - '--talk-name=org.freedesktop.FileManager1'
 cleanup:
   - '/lib/*.a'
   - '/include'

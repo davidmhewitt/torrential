@@ -35,8 +35,6 @@ public class Torrential.TorrentManager : Object {
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
     private Settings saved_state = Settings.get_default ();
 
-    private Thread<void*>? update_session_thread = null;
-
     public signal void torrent_completed (Torrent torrent);
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
@@ -47,9 +45,8 @@ public class Torrential.TorrentManager : Object {
         settings = Transmission.variant_dict (0);
         Transmission.load_default_settings (ref settings, CONFIG_DIR, "torrential");
 
-        update_session_settings ();
-
         session = new Transmission.Session (CONFIG_DIR, false, settings);
+
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
@@ -58,24 +55,10 @@ public class Torrential.TorrentManager : Object {
         }
     }
 
-    ~TorrentManager () {
+    public void close_session () {
+        update_session_settings ();
         session.save_settings (CONFIG_DIR, settings);
-    }
-
-    public void close () throws ThreadError {
-        ThreadFunc<void*> run = () => {
-            update_session_settings ();
-            session.update_settings (settings);
-
-            return null;
-        };
-        update_session_thread = new Thread<void*> ("update-session-settings", (owned)run);
-    }
-
-    public void wait_for_close () {
-        if (update_session_thread != null) {
-            update_session_thread.join ();
-        }
+        session = null;
     }
 
     public bool has_active_torrents () {
@@ -87,7 +70,7 @@ public class Torrential.TorrentManager : Object {
         return false;
     }
 
-    private void update_session_settings () {
+    public void update_session_settings () {
         settings.add_int (Transmission.Prefs.download_queue_size, saved_state.max_downloads);
 
         if (saved_state.download_speed_limit == 0) {
@@ -119,6 +102,8 @@ public class Torrential.TorrentManager : Object {
         } else {
             settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
         }
+
+        session.update_settings (settings);
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {

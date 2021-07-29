@@ -19,13 +19,10 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.MainWindow : Gtk.Window {
-    private bool quitting_for_real = false;
-
+public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private uint refresh_timer;
 
     private PreferencesWindow? prefs_window = null;
-    private weak Application app;
 
     private Granite.Widgets.ModeButton view_mode;
     private Gtk.ToolButton magnet_button;
@@ -50,19 +47,16 @@ public class Torrential.MainWindow : Gtk.Window {
 
     private const string ACTION_PREFERENCES = "preferences";
     private const string ACTION_QUIT = "quit";
-    private const string ACTION_HIDE = "hide";
     private const string ACTION_OPEN = "open";
     private const string ACTION_OPEN_MAGNET = "open-magnet";
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
     private const string ACTION_SHOW_WINDOW = "show-window";
 
-    private uint int_sig;
-    private uint term_sig;
+    private bool quitting = false;
 
     private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
         {ACTION_QUIT,                       on_quit                 },
-        {ACTION_HIDE,                       on_hide                 },
         {ACTION_OPEN,                       on_open                 },
         {ACTION_OPEN_MAGNET,                on_open_magnet          }
     };
@@ -71,15 +65,19 @@ public class Torrential.MainWindow : Gtk.Window {
     static construct {
         action_accelerators.set (ACTION_PREFERENCES, "<Ctrl>comma");
         action_accelerators.set (ACTION_QUIT, "<Ctrl>q");
-        action_accelerators.set (ACTION_HIDE, "<Ctrl>w");
         action_accelerators.set (ACTION_OPEN, "<Ctrl>o");
         action_accelerators.set (ACTION_OPEN_MAGNET, "<Ctrl>m");
     }
 
-    public MainWindow (Application app) {
+    public MainWindow (Application app, TorrentManager torrent_manager) {
+        Object (
+            application: app
+        );
+
+        this.torrent_manager = torrent_manager;
+
         Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
 
-        this.app = app;
         saved_state = Settings.get_default ();
         set_default_size (saved_state.window_width, saved_state.window_height);
 
@@ -95,7 +93,7 @@ public class Torrential.MainWindow : Gtk.Window {
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
         foreach (var action in action_accelerators.get_keys ()) {
-            app.set_accels_for_action (ACTION_GROUP_PREFIX + action,
+            application.set_accels_for_action (ACTION_GROUP_PREFIX + action,
                                        action_accelerators[action].to_array ());
         }
 
@@ -103,14 +101,14 @@ public class Torrential.MainWindow : Gtk.Window {
         open_torrent.activate.connect ((parameter) => {
             torrent_manager.open_torrent (parameter.get_int32 ());
         });
-        app.add_action (open_torrent);
+        application.add_action (open_torrent);
 
         SimpleAction show_window = new SimpleAction (ACTION_SHOW_WINDOW, null);
         show_window.activate.connect (() => {
             present ();
             present_with_time (0);
         });
-        app.add_action (show_window);
+        application.add_action (show_window);
 
         var grid = new Gtk.Grid ();
         grid.orientation = Gtk.Orientation.VERTICAL;
@@ -118,8 +116,6 @@ public class Torrential.MainWindow : Gtk.Window {
         infobar.set_message_type (Gtk.MessageType.WARNING);
         infobar.no_show_all = true;
         infobar.visible = false;
-
-        torrent_manager = new TorrentManager ();
 
         build_headerbar ();
         build_main_interface ();
@@ -159,7 +155,7 @@ public class Torrential.MainWindow : Gtk.Window {
                 var notification = new Notification (_("Torrent Complete"));
                 notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
                 notification.set_default_action_and_target_value ("app." + ACTION_OPEN_COMPLETED_TORRENT, new Variant.int32 (torrent.id));
-                app.send_notification ("app.torrent-completed", notification);
+                application.send_notification ("app.torrent-completed", notification);
             }
         });
 
@@ -177,27 +173,22 @@ public class Torrential.MainWindow : Gtk.Window {
         });
 
         delete_event.connect (() => {
-            if (!torrent_manager.has_active_torrents ()) {
-                quitting_for_real = true;
-            }
-            if (saved_state.hide_on_close && !quitting_for_real) {
+            if (!quitting && saved_state.hide_on_close && torrent_manager.has_active_torrents ()) {
                 return hide_on_delete ();
-            } else {
-                Source.remove (refresh_timer);
-                torrent_manager.disconnect (torrent_completed_signal_id);
-
-                int window_width;
-                int window_height;
-                get_size (out window_width, out window_height);
-                saved_state.window_width = window_width;
-                saved_state.window_height = window_height;
-                if (is_maximized) {
-                    saved_state.window_state = Settings.WindowState.MAXIMIZED;
-                } else {
-                    saved_state.window_state = Settings.WindowState.NORMAL;
-                }
-                return false;
             }
+
+            int window_width;
+            int window_height;
+            get_size (out window_width, out window_height);
+            saved_state.window_width = window_width;
+            saved_state.window_height = window_height;
+            if (is_maximized) {
+                saved_state.window_state = Settings.WindowState.MAXIMIZED;
+            } else {
+                saved_state.window_state = Settings.WindowState.NORMAL;
+            }
+
+            return false;
         });
 
         var download_folder = File.new_for_path (Environment.get_user_special_dir (UserDirectory.DOWNLOAD));
@@ -207,23 +198,6 @@ public class Torrential.MainWindow : Gtk.Window {
         } catch (Error e) {
             warning ("Error setting up watchfolder on Download folder: %s", e.message);
         }
-
-#if VALA_0_40
-        int_sig = Unix.signal_add (Posix.Signal.INT, quit_source_func, Priority.HIGH);
-        term_sig = Unix.signal_add (Posix.Signal.TERM, quit_source_func, Priority.HIGH);
-#else
-        int_sig = Unix.signal_add (Posix.SIGINT, quit_source_func, Priority.HIGH);
-        term_sig = Unix.signal_add (Posix.SIGTERM, quit_source_func, Priority.HIGH);
-#endif
-    }
-
-    public bool quit_source_func () {
-        quit ();
-        return false;
-    }
-
-    public void wait_for_close () {
-        torrent_manager.wait_for_close ();
     }
 
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
@@ -374,31 +348,19 @@ public class Torrential.MainWindow : Gtk.Window {
     private void on_preferences (SimpleAction action) {
         prefs_window = new PreferencesWindow (this);
         prefs_window.on_close.connect (() => {
-            try {
-                torrent_manager.close ();
-            } catch (ThreadError e) {
-                warning ("Error with thread while updating session settings. Error: %s", e.message);
-            }
+            torrent_manager.update_session_settings ();
         });
 
         prefs_window.show_all ();
     }
 
     public void quit () {
-        Source.remove (int_sig);
-        Source.remove (term_sig);
-
-        Granite.Services.Application.set_progress_visible.begin (false);
-        quitting_for_real = true;
+        quitting = true;
         close ();
     }
 
     private void on_quit (SimpleAction action) {
         quit ();
-    }
-
-    private void on_hide (SimpleAction action) {
-        close ();
     }
 
     private void on_open (SimpleAction action) {
@@ -493,7 +455,7 @@ public class Torrential.MainWindow : Gtk.Window {
                 var notification = new Notification (_("Torrent Added"));
                 notification.set_body (_("Successfully added torrent file from Downloads"));
                 notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
-                app.send_notification ("app.torrent-added", notification);
+                application.send_notification ("app.torrent-added", notification);
             }
         }
     }
@@ -540,7 +502,7 @@ public class Torrential.MainWindow : Gtk.Window {
                 var notification = new Notification (_("Magnet Link"));
                 notification.set_body (_("Successfully added magnet link"));
                 notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
-                app.send_notification ("app.magnet-added", notification);
+                application.send_notification ("app.magnet-added", notification);
             }
         } else if (result == Transmission.ParseResult.ERR) {
             infobar.add_error (_("Failed to add magnet link as it doesn\u2019t appear to be valid."));
@@ -559,7 +521,7 @@ public class Torrential.MainWindow : Gtk.Window {
             var notification = new Notification (_("Magnet Link"));
             notification.set_body (_("Failed to add magnet link"));
             notification.set_default_action ("app." + ACTION_SHOW_WINDOW);
-            app.send_notification ("app.magnet-added", notification);
+            application.send_notification ("app.magnet-added", notification);
         }
     }
 }

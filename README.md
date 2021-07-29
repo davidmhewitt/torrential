@@ -3,7 +3,7 @@ Download torrents in style with this speedy, minimalist torrent client for eleme
 
 [![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.davidmhewitt.torrential)
 
-![Torrential Screenshot](https://github.com/davidmhewitt/torrential/raw/master/data/com.github.davidmhewitt.torrential.screenshot.png)
+![Torrential Screenshot](https://github.com/davidmhewitt/torrential/raw/main/data/com.github.davidmhewitt.torrential.screenshot.png)
 
 ## Building, Testing, and Installation
 

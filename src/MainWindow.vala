@@ -28,6 +28,7 @@ public class Torrential.MainWindow : Gtk.Window {
     private weak Application app;
 
     private Granite.Widgets.ModeButton view_mode;
+    private Gtk.ToolButton magnet_button;
     private Gtk.Stack stack;
     private Gtk.HeaderBar headerbar;
     private Granite.Widgets.Welcome welcome_screen;
@@ -254,7 +255,7 @@ public class Torrential.MainWindow : Gtk.Window {
         headerbar.pack_start (open_button);
 
         var magnet_image = new Gtk.Image.from_icon_name ("open-magnet", Gtk.IconSize.LARGE_TOOLBAR);
-        var magnet_button = new Gtk.ToolButton (magnet_image, null);
+        magnet_button = new Gtk.ToolButton (magnet_image, null);
         magnet_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET);
         magnet_button.tooltip_text = _("Open magnet link");
         headerbar.pack_start (magnet_button);
@@ -430,24 +431,26 @@ public class Torrential.MainWindow : Gtk.Window {
     }
 
     private void on_open_magnet () {
-        Gtk.Dialog dialog = new Gtk.Dialog ();
+        Gtk.Popover popover = new Gtk.Popover (magnet_button);
 
-        dialog.add_buttons (Gtk.Stock.CANCEL, Gtk.ResponseType.CANCEL, Gtk.Stock.OK, Gtk.ResponseType.OK);
+        var add_button = new Gtk.Button.with_label (_("Add Magnet Link")) {
+            sensitive = false
+        };
 
-        Gtk.Entry entry = new Gtk.Entry ();
+        var entry = new Gtk.Entry ();
         entry.changed.connect (() => {
             // Only allow OK when there's text in the box.
-            dialog.set_response_sensitive (Gtk.ResponseType.OK, entry.text.strip () != "");
+            add_button.sensitive = entry.text.strip () != "";
         });
 
-        dialog.width_request = 350;
-        dialog.get_content_area ().spacing = 7;
-        dialog.get_content_area ().border_width = 10;
-        dialog.get_content_area ().pack_start (new Gtk.Label (_("Magnet URL:")));
-        dialog.get_content_area ().pack_start (entry);
-        dialog.get_widget_for_response (Gtk.ResponseType.OK).can_default = true;
-        dialog.set_default_response (Gtk.ResponseType.OK);
-        dialog.show_all ();
+        entry.activate.connect (() => {
+            add_button.activate ();
+        });
+
+        add_button.clicked.connect (() => {
+            add_magnet (entry.text, true);
+            popover.popdown ();
+        });
 
         var clipboard = Gtk.Clipboard.get (Gdk.SELECTION_CLIPBOARD);
         string? contents = clipboard.wait_for_text ();
@@ -455,17 +458,24 @@ public class Torrential.MainWindow : Gtk.Window {
             entry.text = contents;
         }
 
-        entry.activates_default = true;
-        entry.select_region (0, -1);
+        var label = new Gtk.Label (_("Magnet URL:")) {
+            halign = Gtk.Align.START
+        };
 
-        dialog.set_response_sensitive (Gtk.ResponseType.OK, entry.text.strip () != "");
+        var content_grid = new Gtk.Grid () {
+            margin = 6,
+            row_spacing = 3,
+            orientation = Gtk.Orientation.VERTICAL
+        };
 
-        int response = dialog.run ();
-        if (response == Gtk.ResponseType.OK) {
-            add_magnet (entry.text, true);
-        }
+        content_grid.add (label);
+        content_grid.add (entry);
+        content_grid.add (add_button);
 
-        dialog.destroy ();
+        popover.add (content_grid);
+
+        popover.show_all ();
+        popover.popup ();
     }
 
     private void on_download_folder_changed (File file, File? other_file, FileMonitorEvent event) {

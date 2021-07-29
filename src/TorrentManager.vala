@@ -119,9 +119,6 @@ public class Torrential.TorrentManager : Object {
         } else {
             settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
         }
-
-        settings.add_bool (Transmission.Prefs.ratio_limit_enabled, saved_state.seed_ratio_enabled);
-        settings.add_real (Transmission.Prefs.ratio_limit, saved_state.seed_ratio);
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {

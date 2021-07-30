@@ -164,7 +164,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         }
     }
 
-    public static string time_to_string (uint totalSeconds) {
+    public static string time_to_string (int totalSeconds) {
+        if (totalSeconds < 0) {
+            return "...";
+        }
+
         uint seconds = (totalSeconds % 60);
         uint minutes = (totalSeconds % 3600) / 60;
         uint hours = (totalSeconds % 86400) / 3600;
@@ -176,10 +180,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         var str_seconds = ngettext ("%u second", "%u seconds", seconds).printf (seconds);
 
         var formatted = "";
-        if (totalSeconds == -1) {
-            formatted = "...";
-        }
-        else if (days > 0) {
+        if (days > 0) {
             formatted = "%s, %s, %s, %s".printf (str_days, str_hours, str_minutes, str_seconds);
         }
         else if (hours > 0) {

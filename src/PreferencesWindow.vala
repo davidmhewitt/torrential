@@ -14,7 +14,7 @@
 * with this program. If not, see http://www.gnu.org/licenses/.
 */
 
-public class Torrential.PreferencesWindow : Gtk.Dialog {
+public class Torrential.PreferencesWindow : Granite.Dialog {
 
     public signal void on_close ();
 

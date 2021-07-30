@@ -23,7 +23,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
 
     private Settings saved_state = Settings.get_default ();
 
-    private Gtk.FileChooserButton location_chooser;
+    private Gtk.Label location_chooser_label;
 
     public weak MainWindow parent_window { private get; construct; }
 
@@ -74,7 +74,7 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     }
 
     private void on_saved_settings_changed () {
-        location_chooser.set_current_folder (saved_state.download_folder);
+        location_chooser_label.label = saved_state.download_folder;
     }
 
     private Gtk.Grid create_advanced_settings_widgets () {
@@ -111,15 +111,41 @@ public class Torrential.PreferencesWindow : Gtk.Dialog {
     private Gtk.Grid create_general_settings_widgets () {
         var location_heading = create_heading (_("Download Location"));
 
-        location_chooser = new Gtk.FileChooserButton (_("Select Download Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
-        location_chooser.hexpand = true;
-        location_chooser.halign = Gtk.Align.FILL;
-        location_chooser.margin_start = 20;
-        location_chooser.margin_end = 20;
-        location_chooser.set_current_folder (saved_state.download_folder);
-        location_chooser.file_set.connect (() => {
-            saved_state.download_folder = location_chooser.get_file ().get_path ();
+        var location_chooser = new Gtk.Button () {
+            hexpand = true,
+            halign = Gtk.Align.FILL,
+            margin_start = 20,
+            margin_end = 20
+        };
+
+        location_chooser.clicked.connect (() => {
+            var chooser = new Gtk.FileChooserDialog (
+                _("Select Download Folder…"),
+                this,
+                Gtk.FileChooserAction.SELECT_FOLDER,
+                _("Cancel"), Gtk.ResponseType.CANCEL,
+                _("Select"), Gtk.ResponseType.ACCEPT
+            );
+
+            var res = chooser.run ();
+
+            if (res == Gtk.ResponseType.ACCEPT) {
+                saved_state.download_folder = chooser.get_file ().get_path ();
+            }
+
+            chooser.destroy ();
         });
+
+        location_chooser_label = new Gtk.Label (saved_state.download_folder);
+
+        var location_grid = new Gtk.Grid () {
+            column_spacing = 3
+        };
+
+        location_grid.add (new Gtk.Image.from_icon_name ("folder", Gtk.IconSize.BUTTON));
+        location_grid.add (location_chooser_label);
+
+        location_chooser.add (location_grid);
 
         var download_heading = create_heading (_("Limits"));
 

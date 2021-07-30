@@ -15,7 +15,8 @@ finish-args:
   # Needed for "Show in file manager" action on torrents
   - '--talk-name=org.freedesktop.FileManager1'
 cleanup:
-  - '/lib/*.a'
+  - '*.a'
+  - '*.la'
   - '/include'
 modules:
   - name: libevent

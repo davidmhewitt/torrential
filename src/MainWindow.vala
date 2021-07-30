@@ -20,19 +20,13 @@
 */
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
-    private uint refresh_timer;
-
-    private PreferencesWindow? prefs_window = null;
-
     private Granite.Widgets.ModeButton view_mode;
     private Gtk.ToolButton magnet_button;
     private Gtk.Stack stack;
-    private Gtk.HeaderBar headerbar;
     private Granite.Widgets.Welcome welcome_screen;
     private Granite.Widgets.Toast toast;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
-    private Gtk.ScrolledWindow list_box_scroll;
 
     private Gtk.SearchEntry search_entry;
 
@@ -117,8 +111,14 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         infobar.no_show_all = true;
         infobar.visible = false;
 
-        build_headerbar ();
-        build_main_interface ();
+        list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
+        list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
+        list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
+        list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
+        list_box.link_copied.connect (on_link_copied);
+        var list_box_scroll = new Gtk.ScrolledWindow (null, null);
+        list_box_scroll.add (list_box);
+
         build_welcome_screen ();
 
         var no_results_alertview = new Granite.Widgets.AlertView (_("No Search Results"), _("Try changing search terms"), "edit-find-symbolic");
@@ -140,7 +140,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         add (overlay);
 
-        set_titlebar (headerbar);
+        set_titlebar (build_headerbar ());
         show_all ();
 
         var torrents = torrent_manager.get_torrents ();
@@ -149,7 +149,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             update_category_totals (torrents);
         }
 
-        var torrent_completed_signal_id = torrent_manager.torrent_completed.connect ((torrent) => {
+        torrent_manager.torrent_completed.connect ((torrent) => {
             var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
             if (!focused) {
                 var notification = new Notification (_("Torrent Complete"));
@@ -159,7 +159,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
         });
 
-        refresh_timer = Timeout.add_seconds (1, () => {
+        Timeout.add_seconds (1, () => {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
             Granite.Services.Application.set_progress.begin (torrent_manager.get_overall_progress ());
@@ -208,8 +208,8 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    private void build_headerbar () {
-        headerbar = new Gtk.HeaderBar ();
+    private Gtk.HeaderBar build_headerbar () {
+        var headerbar = new Gtk.HeaderBar ();
         headerbar.show_close_button = true;
 
         var menu_button = new Gtk.MenuButton ();
@@ -252,6 +252,8 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
 
         headerbar.set_custom_title (view_mode);
+
+        return headerbar;
     }
 
     private void update_view () {
@@ -285,16 +287,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         } else {
             stack.visible_child_name = "main";
         }
-    }
-
-    private void build_main_interface () {
-        list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
-        list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
-        list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
-        list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
-        list_box.link_copied.connect (on_link_copied);
-        list_box_scroll = new Gtk.ScrolledWindow (null, null);
-        list_box_scroll.add (list_box);
     }
 
     private void build_welcome_screen () {
@@ -346,7 +338,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_preferences (SimpleAction action) {
-        prefs_window = new PreferencesWindow (this);
+        var prefs_window = new PreferencesWindow (this);
         prefs_window.on_close.connect (() => {
             torrent_manager.update_session_settings ();
         });

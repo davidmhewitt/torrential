@@ -64,13 +64,17 @@ public class Torrential.Application : Gtk.Application {
     }
 
     public override void activate () {
+        Intl.setlocale (LocaleCategory.ALL, "");
+        GLib.Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+        GLib.Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+        GLib.Intl.textdomain (GETTEXT_PACKAGE);
+
         if (window == null) {
             window = new MainWindow (this, torrent_manager);
             add_window (window);
+        } else {
+            window.present ();
         }
-
-        window.present ();
-        window.present_with_time (0);
 
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();

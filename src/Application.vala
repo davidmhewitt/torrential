@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
+* Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public

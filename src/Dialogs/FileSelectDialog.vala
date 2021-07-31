@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2018 David Hewitt (https://github.com/davidmhewitt)
+* Copyright (c) 2018-2021 David Hewitt (https://github.com/davidmhewitt)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -19,7 +19,7 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Dialogs.FileSelectDialog : Gtk.Dialog {
+public class Torrential.Dialogs.FileSelectDialog : Granite.Dialog {
     public Torrent torrent { construct; private get; }
 
     public FileSelectDialog (Torrent torrent) {

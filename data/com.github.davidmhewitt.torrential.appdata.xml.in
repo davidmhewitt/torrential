@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2017 David Hewitt <davidmhewitt@gmail.com> -->
+<!-- Copyright 2017-2021 David Hewitt <davidmhewitt@gmail.com> -->
 <component type="desktop">
   <id>com.github.davidmhewitt.torrential</id>
   <launchable type="desktop-id">com.github.davidmhewitt.torrential.desktop</launchable>

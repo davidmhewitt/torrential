@@ -11,64 +11,74 @@
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <releases>
-      <release version="1.1.0" date="2018-07-30">
-        <description>
-          <ul>
-            <li>Hello Juno support!</li>
-            <li>Torrential now also lets you pick which files within the torrent you want to download.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="1.0.9" date="2018-06-06">
-        <description>
-          <ul>
-            <li>Torrential now watches your downloads folder for new torrent files while it's running.</li>
-            <li>Torrent files are now moved to the trash after they have been added.</li>
-            <li>Added a copy magnet link entry to the right click menu.</li>
-            <li>Minor quality of life improvements and code cleanup.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="1.0.8" date="2018-02-18">
-        <description>
-          <ul>
-            <li>Added quit option to right click menu in dock.</li>
-            <li>Multiple torrent can now be selected in the list box.</li>
-            <li>Underlying libtransmission version updated.</li>
-            <li>Updated translations.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="1.0.7" date="2017-11-01">
-        <description>
-          <ul>
-            <li>Improved application icon on HiDPI displays.</li>
-            <li>Fix for incompatibility with upcoming version of Granite.</li>
-            <li>Updated translations.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="1.0.6" date="2017-08-25">
-        <description>
-          <ul>
-            <li>Added a toolbar button to add magnet links.</li>
-            <li>When double clicking a downloaded torrent with only a single file, the default app for that file is now launched.</li>
-            <li>Possible fix for inconsistent sorting bug.</li>
-            <li>Minor AppCenter metadata tweaks.</li>
-            <li>Updated translations.</li>
-          </ul>
-        </description>
-      </release>
-      <release version="1.0.5" date="2017-07-10">
-        <description>
-          <ul>
-            <li>Only show progress bar in dock when necessary.</li>
-            <li>Alert messages when no torrents in list box.</li>
-            <li>Added tooltips to buttons that were missing them.</li>
-            <li>Added translations for some other languages and minor bug fixes.</li>
-          </ul>
-        </description>
-      </release>
+    <release version="2.0.0" date="2021-07-30">
+      <description>
+        <ul>
+          <li>Hello Odin support!</li>
+          <li>Dark style preference support.</li>
+          <li>Lots of minor design tweaks and code cleanup.</li>
+          <li>Underlying libtransmission version updated.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.1.0" date="2018-07-30">
+      <description>
+        <ul>
+          <li>Hello Juno support!</li>
+          <li>Torrential now also lets you pick which files within the torrent you want to download.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.9" date="2018-06-06">
+      <description>
+        <ul>
+          <li>Torrential now watches your downloads folder for new torrent files while it's running.</li>
+          <li>Torrent files are now moved to the trash after they have been added.</li>
+          <li>Added a copy magnet link entry to the right click menu.</li>
+          <li>Minor quality of life improvements and code cleanup.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.8" date="2018-02-18">
+      <description>
+        <ul>
+          <li>Added quit option to right click menu in dock.</li>
+          <li>Multiple torrent can now be selected in the list box.</li>
+          <li>Underlying libtransmission version updated.</li>
+          <li>Updated translations.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.7" date="2017-11-01">
+      <description>
+        <ul>
+          <li>Improved application icon on HiDPI displays.</li>
+          <li>Fix for incompatibility with upcoming version of Granite.</li>
+          <li>Updated translations.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.6" date="2017-08-25">
+      <description>
+        <ul>
+          <li>Added a toolbar button to add magnet links.</li>
+          <li>When double clicking a downloaded torrent with only a single file, the default app for that file is now launched.</li>
+          <li>Possible fix for inconsistent sorting bug.</li>
+          <li>Minor AppCenter metadata tweaks.</li>
+          <li>Updated translations.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.5" date="2017-07-10">
+      <description>
+        <ul>
+          <li>Only show progress bar in dock when necessary.</li>
+          <li>Alert messages when no torrents in list box.</li>
+          <li>Added tooltips to buttons that were missing them.</li>
+          <li>Added translations for some other languages and minor bug fixes.</li>
+        </ul>
+      </description>
+    </release>
   </releases>
   <custom>
      <value key="x-appcenter-color-primary">rgb(224,247,255)</value>
@@ -78,7 +88,7 @@
   </custom>
   <screenshots>
     <screenshot type="default">
-      <image>https://github.com/davidmhewitt/torrential/raw/master/data/com.github.davidmhewitt.torrential.screenshot.png</image>
+      <image>https://github.com/davidmhewitt/torrential/raw/main/data/com.github.davidmhewitt.torrential.screenshot.png</image>
     </screenshot>
   </screenshots>
   <developer_name>David Hewitt</developer_name>

@@ -45,7 +45,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         green_progress_provider = new Gtk.CssProvider ();
         try {
-            green_progress_provider.load_from_data ("@define-color selected_bg_color @success_color;");
+            green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;");
         } catch (Error e) {
             warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
         }

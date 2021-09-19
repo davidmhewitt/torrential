@@ -5,12 +5,17 @@ on: [push, pull_request]
 jobs:
   flatpak:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [x86_64, aarch64]
+      # Don't fail the whole workflow if one architecture fails
+      fail-fast: false
     container:
-      image: ghcr.io/elementary/flatpak-platform/runtime:6
+      image: ghcr.io/davidmhewitt/flatpak-platform/runtime:6-${{ matrix.arch }}
       options: --privileged
     steps:
     - uses: actions/checkout@v2
-    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v3
+    - uses: bilelmoussaoui/flatpak-github-actions/flatpak-builder@v4
       with:
         bundle: torrential.flatpak
         manifest-path: com.github.davidmhewitt.torrential.yml
@@ -18,3 +23,4 @@ jobs:
         repository-name: appcenter
         repository-url: https://flatpak.elementary.io/repo.flatpakrepo
         cache-key: "flatpak-builder-${{ github.sha }}"
+        arch: ${{ matrix.arch }}

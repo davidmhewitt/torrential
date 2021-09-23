@@ -65,7 +65,8 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     public MainWindow (Application app, TorrentManager torrent_manager) {
         Object (
-            application: app
+            application: app,
+            title: "Torrential"
         );
 
         this.torrent_manager = torrent_manager;
@@ -210,6 +211,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     private Gtk.HeaderBar build_headerbar () {
         var headerbar = new Gtk.HeaderBar ();
+        headerbar.title = title;
         headerbar.show_close_button = true;
 
         var menu_button = new Gtk.MenuButton ();

@@ -11,6 +11,14 @@
     <p>A speedy, no-frills torrent client. Comes with a sane set of default options and none of the overwhelming information you don't need.</p>
   </description>
   <releases>
+    <release version="2.0.1" date="2021-12-08">
+      <description>
+        <ul>
+          <li>Progress bars now turn green for completed downloads.</li>
+          <li>Window title added for window switcher.</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.0" date="2021-07-30">
       <description>
         <ul>

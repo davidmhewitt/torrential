@@ -1,4 +1,4 @@
-project('com.github.davidmhewitt.torrential', 'vala', 'c', version: '2.0.0')
+project('com.github.davidmhewitt.torrential', 'vala', 'c', version: '2.0.1')
 
 gnome = import('gnome')
 i18n = import('i18n')

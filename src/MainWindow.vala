@@ -327,13 +327,15 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         preferences_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
         layout_box.pack_start (preferences_item);
 
+        layout_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+
         var quit_item = new Gtk.ModelButton ();
         quit_item.text = _("Quit");
         quit_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_QUIT);
         layout_box.pack_start (quit_item);
 
+        layout_box.show_all ();
         app_menu.add (layout_box);
-        app_menu.show_all ();
 
         return app_menu;
     }

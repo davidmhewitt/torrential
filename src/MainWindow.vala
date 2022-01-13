@@ -217,7 +217,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         var menu_button = new Gtk.MenuButton ();
         menu_button.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
         menu_button.tooltip_text = _("Application menu");
-        menu_button.popup = build_menu ();
+        menu_button.popover = build_menu ();
         headerbar.pack_end (menu_button);
 
         var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
@@ -316,19 +316,23 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         stack.visible_child_name = "main";
     }
 
-    private Gtk.Menu build_menu () {
-        var app_menu = new Gtk.Menu ();
+    private Gtk.Popover build_menu () {
+        var app_menu = new Gtk.Popover (null);
+        var layout_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        layout_box.margin_bottom = 3;
+        layout_box.margin_top = 3;
 
-        var preferences_item = new Gtk.MenuItem.with_mnemonic (_("_Preferences"));
+        var preferences_item = new Gtk.ModelButton ();
+        preferences_item.text = _("Preferences");
         preferences_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
-        app_menu.append (preferences_item);
+        layout_box.pack_start (preferences_item);
 
-        app_menu.append (new Gtk.SeparatorMenuItem ());
-
-        var quit_item = new Gtk.MenuItem.with_mnemonic (_("_Quit"));
+        var quit_item = new Gtk.ModelButton ();
+        quit_item.text = _("Quit");
         quit_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_QUIT);
-        app_menu.append (quit_item);
+        layout_box.pack_start (quit_item);
 
+        app_menu.add (layout_box);
         app_menu.show_all ();
 
         return app_menu;

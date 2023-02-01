@@ -488,12 +488,12 @@ namespace Transmission {
 		[CCode (cname = "tr_variantParse")]
 		public static int parse (void* buf, void* buffend, out variant variant, out unowned uint8[] end);
 		[CCode (cname = "tr_variantLoad")]
-		public static int load ([CCode (array_lengh_type = "size_t")] uint8[] buf, out variant variant, out unowned uint8[] end);
+		public static int load ([CCode (array_length_type = "size_t")] uint8[] buf, out variant variant, out unowned uint8[] end);
 
 		[CCode (cname = "tr_variantInitStr")]
-		public variant.str ([CCode (array_lengh_type = "int")] char[] raw);
+		public variant.str ([CCode (array_length_type = "int")] char[] raw);
 		[CCode (cname = "tr_variantInitRaw")]
-		public variant.raw ([CCode (array_lengh_type = "size_t")] uint8[] raw);
+		public variant.raw ([CCode (array_length_type = "size_t")] uint8[] raw);
 		[CCode (cname = "tr_variantInitInt")]
 		public variant.int(int64 num);
 		[CCode (cname = "tr_variantInitBool")]
@@ -529,7 +529,7 @@ namespace Transmission {
 		 * @return true if successful, or false if the variant could not be represented as a raw byte array
 		 */
 		[CCode (cname = "tr_variantGetRaw")]
-		public bool get_raw ([CCode (array_lengh_type = "size_t")] out uint8[] raw);
+		public bool get_raw ([CCode (array_length_type = "size_t")] out uint8[] raw);
 
 		/**
 		 * Get a boolean from a variant object
@@ -577,7 +577,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantListAddStr")]
 		public unowned variant ListAddStr (string val);
 		[CCode (cname = "tr_variantListAddRaw")]
-		public unowned variant ListAddRaw ([CCode (array_lengh_type = "size_t")] uint8[] val);
+		public unowned variant ListAddRaw ([CCode (array_length_type = "size_t")] uint8[] val);
 		[CCode (cname = "tr_variantListAddList")]
 		public unowned variant ListAddList (size_t reserveCount);
 		[CCode (cname = "tr_variantListAddDict")]
@@ -614,7 +614,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantDictAddDict")]
 		public unowned variant? add_dict (Prefs key, size_t reserve);
 		[CCode (cname = "tr_variantDictAddRaw")]
-		public unowned variant? add_raw (Prefs key, [CCode (array_lengh_type = "size_t")] uint8[] raw);
+		public unowned variant? add_raw (Prefs key, [CCode (array_length_type = "size_t")] uint8[] raw);
 		[CCode (cname = "tr_variantDictChild")]
 		public bool get_child (size_t i, out Prefs key, out variant? val);
 		[CCode (cname = "tr_variantDictFind")]
@@ -632,7 +632,7 @@ namespace Transmission {
 		[CCode (cname = "tr_variantDictFindStr")]
 		public bool find_str (Prefs key, out unowned string? val);
 		[CCode (cname = "tr_variantDictFindRaw")]
-		public bool find_raw (Prefs key, [CCode (array_lengh_type = "size_t")] out uint8[]? raw);
+		public bool find_raw (Prefs key, [CCode (array_length_type = "size_t")] out uint8[]? raw);
 	}
 
 	[CCode (cname = "tr_session", cprefix = "tr_session", free_function = "tr_sessionClose", has_type_id = false)]

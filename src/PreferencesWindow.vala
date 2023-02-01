@@ -71,15 +71,15 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
 
     private Gtk.Grid create_advanced_settings_widgets () {
         var force_encryption_switch = create_switch ();
-        settings.bind_property ("force-encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("force-encryption", force_encryption_switch, "active", SettingsBindFlags.DEFAULT);
         var force_encryption_label = create_label (_("Only connect to encrypted peers:"));
 
         var randomise_port_switch = create_switch ();
-        settings.bind_property ("randomize-port", randomise_port_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("randomize-port", randomise_port_switch, "active", SettingsBindFlags.DEFAULT);
         var randomise_port_label  = create_label (_("Randomise BitTorrent port on launch:"));
 
         var port_entry = create_spinbutton (49152, 65535, 1);
-        settings.bind_property ("peer-port", port_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("peer-port", port_entry, "value", SettingsBindFlags.DEFAULT);
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 

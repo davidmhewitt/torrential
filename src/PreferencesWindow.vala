@@ -34,11 +34,9 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     construct {
         // Window properties
         title = _("Preferences");
-        set_size_request (MIN_WIDTH, MIN_HEIGHT);
+        set_default_size (MIN_WIDTH, MIN_HEIGHT);
         resizable = false;
-        deletable = false;
         destroy_with_parent = true;
-        window_position = Gtk.WindowPosition.CENTER;
         set_transient_for (parent_window);
 
         settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
@@ -47,30 +45,22 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         stack.add_titled (create_general_settings_widgets (), "general", _("General"));
         stack.add_titled (create_advanced_settings_widgets (), "advanced", _("Advanced"));
 
-        var switcher = new Gtk.StackSwitcher ();
-        switcher.hexpand = true;
-        switcher.halign = Gtk.Align.CENTER;
-        switcher.margin_start = 20;
-        switcher.margin_end = 20;
-        switcher.set_stack (stack);
+        var switcher = new Gtk.StackSwitcher () {
+            halign = Gtk.Align.CENTER,
+            stack = stack
+        };
 
-        var close_button = new Gtk.Button.with_label (_("Close"));
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        box.add (switcher);
+        box.add (stack);
+
+        get_content_area ().add (box);
+
+        var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => {
             on_close ();
-            this.destroy ();
+            destroy ();
         });
-
-        var button_box = new Gtk.ButtonBox (Gtk.Orientation.HORIZONTAL);
-        button_box.margin_end = 10;
-        button_box.set_layout (Gtk.ButtonBoxStyle.END);
-        button_box.pack_end (close_button);
-
-        var content_grid = new Gtk.Grid ();
-        content_grid.attach (switcher, 0, 0, 1, 1);
-        content_grid.attach (stack, 0, 1, 1, 1);
-        content_grid.attach (button_box, 0, 2, 1, 1);
-
-        ((Gtk.Container) get_content_area ()).add (content_grid);
 
         settings.changed.connect (on_saved_settings_changed);
     }

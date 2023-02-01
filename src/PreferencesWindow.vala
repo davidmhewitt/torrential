@@ -21,7 +21,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     private const int MIN_WIDTH = 420;
     private const int MIN_HEIGHT = 300;
 
-    private Settings saved_state = Settings.get_default ();
+    private GLib.Settings settings;
 
     private Gtk.Label location_chooser_label;
 
@@ -40,6 +40,8 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         destroy_with_parent = true;
         window_position = Gtk.WindowPosition.CENTER;
         set_transient_for (parent_window);
+
+        settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
 
         var stack = new Gtk.Stack ();
         stack.add_titled (create_general_settings_widgets (), "general", _("General"));
@@ -70,24 +72,24 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
 
         ((Gtk.Container) get_content_area ()).add (content_grid);
 
-        saved_state.changed.connect (on_saved_settings_changed);
+        settings.changed.connect (on_saved_settings_changed);
     }
 
     private void on_saved_settings_changed () {
-        location_chooser_label.label = saved_state.download_folder;
+        location_chooser_label.label = Utils.get_downloads_folder ();
     }
 
     private Gtk.Grid create_advanced_settings_widgets () {
         var force_encryption_switch = create_switch ();
-        saved_state.bind_property ("force_encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind_property ("force-encryption", force_encryption_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var force_encryption_label = create_label (_("Only connect to encrypted peers:"));
 
         var randomise_port_switch = create_switch ();
-        saved_state.bind_property ("randomize_port", randomise_port_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind_property ("randomize-port", randomise_port_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         var randomise_port_label  = create_label (_("Randomise BitTorrent port on launch:"));
 
         var port_entry = create_spinbutton (49152, 65535, 1);
-        saved_state.bind_property ("peer_port", port_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind_property ("peer-port", port_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 
@@ -130,13 +132,13 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
             var res = chooser.run ();
 
             if (res == Gtk.ResponseType.ACCEPT) {
-                saved_state.download_folder = chooser.get_file ().get_path ();
+                settings.set_string ("download-folder", chooser.get_file ().get_path ());
             }
 
             chooser.destroy ();
         });
 
-        location_chooser_label = new Gtk.Label (saved_state.download_folder);
+        location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
 
         var location_grid = new Gtk.Grid () {
             column_spacing = 3
@@ -150,23 +152,23 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         var download_heading = create_heading (_("Limits"));
 
         var max_downloads_entry = create_spinbutton (1, 100, 1);
-        saved_state.bind_property ("max_downloads", max_downloads_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("max-downloads", max_downloads_entry, "value", SettingsBindFlags.DEFAULT);
         var max_downloads_label = create_label (_("Max simultaneous downloads:"));
 
         var download_speed_limit_entry = create_spinbutton (0, 1000000, 25);
         download_speed_limit_entry.tooltip_text = _("0 means unlimited");
-        saved_state.bind_property ("download_speed_limit", download_speed_limit_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("download-speed-limit", download_speed_limit_entry, "value", SettingsBindFlags.DEFAULT);
         var download_speed_limit_label = create_label (_("Download speed limit (KBps):"));
 
         var upload_speed_limit_entry = create_spinbutton (0, 1000000, 25);
         upload_speed_limit_entry.tooltip_text = _("0 means unlimited");
-        saved_state.bind_property ("upload_speed_limit", upload_speed_limit_entry, "value", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("upload-speed-limit", upload_speed_limit_entry, "value", SettingsBindFlags.DEFAULT);
         var upload_speed_limit_label = create_label (_("Upload speed limit (KBps):"));
 
         var desktop_label = create_heading (_("Desktop Integration"));
 
         var hide_on_close_switch = create_switch ();
-        saved_state.bind_property ("hide_on_close", hide_on_close_switch, "active", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE);
+        settings.bind ("hide-on-close", hide_on_close_switch, "active", SettingsBindFlags.DEFAULT);
         var hide_on_close_label = create_label (_("Continue downloads when closed:"));
 
         Gtk.Grid general_grid = new Gtk.Grid ();

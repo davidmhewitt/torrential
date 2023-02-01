@@ -6,6 +6,5 @@ src/Widgets/TorrentListRow.vala
 src/Application.vala
 src/MainWindow.vala
 src/PreferencesWindow.vala
-src/Settings.vala
 src/Torrent.vala
 src/TorrentManager.vala

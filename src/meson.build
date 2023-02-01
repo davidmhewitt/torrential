@@ -7,7 +7,7 @@ sources = files(
     'Application.vala',
     'MainWindow.vala',
     'PreferencesWindow.vala',
-    'Settings.vala',
+    'Utils.vala',
     'Torrent.vala',
     'TorrentManager.vala',
 )

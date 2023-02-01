@@ -19,36 +19,10 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Settings : Granite.Services.Settings {
-    public enum WindowState {
-        NORMAL,
-        MAXIMIZED
-    }
-
-    public int window_width { get; set; }
-    public int window_height { get; set; }
-    public WindowState window_state { get; set; }
-
-    public string download_folder { get; set; }
-    public bool hide_on_close { get; set; }
-    public bool trash_original_torrents { get; set; }
-    public int max_downloads { get; set; }
-    public int download_speed_limit { get; set; }
-    public int upload_speed_limit { get; set; }
-    public int peer_port { get; set; }
-    public bool randomize_port { get; set; }
-    public bool force_encryption { get; set; }
-
-    private static Settings _settings;
-    public static unowned Settings get_default () {
-        if (_settings == null) {
-            _settings = new Settings ();
-        }
-        return _settings;
-    }
-
-    private Settings ()  {
-        base ("com.github.davidmhewitt.torrential.settings");
+public class Torrential.Utils {
+    public static string get_downloads_folder () {
+        var settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
+        var download_folder = settings.get_string ("download-folder");
 
         if (download_folder == "") {
             download_folder = Environment.get_user_special_dir (GLib.UserDirectory.DOWNLOAD);
@@ -58,6 +32,8 @@ public class Torrential.Settings : Granite.Services.Settings {
                 download_folder = Environment.get_user_special_dir (GLib.UserDirectory.DOWNLOAD);
             }
         }
+
+        return download_folder;
     }
 }
 

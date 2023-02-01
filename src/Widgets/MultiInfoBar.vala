@@ -20,23 +20,20 @@
 */
 
 public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
-    
     private Gtk.Label infobar_label = new Gtk.Label ("");
     private Gee.ArrayQueue<string> infobar_errors = new Gee.ArrayQueue<string> ();
     private Gtk.Button next_button;
 
     construct {
-        var content = get_content_area ();
-        content.add (infobar_label);
+        get_content_area ().add (infobar_label);
 
-        var action = get_action_area () as Gtk.ButtonBox;
-        next_button = new Gtk.Button.with_label (_("Next Warning"));
+        next_button = (Gtk.Button) add_button (_("Next Warning"), 0);
         next_button.clicked.connect (() => next_error ());
-        var close_button = new Gtk.Button.with_label (_("Close"));
+
+        var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => close_bar ());
-        action.add (next_button);
-        action.add (close_button);
-        action.show_all ();
+
+        show_all ();
     }
 
     public void add_errors (Gee.ArrayList<string> errors) {

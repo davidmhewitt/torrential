@@ -215,11 +215,16 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             title = title
         };
 
+        var menu = new Menu ();
+        menu.append (_("_Preferences"), ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
+        menu.append (_("_Quit"), ACTION_GROUP_PREFIX + ACTION_QUIT);
+
         var menu_button = new Gtk.MenuButton () {
             image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR),
-            tooltip_text = _("Application menu")
+            menu_model = menu,
+            tooltip_text = _("Application menu"),
+            use_popover = true
         };
-        menu_button.popup = build_menu ();
         headerbar.pack_end (menu_button);
 
         var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR) {
@@ -320,24 +325,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         search_entry.sensitive = true;
         view_mode.sensitive = true;
         stack.visible_child_name = "main";
-    }
-
-    private Gtk.Menu build_menu () {
-        var app_menu = new Gtk.Menu ();
-
-        var preferences_item = new Gtk.MenuItem.with_mnemonic (_("_Preferences"));
-        preferences_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_PREFERENCES);
-        app_menu.append (preferences_item);
-
-        app_menu.append (new Gtk.SeparatorMenuItem ());
-
-        var quit_item = new Gtk.MenuItem.with_mnemonic (_("_Quit"));
-        quit_item.set_action_name (ACTION_GROUP_PREFIX + ACTION_QUIT);
-        app_menu.append (quit_item);
-
-        app_menu.show_all ();
-
-        return app_menu;
     }
 
     private void on_link_copied () {

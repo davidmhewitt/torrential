@@ -21,7 +21,7 @@
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private Granite.Widgets.ModeButton view_mode;
-    private Gtk.ToolButton magnet_button;
+    private Gtk.Button magnet_button;
     private Gtk.Stack stack;
     private Granite.Widgets.Welcome welcome_screen;
     private Granite.Widgets.Toast toast;
@@ -210,39 +210,45 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private Gtk.HeaderBar build_headerbar () {
-        var headerbar = new Gtk.HeaderBar ();
-        headerbar.title = title;
-        headerbar.show_close_button = true;
+        var headerbar = new Gtk.HeaderBar () {
+            show_close_button = true,
+            title = title
+        };
 
-        var menu_button = new Gtk.MenuButton ();
-        menu_button.image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
-        menu_button.tooltip_text = _("Application menu");
+        var menu_button = new Gtk.MenuButton () {
+            image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR),
+            tooltip_text = _("Application menu")
+        };
         menu_button.popup = build_menu ();
         headerbar.pack_end (menu_button);
 
-        var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR);
-        open_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN);
-        open_button.tooltip_text = _("Open .torrent file");
+        var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR) {
+            action_name = ACTION_GROUP_PREFIX + ACTION_OPEN,
+            tooltip_text = _("Open .torrent file")
+        };
         headerbar.pack_start (open_button);
 
-        var magnet_image = new Gtk.Image.from_icon_name ("open-magnet", Gtk.IconSize.LARGE_TOOLBAR);
-        magnet_button = new Gtk.ToolButton (magnet_image, null);
-        magnet_button.set_action_name (ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET);
-        magnet_button.tooltip_text = _("Open magnet link");
+        magnet_button = new Gtk.Button.from_icon_name ("open-magnet", Gtk.IconSize.LARGE_TOOLBAR) {
+            action_name = ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET,
+            tooltip_text = _("Open magnet link")
+        };
         headerbar.pack_start (magnet_button);
 
-        search_entry = new Gtk.SearchEntry ();
-        search_entry.placeholder_text = _("Search Torrents");
+        search_entry = new Gtk.SearchEntry () {
+            placeholder_text = _("Search Torrents"),
+            sensitive = false,
+            valign = Gtk.Align.CENTER
+        };
         headerbar.pack_end (search_entry);
-        search_entry.sensitive = false;
         search_entry.search_changed.connect (() => {
             update_view ();
         });
 
-        view_mode = new Granite.Widgets.ModeButton ();
-        view_mode.sensitive = false;
-        view_mode.margin = 1;
-        view_mode.margin_start = 20;
+        view_mode = new Granite.Widgets.ModeButton () {
+            sensitive = false,
+            margin_start = 20,
+            valign = Gtk.Align.CENTER
+        };
         view_mode.append_text (_("All"));
         view_mode.append_text (_("Downloading"));
         view_mode.append_text (_("Seeding"));

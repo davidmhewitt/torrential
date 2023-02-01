@@ -33,9 +33,9 @@ case $1 in
         rm -rf "$TMPDIR"
         ;;
     build)
-        flatpak-builder --force-clean --user build $PROJECT_NAME.yml
+        flatpak-builder --install --force-clean --user build $PROJECT_NAME.yml
         ;;
     run)
-        flatpak-builder --run build $PROJECT_NAME.yml $PROJECT_NAME
+        flatpak run --user $PROJECT_NAME
         ;;
 esac

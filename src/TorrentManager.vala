@@ -29,23 +29,25 @@ const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
 const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
 
 public class Torrential.TorrentManager : Object {
-    private Transmission.variant_dict settings;
+    private Transmission.variant_dict variant_dict;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
-    private Settings saved_state = Settings.get_default ();
+    private GLib.Settings settings;
 
     public signal void torrent_completed (Torrent torrent);
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
-    public TorrentManager () {
+    construct {
+        settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
+
         Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
         Transmission.String.Units.speed_init (1024, _("KB/s"), _("MB/s"), _("GB/s"), _("TB/s"));
-        settings = Transmission.variant_dict (0);
-        Transmission.load_default_settings (ref settings, CONFIG_DIR, "torrential");
+        variant_dict = Transmission.variant_dict (0);
+        Transmission.load_default_settings (ref variant_dict, CONFIG_DIR, "torrential");
 
-        session = new Transmission.Session (CONFIG_DIR, false, settings);
+        session = new Transmission.Session (CONFIG_DIR, false, variant_dict);
 
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
@@ -57,7 +59,7 @@ public class Torrential.TorrentManager : Object {
 
     public void close_session () {
         update_session_settings ();
-        session.save_settings (CONFIG_DIR, settings);
+        session.save_settings (CONFIG_DIR, variant_dict);
         session = null;
     }
 
@@ -71,39 +73,39 @@ public class Torrential.TorrentManager : Object {
     }
 
     public void update_session_settings () {
-        settings.add_int (Transmission.Prefs.download_queue_size, saved_state.max_downloads);
+        variant_dict.add_int (Transmission.Prefs.download_queue_size, settings.get_int ("max-downloads"));
 
-        if (saved_state.download_speed_limit == 0) {
-            settings.add_bool (Transmission.Prefs.speed_limit_down_enabled, false);
+        if (settings.get_int ("download-speed-limit") == 0) {
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_down_enabled, false);
         } else {
-            settings.add_bool (Transmission.Prefs.speed_limit_down_enabled, true);
-            settings.add_int (Transmission.Prefs.speed_limit_down, saved_state.download_speed_limit);
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_down_enabled, true);
+            variant_dict.add_int (Transmission.Prefs.speed_limit_down, settings.get_int ("download-speed-limit"));
         }
 
-        if (saved_state.upload_speed_limit == 0) {
-            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, false);
+        if (settings.get_int ("upload-speed-limit") == 0) {
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_up_enabled, false);
         } else {
-            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
-            settings.add_int (Transmission.Prefs.speed_limit_up, saved_state.upload_speed_limit);
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
+            variant_dict.add_int (Transmission.Prefs.speed_limit_up, settings.get_int ("upload-speed-limit"));
         }
 
-        settings.add_bool (Transmission.Prefs.peer_port_random_on_start, saved_state.randomize_port);
-        if (saved_state.randomize_port) {
+        variant_dict.add_bool (Transmission.Prefs.peer_port_random_on_start, settings.get_boolean ("randomize-port"));
+        if (settings.get_boolean ("randomize-port")) {
             int64 port = 0;
-            if (settings.find_int (Transmission.Prefs.peer_port, out port)) {
-                saved_state.peer_port = (int)port;
+            if (variant_dict.find_int (Transmission.Prefs.peer_port, out port)) {
+                settings.set_int ("peer-port", (int) port);
             }
         } else {
-            settings.add_int (Transmission.Prefs.peer_port, saved_state.peer_port);
+            variant_dict.add_int (Transmission.Prefs.peer_port, settings.get_int ("peer-port"));
         }
 
-        if (saved_state.force_encryption) {
-            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
+        if (settings.get_boolean ("force-encryption")) {
+            variant_dict.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
         } else {
-            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
+            variant_dict.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
         }
 
-        session.update_settings (settings);
+        session.update_settings (variant_dict);
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {
@@ -117,7 +119,7 @@ public class Torrential.TorrentManager : Object {
     public Transmission.ParseResult add_torrent_by_path (string path, out Torrent? created_torrent) {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_file (path);
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Utils.get_downloads_folder ());
 
         Transmission.ParseResult result;
         int duplicate_id;
@@ -138,7 +140,7 @@ public class Torrential.TorrentManager : Object {
     public Transmission.ParseResult add_torrent_by_magnet (string magnet, out Torrent? created_torrent) {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_magnet_link (magnet);
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Utils.get_downloads_folder ());
 
         Transmission.ParseResult result;
         int duplicate_id;
@@ -157,7 +159,7 @@ public class Torrential.TorrentManager : Object {
     }
 
     private void check_trash () {
-        if (Settings.get_default ().trash_original_torrents) {
+        if (settings.get_boolean ("trash-original-torrents")) {
             var path = torrent_constructor.source_file;
             if (path != null && !path.has_prefix (CONFIG_DIR)) {
                 var file = File.new_for_path (path);

@@ -20,7 +20,6 @@
 */
 
 public class Torrential.Application : Gtk.Application {
-    private MainWindow? window = null;
     private TorrentManager torrent_manager = null;
 
     const OptionEntry[] ENTRIES = {
@@ -40,41 +39,15 @@ public class Torrential.Application : Gtk.Application {
         torrent_manager = new TorrentManager ();
     }
 
-    public override void open (File[] files, string hint) {
-        if (files[0].has_uri_scheme ("magnet")) {
-            var magnet = files[0].get_uri ();
-            magnet = magnet.replace ("magnet:///?", "magnet:?");
+    public override void startup () {
+        base.startup ();
 
-            if (window != null) {
-                window.add_magnet (magnet);
-            } else {
-                activate ();
-                window.add_magnet (magnet);
-            }
-            return;
-        }
-
-        var uris = new SList<string> ();
-        foreach (var file in files) {
-            uris.append (file.get_uri ());
-        }
-
-        activate ();
-        window.add_files (uris);
-    }
-
-    public override void activate () {
         Intl.setlocale (LocaleCategory.ALL, "");
-        GLib.Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-        GLib.Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-        GLib.Intl.textdomain (GETTEXT_PACKAGE);
+        Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+        Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain (GETTEXT_PACKAGE);
 
-        if (window == null) {
-            window = new MainWindow (this, torrent_manager);
-            add_window (window);
-        } else {
-            window.present ();
-        }
+        Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
 
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();
@@ -86,12 +59,43 @@ public class Torrential.Application : Gtk.Application {
         });
     }
 
+    public override void open (File[] files, string hint) {
+        if (files[0].has_uri_scheme ("magnet")) {
+            var magnet = files[0].get_uri ();
+            magnet = magnet.replace ("magnet:///?", "magnet:?");
+
+            if (active_window == null) {
+                activate ();
+            }
+
+            ((MainWindow) active_window).add_magnet (magnet);
+            return;
+        }
+
+        var uris = new SList<string> ();
+        foreach (var file in files) {
+            uris.append (file.get_uri ());
+        }
+
+        activate ();
+        ((MainWindow) active_window).add_files (uris);
+    }
+
+    public override void activate () {
+        if (active_window == null) {
+            var window = new MainWindow (this, torrent_manager);
+            add_window (window);
+        } else {
+            active_window.present ();
+        }
+    }
+
     public override int command_line (GLib.ApplicationCommandLine command_line) {
         var options = command_line.get_options_dict ();
 
         if (options.contains ("quit")) {
-            if (window != null) {
-                window.quit ();
+            if (active_window != null) {
+                ((MainWindow) active_window).quit ();
             }
         }
 
@@ -116,16 +120,16 @@ public class Torrential.Application : Gtk.Application {
         return Posix.EXIT_SUCCESS;
     }
 
-    public void close_session () {
+    private void close_session () {
         torrent_manager.close_session ();
     }
-}
 
-int main (string[] args) {
-    var app = new Torrential.Application ();
-    var result = app.run (args);
+    public static int main (string[] args) {
+        var app = new Torrential.Application ();
+        var result = app.run (args);
 
-    app.close_session ();
+        app.close_session ();
 
-    return result;
+        return result;
+    }
 }

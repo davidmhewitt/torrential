@@ -70,8 +70,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         this.torrent_manager = torrent_manager;
 
-        Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
-
         settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
 
         set_default_size (

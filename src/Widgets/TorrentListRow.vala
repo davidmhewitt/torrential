@@ -137,10 +137,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     public void edit_files () {
-        var dialog = new Dialogs.FileSelectDialog (torrent);
-        dialog.show_all ();
-        dialog.run ();
-        dialog.destroy ();
+        var dialog = new Dialogs.FileSelectDialog (torrent) {
+            transient_for = (Gtk.Window) get_toplevel ()
+        };
+        dialog.present ();
+        dialog.response.connect (dialog.destroy);
     }
 
     private string generate_completeness_text () {

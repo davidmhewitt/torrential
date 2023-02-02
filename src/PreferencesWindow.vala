@@ -118,14 +118,15 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
                 _("Cancel"), Gtk.ResponseType.CANCEL,
                 _("Select"), Gtk.ResponseType.ACCEPT
             );
+            chooser.present ();
 
-            var res = chooser.run ();
+            chooser.response.connect ((response) => {
+                if (response == Gtk.ResponseType.ACCEPT) {
+                    settings.set_string ("download-folder", chooser.get_file ().get_path ());
+                }
 
-            if (res == Gtk.ResponseType.ACCEPT) {
-                settings.set_string ("download-folder", chooser.get_file ().get_path ());
-            }
-
-            chooser.destroy ();
+                chooser.destroy ();
+            });
         });
 
         location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());

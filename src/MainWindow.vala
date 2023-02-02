@@ -109,10 +109,10 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
         application.add_action (show_window);
 
-        infobar = new Widgets.MultiInfoBar ();
-        infobar.set_message_type (Gtk.MessageType.WARNING);
-        infobar.no_show_all = true;
-        infobar.visible = false;
+        infobar = new Widgets.MultiInfoBar () {
+            revealed = false,
+            message_type = Gtk.MessageType.WARNING
+        };
 
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));
@@ -472,7 +472,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
         if (errors.size > 0) {
             infobar.add_errors (errors);
-            infobar.show ();
         }
     }
 
@@ -491,11 +490,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
         } else if (result == Transmission.ParseResult.ERR) {
             infobar.add_error (_("Failed to add magnet link as it doesn\u2019t appear to be valid."));
-            infobar.show ();
             send_magnet_error_notification ();
         } else {
             infobar.add_error (_("Didn\u2019t add magnet link. An identical torrent has already been added."));
-            infobar.show ();
             send_magnet_error_notification ();
         }
     }

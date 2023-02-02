@@ -54,7 +54,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
     }
 
     private void close_bar () {
-        hide ();
+        revealed = false;
         infobar_errors.clear ();
     }
 
@@ -69,6 +69,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
                 next_button.hide ();
             }
             infobar_label.show ();
+            revealed = true;
         }
     }
 }

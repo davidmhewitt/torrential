@@ -67,6 +67,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
                 next_button.hide ();
             }
             infobar_label.show ();
+            revealed = true;
         }
     }
 }

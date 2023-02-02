@@ -109,6 +109,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         application.add_action (show_window);
 
         infobar = new Widgets.MultiInfoBar () {
+            revealed = false,
             message_type = Gtk.MessageType.WARNING
         };
 
@@ -437,7 +438,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             add_magnet (entry.text, true);
             popover.popdown ();
         });
-
     }
 
     private void on_download_folder_changed (File file, File? other_file, FileMonitorEvent event) {
@@ -492,7 +492,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
         if (errors.size > 0) {
             infobar.add_errors (errors);
-            infobar.revealed = true;
         }
     }
 
@@ -511,11 +510,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
         } else if (result == Transmission.ParseResult.ERR) {
             infobar.add_error (_("Failed to add magnet link as it doesn\u2019t appear to be valid."));
-            infobar.revealed = true;
             send_magnet_error_notification ();
         } else {
             infobar.add_error (_("Didn\u2019t add magnet link. An identical torrent has already been added."));
-            infobar.revealed = true;
             send_magnet_error_notification ();
         }
     }

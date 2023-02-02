@@ -39,7 +39,8 @@ public class Torrential.Dialogs.FileSelectDialog : Granite.Dialog {
         var view = new Widgets.FileSelectTreeView (torrent);
 
         var scrolled = new Gtk.ScrolledWindow (null, null) {
-            expand = true,
+            hexpand = true,
+            vexpand = true,
             margin_end = 10,
             margin_bottom = 9,
             margin_start = 10

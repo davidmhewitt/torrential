@@ -179,7 +179,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
 
         torrent_manager.torrent_completed.connect ((torrent) => {
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused) {
                 var notification = new Notification (_("Torrent Complete"));
                 notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
@@ -192,7 +192,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
             Granite.Services.Application.set_progress.begin (torrent_manager.get_overall_progress ());
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused && list_box.has_visible_children ()) {
                 Granite.Services.Application.set_progress_visible.begin (true);
             } else {
@@ -449,7 +449,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void add_monitored_file (string path) {
-        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+        var focused = application.get_active_window ().is_active;
 
         Torrent? new_torrent;
         var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
@@ -501,7 +501,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
             enable_main_view ();
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused && !silent) {
                 var notification = new Notification (_("Magnet Link"));
                 notification.set_body (_("Successfully added magnet link"));
@@ -518,7 +518,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void send_magnet_error_notification () {
-        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+        var focused = application.get_active_window ().is_active;
         if (!focused) {
             var notification = new Notification (_("Magnet Link"));
             notification.set_body (_("Failed to add magnet link"));

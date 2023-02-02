@@ -109,8 +109,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
         application.add_action (show_window);
 
-        var grid = new Gtk.Grid ();
-        grid.orientation = Gtk.Orientation.VERTICAL;
         infobar = new Widgets.MultiInfoBar ();
         infobar.set_message_type (Gtk.MessageType.WARNING);
         infobar.no_show_all = true;
@@ -135,12 +133,14 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         stack.add_named (no_results_alertview, "no_results");
         stack.add_named (empty_category_alertview, "empty_category");
         stack.visible_child_name = "welcome";
-        grid.add (infobar);
-        grid.add (stack);
+
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        box.add (infobar);
+        box.add (stack);
 
         var overlay = new Gtk.Overlay ();
         toast = new Granite.Widgets.Toast ("");
-        overlay.add_overlay (grid);
+        overlay.add_overlay (box);
         overlay.add_overlay (toast);
 
         add (overlay);
@@ -404,17 +404,17 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             halign = Gtk.Align.START
         };
 
-        var content_grid = new Gtk.Grid () {
-            margin = 6,
-            row_spacing = 3,
-            orientation = Gtk.Orientation.VERTICAL
+        var content_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3) {
+            margin_top = 6,
+            margin_end = 6,
+            margin_bottom = 6,
+            margin_start = 6
         };
+        content_box.add (label);
+        content_box.add (entry);
+        content_box.add (add_button);
 
-        content_grid.add (label);
-        content_grid.add (entry);
-        content_grid.add (add_button);
-
-        popover.add (content_grid);
+        popover.add (content_box);
 
         popover.show_all ();
         popover.popup ();

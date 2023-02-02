@@ -130,14 +130,11 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
 
         location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
 
-        var location_grid = new Gtk.Grid () {
-            column_spacing = 3
-        };
+        var location_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
+        location_box.add (new Gtk.Image.from_icon_name ("folder", Gtk.IconSize.BUTTON));
+        location_box.add (location_chooser_label);
 
-        location_grid.add (new Gtk.Image.from_icon_name ("folder", Gtk.IconSize.BUTTON));
-        location_grid.add (location_chooser_label);
-
-        location_chooser.add (location_grid);
+        location_chooser.add (location_box);
 
         var download_heading = new Granite.HeaderLabel (_("Limits"));
 

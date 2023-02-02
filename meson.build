@@ -12,9 +12,9 @@ vapi_dir = join_paths(meson.current_source_dir(), 'vapi')
 add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 
 dependencies = [
-    dependency('gtk+-3.0'),
+    dependency('gtk4'),
     dependency('gee-0.8'),
-    dependency('granite'),
+    dependency('granite-7'),
     dependency('threads'),
     meson.get_compiler('vala').find_library('posix'),
     meson.get_compiler('vala').find_library('transmission-2.0', dirs: vapi_dir),

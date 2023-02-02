@@ -32,8 +32,6 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
 
         var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => close_bar ());
-
-        show_all ();
     }
 
     public void add_errors (Gee.ArrayList<string> errors) {
@@ -54,7 +52,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
     }
 
     private void close_bar () {
-        hide ();
+        revealed = false;
         infobar_errors.clear ();
     }
 

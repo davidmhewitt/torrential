@@ -111,7 +111,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         status.halign = Gtk.Align.START;
         status.use_markup = true;
         grid.attach (status, 1, 3, 1, 1);
-        show_all ();
     }
 
     public void update () {
@@ -129,7 +128,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public void edit_files () {
         var dialog = new Dialogs.FileSelectDialog (torrent);
-        dialog.show_all ();
         dialog.run ();
         dialog.destroy ();
     }

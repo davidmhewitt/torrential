@@ -47,7 +47,7 @@ public class Torrential.Application : Gtk.Application {
         Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
         Intl.textdomain (GETTEXT_PACKAGE);
 
-        Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
+        Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).add_resource_path ("/com/github/davidmhewitt/torrential");
 
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();

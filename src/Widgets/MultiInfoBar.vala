@@ -25,7 +25,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
     private Gtk.Button next_button;
 
     construct {
-        get_content_area ().add (infobar_label);
+        add_child (infobar_label);
 
         next_button = (Gtk.Button) add_button (_("Next Warning"), 0);
         next_button.clicked.connect (() => next_error ());

@@ -50,14 +50,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
         }
 
-        var grid = new Gtk.Grid ();
-        grid.margin = 12;
-        grid.margin_bottom = grid.margin_top = 6;
-        grid.column_spacing = 12;
-        grid.row_spacing = 3;
-
-        add (grid);
-
         Icon icon;
         if (torrent.file_count > 1) {
             icon = ContentType.get_icon ("inode/directory");
@@ -72,53 +64,70 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             }
         }
         var icon_image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
-        grid.attach (icon_image, 0, 0, 1, 4);
 
-        torrent_name = new Gtk.Label (torrent.name);
-        torrent_name.halign = Gtk.Align.START;
-        torrent_name.get_style_context ().add_class ("h3");
-        torrent_name.ellipsize = Pango.EllipsizeMode.END;
-        grid.attach (torrent_name, 1, 0, 1, 1);
+        torrent_name = new Gtk.Label (torrent.name) {
+            ellipsize = Pango.EllipsizeMode.END,
+            halign = Gtk.Align.START
+        };
+        torrent_name.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
 
-        completeness = new Gtk.Label ("<small>%s</small>".printf (generate_completeness_text ()));
-        completeness.halign = Gtk.Align.START;
-        completeness.use_markup = true;
-        grid.attach (completeness, 1, 1, 1, 1);
+        completeness = new Gtk.Label (generate_completeness_text ()) {
+            halign = Gtk.Align.START
+        };
+        completeness.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
-        progress = new Gtk.ProgressBar ();
-        progress.hexpand = true;
-        progress.fraction = torrent.progress;
+        progress = new Gtk.ProgressBar () {
+            hexpand = true,
+            fraction = torrent.progress
+        };
         if (torrent.seeding) {
             progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         }
-        grid.attach (progress, 1, 2, 1, 1);
 
         if (!torrent.paused) {
-            pause_button = new Gtk.Button.from_icon_name (PAUSE_ICON_NAME);
-            pause_button.tooltip_text = _("Pause torrent");
+            pause_button = new Gtk.Button.from_icon_name (PAUSE_ICON_NAME) {
+                tooltip_text = _("Pause torrent")
+            };
         } else {
-            pause_button = new Gtk.Button.from_icon_name (RESUME_ICON_NAME);
-            pause_button.tooltip_text = _("Resume torrent");
+            pause_button = new Gtk.Button.from_icon_name (RESUME_ICON_NAME) {
+                tooltip_text = _("Resume torrent")
+            };
         }
 
-        pause_button.get_style_context ().add_class ("flat");
+        pause_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         pause_button.clicked.connect (() => {
             toggle_pause ();
         });
-        grid.attach (pause_button, 2, 1, 1, 4);
 
-        status = new Gtk.Label ("<small>%s</small>".printf (generate_status_text ()));
-        status.halign = Gtk.Align.START;
-        status.use_markup = true;
+        status = new Gtk.Label (generate_status_text ()) {
+            halign = Gtk.Align.START
+        };
+        status.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
+
+        var grid = new Gtk.Grid () {
+             column_spacing = 12,
+             row_spacing = 3,
+             margin_top = 6,
+             margin_end = 12,
+             margin_bottom = 6,
+             margin_start = 12
+         };
+        grid.attach (icon_image, 0, 0, 1, 4);
+        grid.attach (torrent_name, 1, 0);
+        grid.attach (completeness, 1, 1);
+        grid.attach (progress, 1, 2);
+        grid.attach (pause_button, 2, 1, 1, 4);
         grid.attach (status, 1, 3, 1, 1);
+
+        add (grid);
         show_all ();
     }
 
     public void update () {
         torrent_name.label = torrent.name;
         progress.fraction = torrent.progress;
-        completeness.label = "<small>%s</small>".printf (generate_completeness_text ());
-        status.label = "<small>%s</small>".printf (generate_status_text ());
+        completeness.label = generate_completeness_text ();
+        status.label = generate_status_text ();
         pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
         if (torrent.seeding) {
             progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
@@ -198,13 +207,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     private void toggle_pause () {
         if (!torrent.paused) {
-            torrent.pause ();
-            pause_button.set_image (new Gtk.Image.from_icon_name (RESUME_ICON_NAME, Gtk.IconSize.BUTTON));
-            pause_button.tooltip_text = _("Resume torrent");
+            pause_torrent ();
         } else {
-            torrent.unpause ();
-            pause_button.set_image (new Gtk.Image.from_icon_name (PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
-            pause_button.tooltip_text = _("Pause torrent");
+            resume_torrent ();
         }
     }
 

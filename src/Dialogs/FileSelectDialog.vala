@@ -34,18 +34,22 @@ public class Torrential.Dialogs.FileSelectDialog : Granite.Dialog {
     }
 
     construct {
-        deletable = false;
         set_default_size (450, 300);
 
         var view = new Widgets.FileSelectTreeView (torrent);
-        var scrolled = new Gtk.ScrolledWindow (null, null);
-        scrolled.margin = 6;
-        scrolled.shadow_type = Gtk.ShadowType.IN;
-        scrolled.expand = true;
-        scrolled.add (view);
 
-        Gtk.Box content = get_content_area () as Gtk.Box;
-        content.pack_start (scrolled, true, true, 0);
+        var scrolled = new Gtk.ScrolledWindow (null, null) {
+            hexpand = true,
+            vexpand = true,
+            margin_end = 10,
+            margin_bottom = 9,
+            margin_start = 10
+        };
+        scrolled.add (view);
+        scrolled.get_style_context ().add_class (Gtk.STYLE_CLASS_FRAME);
+        scrolled.show_all ();
+
+        get_content_area ().add (scrolled);
 
         add_button (_("Close"), 0);
 

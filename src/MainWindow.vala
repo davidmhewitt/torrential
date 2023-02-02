@@ -420,7 +420,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         content_box.append (add_button);
 
         var popover = new Gtk.Popover () {
-            child = content_grid
+            child = content_box
         };
         popover.set_parent (magnet_button);
         popover.popup ();

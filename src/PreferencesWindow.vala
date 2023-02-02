@@ -50,11 +50,16 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
             stack = stack
         };
 
-        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        box.add (switcher);
-        box.add (stack);
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
+            margin_top = 12,
+            margin_end = 12,
+            margin_bottom = 12,
+            margin_start = 12
+        };
+        box.append (switcher);
+        box.append (stack);
 
-        get_content_area ().add (box);
+        get_content_area ().append (box);
 
         var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => {
@@ -83,8 +88,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 
-        Gtk.Grid advanced_grid = new Gtk.Grid ();
-        advanced_grid.margin = 12;
+        var advanced_grid = new Gtk.Grid ();
         advanced_grid.hexpand = true;
         advanced_grid.column_spacing = 12;
         advanced_grid.row_spacing = 6;
@@ -103,38 +107,19 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     private Gtk.Grid create_general_settings_widgets () {
         var location_heading = new Granite.HeaderLabel (_("Download Location"));
 
+        location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
+
+        var location_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
+        location_box.append (new Gtk.Image.from_icon_name ("folder"));
+        location_box.append (location_chooser_label);
+
         var location_chooser = new Gtk.Button () {
+            child = location_box,
             hexpand = true,
             halign = Gtk.Align.FILL,
             margin_start = 20,
             margin_end = 20
         };
-
-        location_chooser.clicked.connect (() => {
-            var chooser = new Gtk.FileChooserDialog (
-                _("Select Download Folder…"),
-                this,
-                Gtk.FileChooserAction.SELECT_FOLDER,
-                _("Cancel"), Gtk.ResponseType.CANCEL,
-                _("Select"), Gtk.ResponseType.ACCEPT
-            );
-
-            var res = chooser.run ();
-
-            if (res == Gtk.ResponseType.ACCEPT) {
-                settings.set_string ("download-folder", chooser.get_file ().get_path ());
-            }
-
-            chooser.destroy ();
-        });
-
-        location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
-
-        var location_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
-        location_box.add (new Gtk.Image.from_icon_name ("folder", Gtk.IconSize.BUTTON));
-        location_box.add (location_chooser_label);
-
-        location_chooser.add (location_box);
 
         var download_heading = new Granite.HeaderLabel (_("Limits"));
 
@@ -158,8 +143,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         settings.bind ("hide-on-close", hide_on_close_switch, "active", SettingsBindFlags.DEFAULT);
         var hide_on_close_label = create_label (_("Continue downloads when closed:"));
 
-        Gtk.Grid general_grid = new Gtk.Grid ();
-        general_grid.margin = 12;
+        var general_grid = new Gtk.Grid ();
         general_grid.hexpand = true;
         general_grid.column_spacing = 12;
         general_grid.row_spacing = 6;
@@ -178,6 +162,26 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         general_grid.attach (desktop_label, 0, 7, 1, 1);
         general_grid.attach (hide_on_close_label, 0, 8, 1, 1);
         general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
+
+        location_chooser.clicked.connect (() => {
+            var chooser = new Gtk.FileChooserDialog (
+                _("Select Download Folder…"),
+                this,
+                Gtk.FileChooserAction.SELECT_FOLDER,
+                _("Cancel"), Gtk.ResponseType.CANCEL,
+                _("Select"), Gtk.ResponseType.ACCEPT
+            );
+            chooser.present ();
+
+            chooser.response.connect ((response) => {
+                if (response == Gtk.ResponseType.ACCEPT) {
+                    settings.set_string ("download-folder", chooser.get_file ().get_path ());
+                }
+
+                chooser.destroy ();
+            });
+        });
+
 
         return general_grid;
     }

@@ -40,7 +40,9 @@ public class Torrential.Dialogs.FileSelectDialog : Granite.Dialog {
 
         var scrolled = new Gtk.ScrolledWindow (null, null) {
             expand = true,
-            margin = 6,
+            margin_end = 10,
+            margin_bottom = 9,
+            margin_start = 10
         };
         scrolled.add (view);
         scrolled.get_style_context ().add_class (Gtk.STYLE_CLASS_FRAME);

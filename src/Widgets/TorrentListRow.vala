@@ -128,7 +128,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     public void edit_files () {
-        var dialog = new Dialogs.FileSelectDialog (torrent);
+        var dialog = new Dialogs.FileSelectDialog (torrent) {
+            transient_for = (Gtk.Window) get_toplevel ()
+        };
         dialog.present ();
         dialog.response.connect (dialog.destroy);
     }

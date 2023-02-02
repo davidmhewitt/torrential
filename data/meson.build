@@ -26,8 +26,8 @@ i18n.merge_file(
 )
 
 i18n.merge_file(
-    input: meson.project_name() + '.appdata.xml.in',
-    output: meson.project_name() + '.appdata.xml',
+    input: 'torrential.metainfo.xml.in',
+    output: meson.project_name() + '.metainfo.xml',
     po_dir: join_paths(meson.source_root(), 'po', 'extra'),
     install: true,
     install_dir: join_paths(get_option('datadir'), 'metainfo')

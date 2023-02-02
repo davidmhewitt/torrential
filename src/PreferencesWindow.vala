@@ -89,7 +89,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         advanced_grid.column_spacing = 12;
         advanced_grid.row_spacing = 6;
 
-        advanced_grid.attach (create_heading (_("Security")), 0, 2, 1, 1);
+        advanced_grid.attach (new Granite.HeaderLabel (_("Security")), 0, 2, 1, 1);
         advanced_grid.attach (force_encryption_label, 0, 3, 1, 1);
         advanced_grid.attach (force_encryption_switch, 1, 3, 1, 1);
         advanced_grid.attach (randomise_port_label, 0, 4, 1, 1);
@@ -101,7 +101,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     }
 
     private Gtk.Grid create_general_settings_widgets () {
-        var location_heading = create_heading (_("Download Location"));
+        var location_heading = new Granite.HeaderLabel (_("Download Location"));
 
         var location_chooser = new Gtk.Button () {
             hexpand = true,
@@ -136,7 +136,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
 
         location_chooser.add (location_box);
 
-        var download_heading = create_heading (_("Limits"));
+        var download_heading = new Granite.HeaderLabel (_("Limits"));
 
         var max_downloads_entry = create_spinbutton (1, 100, 1);
         settings.bind ("max-downloads", max_downloads_entry, "value", SettingsBindFlags.DEFAULT);
@@ -152,7 +152,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         settings.bind ("upload-speed-limit", upload_speed_limit_entry, "value", SettingsBindFlags.DEFAULT);
         var upload_speed_limit_label = create_label (_("Upload speed limit (KBps):"));
 
-        var desktop_label = create_heading (_("Desktop Integration"));
+        var desktop_label = new Granite.HeaderLabel (_("Desktop Integration"));
 
         var hide_on_close_switch = create_switch ();
         settings.bind ("hide-on-close", hide_on_close_switch, "active", SettingsBindFlags.DEFAULT);
@@ -180,14 +180,6 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
 
         return general_grid;
-    }
-
-    private Gtk.Label create_heading (string text) {
-        var label = new Gtk.Label (text);
-        label.get_style_context ().add_class ("h4");
-        label.halign = Gtk.Align.START;
-
-        return label;
     }
 
     private Gtk.Switch create_switch () {

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
+* Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -29,64 +29,38 @@ const string FILES_DBUS_ID = "org.freedesktop.FileManager1";
 const string FILES_DBUS_PATH = "/org/freedesktop/FileManager1";
 
 public class Torrential.TorrentManager : Object {
-    public bool blocklist_updating { get; private set; default = false; }
-
-    private Transmission.variant_dict settings;
+    private Transmission.variant_dict variant_dict;
     private Transmission.Session session;
     private Transmission.TorrentConstructor torrent_constructor;
     private Gee.ArrayList <unowned Transmission.Torrent> added_torrents = new Gee.ArrayList <unowned Transmission.Torrent> ();
-    private Settings saved_state = Settings.get_default ();
-
-    private Thread<void*>? update_session_thread = null;
+    private GLib.Settings settings;
 
     public signal void torrent_completed (Torrent torrent);
-    public signal void blocklist_load_failed ();
 
     private static string CONFIG_DIR = Path.build_path (Path.DIR_SEPARATOR_S, Environment.get_user_config_dir (), "torrential");
 
-    private static int next_tag = 0;
+    construct {
+        settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
 
-    public TorrentManager () {
         Transmission.String.Units.mem_init (1024, _("KB"), _("MB"), _("GB"), _("TB"));
         Transmission.String.Units.speed_init (1024, _("KB/s"), _("MB/s"), _("GB/s"), _("TB/s"));
-        settings = Transmission.variant_dict (0);
-        Transmission.load_default_settings (ref settings, CONFIG_DIR, "torrential");
+        variant_dict = Transmission.variant_dict (0);
+        Transmission.load_default_settings (ref variant_dict, CONFIG_DIR, "torrential");
 
-        update_session_settings ();
+        session = new Transmission.Session (CONFIG_DIR, false, variant_dict);
 
-        session = new Transmission.Session (CONFIG_DIR, false, settings);
-        info (session.blocklist.count.to_string ());
         torrent_constructor = new Transmission.TorrentConstructor (session);
         unowned Transmission.Torrent[] transmission_torrents = session.load_torrents (torrent_constructor);
         for (int i = 0; i < transmission_torrents.length; i++) {
             transmission_torrents[i].set_completeness_callback (on_completeness_changed);
             added_torrents.add (transmission_torrents[i]);
         }
-
-        // Only auto-update blocklist once every day
-        if (new DateTime.now_local ().to_unix () - saved_state.blocklist_updated_timestamp > 3600 * 24) {
-            update_blocklist ();
-        }
     }
 
-    ~TorrentManager () {
-        session.save_settings (CONFIG_DIR, settings);
-    }
-
-    public void close () throws ThreadError {
-        ThreadFunc<void*> run = () => {
-            update_session_settings ();
-            session.update_settings (settings);
-
-            return null;
-        };
-        update_session_thread = new Thread<void*> ("update-session-settings", run);
-    }
-
-    public void wait_for_close () {
-        if (update_session_thread != null) {
-            update_session_thread.join ();
-        }
+    public void close_session () {
+        update_session_settings ();
+        session.save_settings (CONFIG_DIR, variant_dict);
+        session = null;
     }
 
     public bool has_active_torrents () {
@@ -98,94 +72,40 @@ public class Torrential.TorrentManager : Object {
         return false;
     }
 
-    public void update_blocklist () {
-        // Only update the blocklist if we have one set
-        if (saved_state.blocklist_url.strip ().length == 0) {
-            return;
-        }
+    public void update_session_settings () {
+        variant_dict.add_int (Transmission.Prefs.download_queue_size, settings.get_int ("max-downloads"));
 
-        settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
-        session.blocklist.url = saved_state.blocklist_url.strip ();
-
-        next_tag++;
-        blocklist_updating = true;
-
-        var request = Transmission.variant_dict (2);
-        request.add_str (Transmission.Prefs.method, "blocklist-update");
-        request.add_int (Transmission.Prefs.tag, next_tag);
-
-        Transmission.exec_JSON_RPC (session, request, on_blocklist_response);
-    }
-
-    private void on_blocklist_response (Transmission.Session session, Transmission.variant_dict response) {
-        int64 rulecount = 0;
-        Transmission.variant_dict args;
-
-        if (!response.find_doc (Transmission.Prefs.arguments, out args) || !args.find_int (Transmission.Prefs.blocklist_size, out rulecount)) {
-            rulecount = -1;
-        }
-
-        if (rulecount == -1) {
-            Idle.add (() => {
-                blocklist_load_failed ();
-                foreach (unowned Transmission.Torrent torrent in added_torrents) {
-                    torrent.stop ();
-                }
-
-                return Source.REMOVE;
-            });
+        if (settings.get_int ("download-speed-limit") == 0) {
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_down_enabled, false);
         } else {
-            Idle.add (() => {
-                saved_state.blocklist_updated_timestamp = new DateTime.now_local ().to_unix ();
-                return Source.REMOVE;
-            });
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_down_enabled, true);
+            variant_dict.add_int (Transmission.Prefs.speed_limit_down, settings.get_int ("download-speed-limit"));
         }
 
-        blocklist_updating = false;
-    }
-
-    private void update_session_settings () {
-        settings.add_int (Transmission.Prefs.download_queue_size, saved_state.max_downloads);
-
-        if (saved_state.download_speed_limit == 0) {
-            settings.add_bool (Transmission.Prefs.speed_limit_down_enabled, false);
+        if (settings.get_int ("upload-speed-limit") == 0) {
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_up_enabled, false);
         } else {
-            settings.add_bool (Transmission.Prefs.speed_limit_down_enabled, true);
-            settings.add_int (Transmission.Prefs.speed_limit_down, saved_state.download_speed_limit);
+            variant_dict.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
+            variant_dict.add_int (Transmission.Prefs.speed_limit_up, settings.get_int ("upload-speed-limit"));
         }
 
-        if (saved_state.upload_speed_limit == 0) {
-            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, false);
-        } else {
-            settings.add_bool (Transmission.Prefs.speed_limit_up_enabled, true);
-            settings.add_int (Transmission.Prefs.speed_limit_up, saved_state.upload_speed_limit);
-        }
-
-        settings.add_bool (Transmission.Prefs.peer_port_random_on_start, saved_state.randomize_port);
-        if (saved_state.randomize_port) {
+        variant_dict.add_bool (Transmission.Prefs.peer_port_random_on_start, settings.get_boolean ("randomize-port"));
+        if (settings.get_boolean ("randomize-port")) {
             int64 port = 0;
-            if (settings.find_int (Transmission.Prefs.peer_port, out port)) {
-                saved_state.peer_port = (int)port;
+            if (variant_dict.find_int (Transmission.Prefs.peer_port, out port)) {
+                settings.set_int ("peer-port", (int) port);
             }
         } else {
-            settings.add_int (Transmission.Prefs.peer_port, saved_state.peer_port);
+            variant_dict.add_int (Transmission.Prefs.peer_port, settings.get_int ("peer-port"));
         }
 
-        if (saved_state.force_encryption) {
-            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
+        if (settings.get_boolean ("force-encryption")) {
+            variant_dict.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_REQUIRED);
         } else {
-            settings.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
+            variant_dict.add_int (Transmission.Prefs.encryption, Transmission.EncryptionMode.ENCRYPTION_PREFERRED);
         }
 
-        if (saved_state.blocklist_url.strip ().length > 0) {
-            settings.add_bool (Transmission.Prefs.blocklist_enabled, true);
-            settings.add_str (Transmission.Prefs.blocklist_url, saved_state.blocklist_url.strip ());
-        } else {
-            settings.add_bool (Transmission.Prefs.blocklist_enabled, false);
-        }
-
-        settings.add_bool (Transmission.Prefs.ratio_limit_enabled, saved_state.seed_ratio_enabled);
-        settings.add_real (Transmission.Prefs.ratio_limit, saved_state.seed_ratio);
+        session.update_settings (variant_dict);
     }
 
     public Gee.ArrayList<Torrent> get_torrents () {
@@ -199,7 +119,7 @@ public class Torrential.TorrentManager : Object {
     public Transmission.ParseResult add_torrent_by_path (string path, out Torrent? created_torrent) {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_file (path);
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Utils.get_downloads_folder ());
 
         Transmission.ParseResult result;
         int duplicate_id;
@@ -220,7 +140,7 @@ public class Torrential.TorrentManager : Object {
     public Transmission.ParseResult add_torrent_by_magnet (string magnet, out Torrent? created_torrent) {
         torrent_constructor = new Transmission.TorrentConstructor (session);
         torrent_constructor.set_metainfo_from_magnet_link (magnet);
-        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, saved_state.download_folder);
+        torrent_constructor.set_download_dir (Transmission.ConstructionMode.FORCE, Utils.get_downloads_folder ());
 
         Transmission.ParseResult result;
         int duplicate_id;
@@ -239,7 +159,7 @@ public class Torrential.TorrentManager : Object {
     }
 
     private void check_trash () {
-        if (Settings.get_default ().trash_original_torrents) {
+        if (settings.get_boolean ("trash-original-torrents")) {
             var path = torrent_constructor.source_file;
             if (path != null && !path.has_prefix (CONFIG_DIR)) {
                 var file = File.new_for_path (path);

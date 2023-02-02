@@ -1,4 +1,0 @@
-[submodule "transmission"]
-	path = transmission
-	url = https://github.com/davidmhewitt/transmission
-	branch = 2.9x-torrential

@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
+* Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -21,31 +21,23 @@
 
 public class Torrential.Application : Gtk.Application {
     private MainWindow? window = null;
+    private TorrentManager torrent_manager = null;
+
+    const OptionEntry[] ENTRIES = {
+        { "quit", 0, 0, OptionArg.NONE, null, N_("Quit running instance"), null },
+        { GLib.OPTION_REMAINING, 0, 0, OptionArg.FILENAME_ARRAY, null, null, N_("[FILE…]") },
+        { null }
+    };
 
     construct {
         flags |= ApplicationFlags.HANDLES_OPEN;
         flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
 
         application_id = "com.github.davidmhewitt.torrential";
-        var app_launcher = application_id + ".desktop";
 
-        if (AppInfo.get_default_for_uri_scheme ("magnet") == null) {
-            var appinfo = new DesktopAppInfo (app_launcher);
-            try {
-                appinfo.set_as_default_for_type ("x-scheme-handler/magnet");
-            } catch (Error e) {
-                warning ("Unable to set self as default for magnet links: %s", e.message);
-            }
-        }
+        add_main_option_entries (ENTRIES);
 
-        if (AppInfo.get_default_for_type ("application/x-bittorrent", false) == null) {
-            var appinfo = new DesktopAppInfo (app_launcher);
-            try {
-                appinfo.set_as_default_for_type ("application/x-bittorrent");
-            } catch (Error e) {
-                warning ("Unable to set self as default for torrent files: %s", e.message);
-            }
-        }
+        torrent_manager = new TorrentManager ();
     }
 
     public override void open (File[] files, string hint) {
@@ -72,74 +64,68 @@ public class Torrential.Application : Gtk.Application {
     }
 
     public override void activate () {
+        Intl.setlocale (LocaleCategory.ALL, "");
+        GLib.Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+        GLib.Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+        GLib.Intl.textdomain (GETTEXT_PACKAGE);
+
         if (window == null) {
-            window = new MainWindow (this);
+            window = new MainWindow (this, torrent_manager);
             add_window (window);
+        } else {
+            window.present ();
         }
 
-        window.present ();
-        window.present_with_time (0);
+        var granite_settings = Granite.Settings.get_default ();
+        var gtk_settings = Gtk.Settings.get_default ();
+
+        gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+
+        granite_settings.notify["prefers-color-scheme"].connect (() => {
+            gtk_settings.gtk_application_prefer_dark_theme = granite_settings.prefers_color_scheme == Granite.Settings.ColorScheme.DARK;
+        });
     }
 
-    public override int command_line (ApplicationCommandLine cmd_line) {
-        bool quit = false;
+    public override int command_line (GLib.ApplicationCommandLine command_line) {
+        var options = command_line.get_options_dict ();
 
-        OptionEntry[] options = new OptionEntry[1];
-        options[0] = { "quit", 0, 0, OptionArg.NONE, ref quit, "Quit running instance", null };
-
-        // We have to make an extra copy of the array, since .parse assumes
-        // that it can remove strings from the array without freeing them.
-        string[] args = cmd_line.get_arguments ();
-        string*[] _args = new string[args.length];
-        for (int i = 0; i < args.length; i++) {
-            _args[i] = args[i];
-        }
-
-        unowned string[] tmp = _args;
-
-        try {
-            var opt_context = new OptionContext ("- Torrential");
-            opt_context.set_help_enabled (true);
-            opt_context.add_main_entries (options, null);
-            opt_context.set_ignore_unknown_options (true);
-            opt_context.parse (ref tmp);
-        } catch (OptionError e) {
-            cmd_line.print ("error: %s\n", e.message);
-            cmd_line.print ("Run '%s --help' to see a full list of available command line options.\n", args[0]);
-            return 0;
-        }
-
-        if (quit) {
+        if (options.contains ("quit")) {
             if (window != null) {
                 window.quit ();
             }
         }
 
-        File[] files = {};
-        for (int i = 1; i < tmp.length; i++) {
-            files += File.new_for_commandline_arg (tmp[i]);
-        }
-
-        if (files.length > 0) {
-            open (files, "");
-            return 0;
-        }
-
         activate ();
-        return 0;
+
+        if (options.contains (GLib.OPTION_REMAINING)) {
+            File[] files = {};
+
+            (unowned string)[] remaining = options.lookup_value (
+                GLib.OPTION_REMAINING,
+                VariantType.BYTESTRING_ARRAY
+            ).get_bytestring_array ();
+
+            for (int i = 0; i < remaining.length; i++) {
+                unowned string file = remaining[i];
+                files += command_line.create_file_for_arg (file);
+            }
+
+            open (files, "");
+        }
+
+        return Posix.EXIT_SUCCESS;
     }
 
-    public void wait_for_close () {
-        if (window != null) {
-            window.wait_for_close ();
-        }
+    public void close_session () {
+        torrent_manager.close_session ();
     }
 }
 
 int main (string[] args) {
     var app = new Torrential.Application ();
-    var ret_val = app.run (args);
-    app.wait_for_close ();
+    var result = app.run (args);
 
-    return ret_val;
+    app.close_session ();
+
+    return result;
 }

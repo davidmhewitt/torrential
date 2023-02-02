@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
+* Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -45,7 +45,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         green_progress_provider = new Gtk.CssProvider ();
         try {
-            green_progress_provider.load_from_data ("@define-color selected_bg_color @success_color;");
+            green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;");
         } catch (Error e) {
             warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
         }
@@ -77,6 +77,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         torrent_name = new Gtk.Label (torrent.name);
         torrent_name.halign = Gtk.Align.START;
         torrent_name.get_style_context ().add_class ("h3");
+        torrent_name.ellipsize = Pango.EllipsizeMode.END;
         grid.attach (torrent_name, 1, 0, 1, 1);
 
         completeness = new Gtk.Label ("<small>%s</small>".printf (generate_completeness_text ()));
@@ -149,7 +150,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     private string generate_status_text () {
         if (torrent.downloading || torrent.seeding) {
-            char[40] buf = new char[40];
+            char[] buf = new char[40];
             var down_speed = Transmission.String.Units.speed_KBps (buf, torrent.download_speed);
             var up_speed = Transmission.String.Units.speed_KBps (buf, torrent.upload_speed);
             return _("%i of %i peers connected. \u2b07%s \u2b06%s").printf (torrent.connected_peers, torrent.total_peers, down_speed, up_speed);
@@ -164,7 +165,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         }
     }
 
-    public static string time_to_string (uint totalSeconds) {
+    public static string time_to_string (int totalSeconds) {
+        if (totalSeconds < 0) {
+            return "...";
+        }
+
         uint seconds = (totalSeconds % 60);
         uint minutes = (totalSeconds % 3600) / 60;
         uint hours = (totalSeconds % 86400) / 3600;
@@ -176,10 +181,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         var str_seconds = ngettext ("%u second", "%u seconds", seconds).printf (seconds);
 
         var formatted = "";
-        if (totalSeconds == -1) {
-            formatted = "...";
-        }
-        else if (days > 0) {
+        if (days > 0) {
             formatted = "%s, %s, %s, %s".printf (str_days, str_hours, str_minutes, str_seconds);
         }
         else if (hours > 0) {

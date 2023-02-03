@@ -85,6 +85,21 @@ public class Torrential.Application : Gtk.Application {
         if (active_window == null) {
             var window = new MainWindow (this, torrent_manager);
             add_window (window);
+
+            /*
+            * This is very finicky. Bind size after present else set_titlebar gives us bad sizes
+            * Set maximize after height/width else window is min size on unmaximize
+            * Bind maximize as SET else get get bad sizes
+            */
+            var settings = new Settings ("com.github.davidmhewitt.torrential.settings");
+            settings.bind ("window-height", window, "default-height", SettingsBindFlags.DEFAULT);
+            settings.bind ("window-width", window, "default-width", SettingsBindFlags.DEFAULT);
+
+            if (settings.get_boolean ("window-maximized")) {
+                window.maximize ();
+            }
+
+            settings.bind ("window-maximized", window, "maximized", SettingsBindFlags.SET);
         } else {
             active_window.present ();
         }

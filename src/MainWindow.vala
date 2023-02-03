@@ -31,7 +31,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private SimpleActionGroup actions = new SimpleActionGroup ();
 
     public TorrentManager torrent_manager;
-    private GLib.Settings settings;
     private FileMonitor download_monitor;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
@@ -69,22 +68,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         );
 
         this.torrent_manager = torrent_manager;
-
-        settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
-
-        set_default_size (
-            settings.get_int ("window-width"),
-            settings.get_int ("window-height")
-        );
-
-        // Maximize window if necessary
-        switch (settings.get_string ("window-state")) {
-            case "maximized":
-                this.maximize ();
-                break;
-            default:
-                break;
-        }
 
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
@@ -209,19 +192,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
 
         delete_event.connect (() => {
+            var settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
             if (!quitting && settings.get_boolean ("hide-on-close") && torrent_manager.has_active_torrents ()) {
                 return hide_on_delete ();
-            }
-
-            int window_width;
-            int window_height;
-            get_size (out window_width, out window_height);
-            settings.set_int ("window-width", window_width);
-            settings.set_int ("window-height", window_height);
-            if (is_maximized) {
-                settings.set_string ("window-state", "maximized");
-            } else {
-                settings.set_string ("window-state", "normal");
             }
 
             return false;

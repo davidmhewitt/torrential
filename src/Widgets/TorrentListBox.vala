@@ -203,15 +203,9 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             menu.append (_("Show in File Browser"), ACTION_GROUP_PREFIX + ACTION_OPEN);
         }
 
-        uint button;
-        var event = Gtk.get_current_event ();
-        event.get_button (out button);
-
         var gtk_menu = new Gtk.Menu.from_model (menu);
-        gtk_menu.set_screen (null);
         gtk_menu.attach_to_widget (this, null);
-        gtk_menu.show_all ();
-        gtk_menu.popup_at_pointer (event);
+        gtk_menu.popup_at_pointer (Gtk.get_current_event ());
 
         return true;
     }

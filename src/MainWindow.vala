@@ -48,7 +48,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     private bool quitting = false;
 
-    private ActionEntry[] action_entries = {
+    private const ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
         {ACTION_QUIT,                       on_quit                 },
         {ACTION_OPEN,                       on_open                 },

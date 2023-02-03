@@ -64,10 +64,7 @@ public class Torrential.Application : Gtk.Application {
             var magnet = files[0].get_uri ();
             magnet = magnet.replace ("magnet:///?", "magnet:?");
 
-            if (active_window == null) {
-                activate ();
-            }
-
+            activate ();
             ((MainWindow) active_window).add_magnet (magnet);
             return;
         }

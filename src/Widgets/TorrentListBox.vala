@@ -177,8 +177,8 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var items = get_selected_rows ();
         var all_paused = true;
 
-        foreach (var selected_row in items) {
-            if (!((TorrentListRow)selected_row).paused) {
+        foreach (unowned var selected_row in items) {
+            if (!((TorrentListRow) selected_row).paused) {
                 all_paused = false;
                 break;
             }

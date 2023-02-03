@@ -107,6 +107,15 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
         application.add_action (show_window);
 
+        var filter_action = new SimpleAction.stateful (ACTION_FILTER, new VariantType ("y"), new Variant.byte (Widgets.TorrentListBox.FilterType.ALL));
+        filter_action.activate.connect ((parameter) => {
+            var filter_type = (Widgets.TorrentListBox.FilterType) parameter.get_byte ();
+            list_box.filter (filter_type, null);
+
+            filter_action.set_state (parameter);
+        });
+        actions.add_action (filter_action);
+
         infobar = new Widgets.MultiInfoBar () {
             revealed = false,
             message_type = Gtk.MessageType.WARNING
@@ -201,17 +210,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         } catch (Error e) {
             warning ("Error setting up watchfolder on Download folder: %s", e.message);
         }
-
-        var filter_action = new SimpleAction.stateful (ACTION_FILTER, new VariantType ("y"), new Variant.byte (Widgets.TorrentListBox.FilterType.ALL));
-
-        actions.add_action (filter_action);
-
-        filter_action.activate.connect ((parameter) => {
-            var filter_type = (Widgets.TorrentListBox.FilterType) parameter.get_byte ();
-            list_box.filter (filter_type, null);
-
-            filter_action.set_state (parameter);
-        });
     }
 
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {

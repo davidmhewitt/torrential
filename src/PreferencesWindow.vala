@@ -121,6 +121,25 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
             margin_end = 20
         };
 
+        location_chooser.clicked.connect (() => {
+            var chooser = new Gtk.FileChooserDialog (
+                _("Select Download Folder…"),
+                this,
+                Gtk.FileChooserAction.SELECT_FOLDER,
+                _("Cancel"), Gtk.ResponseType.CANCEL,
+                _("Select"), Gtk.ResponseType.ACCEPT
+            );
+            chooser.present ();
+
+            chooser.response.connect ((response) => {
+                if (response == Gtk.ResponseType.ACCEPT) {
+                    settings.set_string ("download-folder", chooser.get_file ().get_path ());
+                }
+
+                chooser.destroy ();
+            });
+        });
+
         var download_heading = new Granite.HeaderLabel (_("Limits"));
 
         var max_downloads_entry = create_spinbutton (1, 100, 1);
@@ -162,26 +181,6 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         general_grid.attach (desktop_label, 0, 7, 1, 1);
         general_grid.attach (hide_on_close_label, 0, 8, 1, 1);
         general_grid.attach (hide_on_close_switch, 1, 8, 1, 1);
-
-        location_chooser.clicked.connect (() => {
-            var chooser = new Gtk.FileChooserDialog (
-                _("Select Download Folder…"),
-                this,
-                Gtk.FileChooserAction.SELECT_FOLDER,
-                _("Cancel"), Gtk.ResponseType.CANCEL,
-                _("Select"), Gtk.ResponseType.ACCEPT
-            );
-            chooser.present ();
-
-            chooser.response.connect ((response) => {
-                if (response == Gtk.ResponseType.ACCEPT) {
-                    settings.set_string ("download-folder", chooser.get_file ().get_path ());
-                }
-
-                chooser.destroy ();
-            });
-        });
-
 
         return general_grid;
     }

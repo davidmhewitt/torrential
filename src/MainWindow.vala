@@ -385,10 +385,19 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         var entry = new Gtk.Entry ();
 
-        var clipboard = Gtk.Clipboard.get (Gdk.SELECTION_CLIPBOARD);
-        string? contents = clipboard.wait_for_text ();
-        if (contents != null && contents.has_prefix ("magnet:")) {
-            entry.text = contents;
+        var clipboard = Gdk.Display.get_default ().get_clipboard ();
+
+        var value_string = Value (typeof (string));
+
+        try {
+            clipboard.get_content ().get_value (ref value_string);
+
+            string? contents = value_string.get_string ();
+            if (contents != null && contents.has_prefix ("magnet:")) {
+                entry.text = contents;
+            }
+        } catch (Error e) {
+            critical (e.message);
         }
 
         var label = new Gtk.Label (_("Magnet URL:")) {

@@ -33,6 +33,8 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
         SEARCH
     }
 
+    public Gee.ArrayList<Torrent> torrents { get; construct; }
+
     private const string ACTION_GROUP_PREFIX = "win.";
     private const string ACTION_REMOVE = "action-remove";
     private const string ACTION_PAUSE = "action-pause";
@@ -44,9 +46,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     private Gtk.ListBox listbox;
 
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
-        foreach (var torrent in torrents) {
-            add_row (torrent);
-        }
+        Object (torrents: torrents);
     }
 
     construct {
@@ -60,6 +60,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
         listbox.set_sort_func (sort);
 
         add (listbox);
+
+        foreach (var torrent in torrents) {
+            add_row (torrent);
+        }
 
         var action_remove = new SimpleAction (ACTION_REMOVE, null);
         var action_pause = new SimpleAction (ACTION_PAUSE, null);

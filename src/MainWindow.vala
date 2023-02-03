@@ -20,7 +20,6 @@
 */
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
-    private Gtk.Box view_mode;
     private Gtk.Button magnet_button;
     private Gtk.Stack stack;
     private Granite.Widgets.Welcome welcome_screen;
@@ -49,8 +48,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     private bool quitting = false;
 
-    private const ActionEntry[] action_entries = {
-        {ACTION_FILTER,                     action_filter,      "y" },
+    private ActionEntry[] action_entries = {
         {ACTION_PREFERENCES,                on_preferences          },
         {ACTION_QUIT,                       on_quit                 },
         {ACTION_OPEN,                       on_open                 },
@@ -203,12 +201,23 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         } catch (Error e) {
             warning ("Error setting up watchfolder on Download folder: %s", e.message);
         }
+
+        var filter_action = new SimpleAction.stateful (ACTION_FILTER, new VariantType ("y"), new Variant.byte (Widgets.TorrentListBox.FilterType.ALL));
+
+        actions.add_action (filter_action);
+
+        filter_action.activate.connect ((parameter) => {
+            var filter_type = (Widgets.TorrentListBox.FilterType) parameter.get_byte ();
+            list_box.filter (filter_type, null);
+
+            filter_action.set_state (parameter);
+        });
     }
 
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
         if (torrents.size == 0) {
             search_entry.sensitive = false;
-            view_mode.sensitive = false;
+            ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (false);
             stack.visible_child_name = "welcome";
         }
     }
@@ -281,11 +290,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         return headerbar;
     }
 
-    private void action_filter (SimpleAction action, Variant? variant) {
-        var filter_type = (Widgets.TorrentListBox.FilterType) variant.get_byte ();
-        list_box.filter (filter_type, null);
-    }
-
     private void update_view () {
         if (search_entry.text != "") {
             list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
@@ -325,7 +329,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     private void enable_main_view () {
         search_entry.sensitive = true;
-        view_mode.sensitive = true;
+        ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (true);
         stack.visible_child_name = "main";
     }
 

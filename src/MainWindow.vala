@@ -191,7 +191,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             return true;
         });
 
-        delete_event.connect (() => {
+        close_request.connect (() => {
             var settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
             if (!quitting && settings.get_boolean ("hide-on-close") && torrent_manager.has_active_torrents ()) {
                 return hide_on_delete ();

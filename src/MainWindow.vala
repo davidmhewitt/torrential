@@ -20,7 +20,6 @@
 */
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
-    private Granite.Widgets.ModeButton view_mode;
     private Gtk.Button magnet_button;
     private Gtk.Stack stack;
     private Granite.Widgets.Welcome welcome_screen;
@@ -39,6 +38,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
     private const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
 
+    private const string ACTION_FILTER = "action-filter";
     private const string ACTION_PREFERENCES = "preferences";
     private const string ACTION_QUIT = "quit";
     private const string ACTION_OPEN = "open";
@@ -106,6 +106,15 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             present_with_time (0);
         });
         application.add_action (show_window);
+
+        var filter_action = new SimpleAction.stateful (ACTION_FILTER, new VariantType ("y"), new Variant.byte (Widgets.TorrentListBox.FilterType.ALL));
+        filter_action.activate.connect ((parameter) => {
+            var filter_type = (Widgets.TorrentListBox.FilterType) parameter.get_byte ();
+            list_box.filter (filter_type, null);
+
+            filter_action.set_state (parameter);
+        });
+        actions.add_action (filter_action);
 
         infobar = new Widgets.MultiInfoBar () {
             revealed = false,
@@ -206,7 +215,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private void update_category_totals (Gee.ArrayList<Torrent> torrents) {
         if (torrents.size == 0) {
             search_entry.sensitive = false;
-            view_mode.sensitive = false;
+            ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (false);
             stack.visible_child_name = "welcome";
         }
     }
@@ -225,7 +234,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR),
             menu_model = menu,
             tooltip_text = _("Application menu"),
-            use_popover = true
+            use_popover = false
         };
         headerbar.pack_end (menu_button);
 
@@ -242,31 +251,40 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         headerbar.pack_start (magnet_button);
 
         search_entry = new Gtk.SearchEntry () {
+            hexpand = true,
             placeholder_text = _("Search Torrents"),
             sensitive = false,
             valign = Gtk.Align.CENTER
         };
-        headerbar.pack_end (search_entry);
+
         search_entry.search_changed.connect (() => {
             update_view ();
         });
 
-        view_mode = new Granite.Widgets.ModeButton () {
-            sensitive = false,
-            margin_start = 20,
-            valign = Gtk.Align.CENTER
+        var view_mode_model = new Menu ();
+        view_mode_model.append (_("All"), Action.print_detailed_name (
+            ACTION_GROUP_PREFIX + ACTION_FILTER, new Variant.byte (Widgets.TorrentListBox.FilterType.ALL))
+        );
+        view_mode_model.append (_("Downloading"), Action.print_detailed_name (
+            ACTION_GROUP_PREFIX + ACTION_FILTER, new Variant.byte (Widgets.TorrentListBox.FilterType.DOWNLOADING))
+        );
+        view_mode_model.append (_("Seeding"), Action.print_detailed_name (
+            ACTION_GROUP_PREFIX + ACTION_FILTER, new Variant.byte (Widgets.TorrentListBox.FilterType.SEEDING))
+        );
+        view_mode_model.append (_("Paused"), Action.print_detailed_name (
+            ACTION_GROUP_PREFIX + ACTION_FILTER, new Variant.byte (Widgets.TorrentListBox.FilterType.PAUSED))
+        );
+
+        var view_mode_button = new Gtk.MenuButton () {
+            image = new Gtk.Image.from_icon_name ("filter", Gtk.IconSize.LARGE_TOOLBAR),
+            menu_model = view_mode_model,
+            tooltip_text = _("Filter"),
+            use_popover = false
         };
-        view_mode.append_text (_("All"));
-        view_mode.append_text (_("Downloading"));
-        view_mode.append_text (_("Seeding"));
-        view_mode.append_text (_("Paused"));
-        view_mode.selected = 0;
 
-        view_mode.notify["selected"].connect (() => {
-            update_view ();
-        });
+        headerbar.pack_end (view_mode_button);
 
-        headerbar.set_custom_title (view_mode);
+        headerbar.set_custom_title (search_entry);
 
         return headerbar;
     }
@@ -281,22 +299,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
             return;
         }
-        switch (view_mode.selected) {
-            case 0:
-                list_box.filter (Widgets.TorrentListBox.FilterType.ALL, null);
-                break;
-            case 1:
-                list_box.filter (Widgets.TorrentListBox.FilterType.DOWNLOADING, null);
-                break;
-            case 2:
-                list_box.filter (Widgets.TorrentListBox.FilterType.SEEDING, null);
-                break;
-            case 3:
-                list_box.filter (Widgets.TorrentListBox.FilterType.PAUSED, null);
-                break;
-            default:
-                break;
-        }
+
         if (!list_box.has_visible_children ()) {
             stack.visible_child_name = "empty_category";
         } else {
@@ -325,7 +328,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
     private void enable_main_view () {
         search_entry.sensitive = true;
-        view_mode.sensitive = true;
+        ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (true);
         stack.visible_child_name = "main";
     }
 

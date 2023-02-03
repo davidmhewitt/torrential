@@ -20,7 +20,6 @@
 */
 
 public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
-
     public signal void torrent_removed (Torrent torrent);
     public signal void open_torrent (int id);
     public signal void open_torrent_location (int id);
@@ -54,23 +53,6 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         row_activated.connect (on_row_activated);
         popup_menu.connect (on_popup_menu);
         set_sort_func (sort);
-
-        key_release_event.connect ((event) => {
-            switch (event.keyval) {
-                case Gdk.Key.Delete:
-                case Gdk.Key.BackSpace:
-                    var items = get_selected_rows ();
-                    foreach (var selected_row in items) {
-                        ((TorrentListRow)selected_row).remove_torrent ();
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-
-            return false;
-        });
     }
 
     construct {
@@ -81,7 +63,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         var action_copy_magnet = new SimpleAction (ACTION_COPY_MAGNET, null);
         var action_open = new SimpleAction (ACTION_OPEN, null);
 
-        var active_window = (Gtk.ApplicationWindow)((Gtk.Application) GLib.Application.get_default ()).active_window;
+        var application = (Gtk.Application) GLib.Application.get_default ();
+        application.set_accels_for_action (ACTION_GROUP_PREFIX + ACTION_REMOVE, {"Delete", "BackSpace"});
+
+        var active_window = (Gtk.ApplicationWindow) application.active_window;
         active_window.add_action (action_remove);
         active_window.add_action (action_pause);
         active_window.add_action (action_resume);

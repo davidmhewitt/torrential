@@ -68,8 +68,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         };
 
         torrent_name = new Gtk.Label (torrent.name) {
-            halign = Gtk.Align.START,
-            ellipsize = Pango.EllipsizeMode.END
+            ellipsize = Pango.EllipsizeMode.END,
+            halign = Gtk.Align.START
         };
         torrent_name.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
 
@@ -79,10 +79,9 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         completeness.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
         progress = new Gtk.ProgressBar () {
-            hexpand = true
+            hexpand = true,
+            fraction = torrent.progress
         };
-
-        progress.fraction = torrent.progress;
         if (torrent.seeding) {
             progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
         }
@@ -97,7 +96,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             };
         }
 
-        pause_button.add_css_class (Granite.STYLE_CLASS_FLAT);
+        pause_button.add_css_class (Granite.STYLE_CLASS_ROUNDED);
         pause_button.clicked.connect (() => {
             toggle_pause ();
         });
@@ -108,19 +107,19 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         status.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
         var grid = new Gtk.Grid () {
-            column_spacing = 12,
-            row_spacing = 3,
-            margin_top = 6,
-            margin_end = 12,
-            margin_bottom = 6,
-            margin_start = 12
-        };
+             column_spacing = 12,
+             row_spacing = 3,
+             margin_top = 6,
+             margin_end = 12,
+             margin_bottom = 6,
+             margin_start = 12
+         };
         grid.attach (icon_image, 0, 0, 1, 4);
         grid.attach (torrent_name, 1, 0);
         grid.attach (completeness, 1, 1);
         grid.attach (progress, 1, 2);
-        grid.attach (status, 1, 3);
         grid.attach (pause_button, 2, 1, 1, 4);
+        grid.attach (status, 1, 3, 1, 1);
 
         child = grid;
     }
@@ -140,9 +139,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     }
 
     public void edit_files () {
-        var dialog = new Dialogs.FileSelectDialog (torrent);
-        dialog.run ();
-        dialog.destroy ();
+        var dialog = new Dialogs.FileSelectDialog (torrent) {
+            transient_for = (Gtk.Window) get_root ()
+        };
+        dialog.present ();
+        dialog.response.connect (dialog.destroy);
     }
 
     private string generate_completeness_text () {

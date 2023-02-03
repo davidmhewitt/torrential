@@ -373,21 +373,26 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_open (SimpleAction action) {
-        var filech = new Gtk.FileChooserNative (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN, _("Open"), _("Cancel"));
-        filech.set_select_multiple (true);
-
         var all_files_filter = new Gtk.FileFilter ();
         all_files_filter.set_filter_name (_("All files"));
         all_files_filter.add_pattern ("*");
+
         var torrent_files_filter = new Gtk.FileFilter ();
         torrent_files_filter.set_filter_name (_("Torrent files"));
         torrent_files_filter.add_mime_type ("application/x-bittorrent");
+
+        var filech = new Gtk.FileChooserNative (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN, _("Open"), _("Cancel"));
+        filech.set_select_multiple (true);
         filech.add_filter (torrent_files_filter);
         filech.add_filter (all_files_filter);
 
-        if (filech.run () == Gtk.ResponseType.ACCEPT) {
-            add_files (filech.get_uris ());
-        }
+        filech.show ();
+
+        filech.response.connect ((response) => {
+            if (response == Gtk.ResponseType.ACCEPT) {
+                add_files (filech.get_uris ());
+            }
+        });
     }
 
     private void on_open_magnet () {

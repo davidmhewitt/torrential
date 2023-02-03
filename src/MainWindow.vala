@@ -276,6 +276,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         );
 
         var view_mode_button = new Gtk.MenuButton () {
+            image = new Gtk.Image.from_icon_name ("filter", Gtk.IconSize.LARGE_TOOLBAR),
             menu_model = view_mode_model,
             tooltip_text = _("Filter"),
             use_popover = false

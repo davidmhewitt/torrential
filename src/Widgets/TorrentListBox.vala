@@ -19,8 +19,7 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
-
+public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     public signal void torrent_removed (Torrent torrent);
     public signal void open_torrent (int id);
     public signal void open_torrent_location (int id);
@@ -42,38 +41,26 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     private const string ACTION_COPY_MAGNET = "action-copy-magnet";
     private const string ACTION_OPEN = "action-open";
 
-    public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
-        set_selection_mode (Gtk.SelectionMode.MULTIPLE);
-        activate_on_single_click = false;
+    private Gtk.ListBox listbox;
 
+    public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
         foreach (var torrent in torrents) {
             add_row (torrent);
         }
-
-        button_press_event.connect (on_button_press);
-        row_activated.connect (on_row_activated);
-        popup_menu.connect (on_popup_menu);
-        set_sort_func (sort);
-
-        key_release_event.connect ((event) => {
-            switch (event.keyval) {
-                case Gdk.Key.Delete:
-                case Gdk.Key.BackSpace:
-                    var items = get_selected_rows ();
-                    foreach (var selected_row in items) {
-                        ((TorrentListRow)selected_row).remove_torrent ();
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-
-            return false;
-        });
     }
 
     construct {
+        listbox = new Gtk.ListBox () {
+            activate_on_single_click = false,
+            selection_mode = Gtk.SelectionMode.MULTIPLE
+        };
+        listbox.button_press_event.connect (on_button_press);
+        listbox.popup_menu.connect (on_popup_menu);
+        listbox.row_activated.connect (on_row_activated);
+        listbox.set_sort_func (sort);
+
+        add (listbox);
+
         var action_remove = new SimpleAction (ACTION_REMOVE, null);
         var action_pause = new SimpleAction (ACTION_PAUSE, null);
         var action_resume = new SimpleAction (ACTION_RESUME, null);
@@ -90,51 +77,64 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         active_window.add_action (action_open);
 
         action_remove.activate.connect (() => {
-            foreach (unowned var row in get_selected_rows ()) {
+            foreach (unowned var row in listbox.get_selected_rows ()) {
                 ((TorrentListRow) row).remove_torrent ();
             }
         });
 
         action_pause.activate.connect (() => {
-            foreach (unowned var row in get_selected_rows ()) {
+            foreach (unowned var row in listbox.get_selected_rows ()) {
                 ((TorrentListRow) row).pause_torrent ();
             }
         });
 
         action_resume.activate.connect (() => {
-            foreach (unowned var row in get_selected_rows ()) {
+            foreach (unowned var row in listbox.get_selected_rows ()) {
                 ((TorrentListRow) row).resume_torrent ();
             }
         });
 
         action_edit_files.activate.connect (() => {
-            var row = (TorrentListRow) get_selected_row ();
+            var row = (TorrentListRow) listbox.get_selected_row ();
             if (row != null) {
                 row.edit_files ();
             }
         });
 
         action_open.activate.connect (() => {
-            var row = (TorrentListRow) get_selected_row ();
+            var row = (TorrentListRow) listbox.get_selected_row ();
             if (row != null) {
                 open_torrent_location (row.id);
             }
         });
 
         action_copy_magnet.activate.connect (() => {
-            var row = (TorrentListRow) get_selected_row ();
+            var row = (TorrentListRow) listbox.get_selected_row ();
             if (row != null) {
                 row.copy_magnet_link ();
                 link_copied ();
             }
         });
+
+        listbox.key_release_event.connect ((event) => {
+            switch (event.keyval) {
+                case Gdk.Key.Delete:
+                case Gdk.Key.BackSpace:
+                    action_remove.activate (null);
+                    break;
+                default:
+                    break;
+            }
+
+            return false;
+        });
     }
 
     public void update () {
-        @foreach ((child) => {
+        listbox.@foreach ((child) => {
             ((TorrentListRow)child).update ();
         });
-        invalidate_sort ();
+        listbox.invalidate_sort ();
     }
 
     public void add_torrent (Torrent torrent) {
@@ -144,13 +144,13 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     private void add_row (Torrent torrent) {
         var row = new TorrentListRow (torrent);
         row.torrent_removed.connect ((torrent_to_remove) => torrent_removed (torrent_to_remove));
-        add (row);
+        listbox.add (row);
     }
 
     private bool on_button_press (Gdk.EventButton event) {
         if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == Gdk.BUTTON_SECONDARY) {
-            var clicked_row = get_row_at_y ((int)event.y);
-            var rows = get_selected_rows ();
+            var clicked_row = listbox.get_row_at_y ((int)event.y);
+            var rows = listbox.get_selected_rows ();
             var found = false;
             foreach (var row in rows) {
                 if (clicked_row == row) {
@@ -160,21 +160,21 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             }
 
             if (!found) {
-                selected_foreach ((box, row) => {
-                    unselect_row (row);
+                listbox.selected_foreach ((box, row) => {
+                    listbox.unselect_row (row);
                 });
 
-                select_row (clicked_row);
+                listbox.select_row (clicked_row);
             }
 
-            popup_menu ();
+            listbox.popup_menu ();
             return true;
         }
         return false;
     }
 
     private bool on_popup_menu () {
-        var items = get_selected_rows ();
+        var items = listbox.get_selected_rows ();
         var all_paused = true;
 
         foreach (unowned var selected_row in items) {
@@ -193,7 +193,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         }
 
         if (items.length () < 2) {
-            var selected_row = get_selected_row () as TorrentListRow;
+            var selected_row = listbox.get_selected_row () as TorrentListRow;
 
             if (selected_row != null && selected_row.multi_file_torrent) {
                 menu.append (_("Select Files to Download"), ACTION_GROUP_PREFIX + ACTION_EDIT_FILES);
@@ -220,25 +220,25 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     public void filter (FilterType filter, string? search_term) {
         switch (filter) {
             case FilterType.ALL:
-                set_filter_func (null);
+                listbox.set_filter_func (null);
                 break;
             case FilterType.DOWNLOADING:
-                set_filter_func ((item) => {
+                listbox.set_filter_func ((item) => {
                     return ((TorrentListRow)item).downloading;
                 });
                 break;
             case FilterType.SEEDING:
-                set_filter_func ((item) => {
+                listbox.set_filter_func ((item) => {
                     return ((TorrentListRow)item).seeding;
                 });
                 break;
             case FilterType.PAUSED:
-                set_filter_func ((item) => {
+                listbox.set_filter_func ((item) => {
                     return ((TorrentListRow)item).paused;
                 });
                 break;
             case FilterType.SEARCH:
-                set_filter_func ((item) => {
+                listbox.set_filter_func ((item) => {
                     return ((TorrentListRow)item).display_name.casefold ().contains (search_term.casefold ());
                 });
                 break;

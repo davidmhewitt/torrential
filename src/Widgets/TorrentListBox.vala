@@ -34,6 +34,14 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
         SEARCH
     }
 
+    private const string ACTION_GROUP_PREFIX = "win.";
+    private const string ACTION_REMOVE = "action-remove";
+    private const string ACTION_PAUSE = "action-pause";
+    private const string ACTION_RESUME = "action-resume";
+    private const string ACTION_EDIT_FILES = "action-edit-files";
+    private const string ACTION_COPY_MAGNET = "action-copy-magnet";
+    private const string ACTION_OPEN = "action-open";
+
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
         set_selection_mode (Gtk.SelectionMode.MULTIPLE);
         activate_on_single_click = false;
@@ -62,6 +70,63 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
             }
 
             return false;
+        });
+    }
+
+    construct {
+        var action_remove = new SimpleAction (ACTION_REMOVE, null);
+        var action_pause = new SimpleAction (ACTION_PAUSE, null);
+        var action_resume = new SimpleAction (ACTION_RESUME, null);
+        var action_edit_files = new SimpleAction (ACTION_EDIT_FILES, null);
+        var action_copy_magnet = new SimpleAction (ACTION_COPY_MAGNET, null);
+        var action_open = new SimpleAction (ACTION_OPEN, null);
+
+        var active_window = (Gtk.ApplicationWindow)((Gtk.Application) GLib.Application.get_default ()).active_window;
+        active_window.add_action (action_remove);
+        active_window.add_action (action_pause);
+        active_window.add_action (action_resume);
+        active_window.add_action (action_edit_files);
+        active_window.add_action (action_copy_magnet);
+        active_window.add_action (action_open);
+
+        action_remove.activate.connect (() => {
+            foreach (unowned var row in get_selected_rows ()) {
+                ((TorrentListRow) row).remove_torrent ();
+            }
+        });
+
+        action_pause.activate.connect (() => {
+            foreach (unowned var row in get_selected_rows ()) {
+                ((TorrentListRow) row).pause_torrent ();
+            }
+        });
+
+        action_resume.activate.connect (() => {
+            foreach (unowned var row in get_selected_rows ()) {
+                ((TorrentListRow) row).resume_torrent ();
+            }
+        });
+
+        action_edit_files.activate.connect (() => {
+            var row = (TorrentListRow) get_selected_row ();
+            if (row != null) {
+                row.edit_files ();
+            }
+        });
+
+        action_open.activate.connect (() => {
+            var row = (TorrentListRow) get_selected_row ();
+            if (row != null) {
+                open_torrent_location (row.id);
+            }
+        });
+
+        action_copy_magnet.activate.connect (() => {
+            var row = (TorrentListRow) get_selected_row ();
+            if (row != null) {
+                row.copy_magnet_link ();
+                link_copied ();
+            }
         });
     }
 
@@ -109,90 +174,39 @@ public class Torrential.Widgets.TorrentListBox : Gtk.ListBox {
     }
 
     private bool on_popup_menu () {
-        Gdk.Event event = Gtk.get_current_event ();
-        var menu = new Gtk.Menu ();
-
         var items = get_selected_rows ();
         var all_paused = true;
 
-        foreach (var selected_row in items) {
-            if (!((TorrentListRow)selected_row).paused) {
+        foreach (unowned var selected_row in items) {
+            if (!((TorrentListRow) selected_row).paused) {
                 all_paused = false;
                 break;
             }
         }
 
-        var remove_item = new Gtk.MenuItem.with_label (_("Remove"));
-        remove_item.activate.connect (() => {
-            foreach (var selected_row in items) {
-                ((TorrentListRow)selected_row).remove_torrent ();
-            }
-        });
-
-        var pause_item = new Gtk.MenuItem.with_label (_("Pause"));
-        pause_item.activate.connect (() => {
-            foreach (var selected_row in items) {
-                ((TorrentListRow)selected_row).pause_torrent ();
-            }
-        });
-
-        var unpause_item = new Gtk.MenuItem.with_label (_("Resume"));
-        unpause_item.activate.connect (() => {
-            foreach (var selected_row in items) {
-                ((TorrentListRow)selected_row).resume_torrent ();
-            }
-        });
-
-        var edit_files_item = new Gtk.MenuItem.with_label (_("Select Files to Download"));
-        edit_files_item.activate.connect (() => {
-            var selected_row = get_selected_row () as TorrentListRow;
-            if (selected_row != null) {
-                selected_row.edit_files ();
-            }
-        });
-
-        var open_item = new Gtk.MenuItem.with_label (_("Show in File Browser"));
-        open_item.activate.connect (() => {
-            var selected_row = get_selected_row ();
-            if (selected_row != null) {
-                open_torrent_location (((TorrentListRow)selected_row).id);
-            }
-        });
-
-        var copy_magnet_item = new Gtk.MenuItem.with_label (_("Copy Magnet Link"));
-        copy_magnet_item.activate.connect (() => {
-            var selected_row = get_selected_row () as TorrentListRow;
-            if (selected_row != null) {
-                selected_row.copy_magnet_link ();
-                link_copied ();
-            }
-        });
-
-        menu.add (remove_item);
+        var menu = new Menu ();
+        menu.append (_("Remove"), ACTION_GROUP_PREFIX + ACTION_REMOVE);
         if (all_paused) {
-            menu.add (unpause_item);
+            menu.append (_("Resume"), ACTION_GROUP_PREFIX + ACTION_RESUME);
         } else {
-            menu.add (pause_item);
+            menu.append (_("Pause"), ACTION_GROUP_PREFIX + ACTION_PAUSE);
         }
 
         if (items.length () < 2) {
             var selected_row = get_selected_row () as TorrentListRow;
 
             if (selected_row != null && selected_row.multi_file_torrent) {
-                menu.add (edit_files_item);
+                menu.append (_("Select Files to Download"), ACTION_GROUP_PREFIX + ACTION_EDIT_FILES);
             }
 
-            menu.add (copy_magnet_item);
-            menu.add (open_item);
+            menu.append (_("Copy Magnet Link"), ACTION_GROUP_PREFIX + ACTION_COPY_MAGNET);
+            menu.append (_("Show in File Browser"), ACTION_GROUP_PREFIX + ACTION_OPEN);
         }
 
-        menu.set_screen (null);
-        menu.attach_to_widget (this, null);
+        var gtk_menu = new Gtk.Menu.from_model (menu);
+        gtk_menu.attach_to_widget (this, null);
+        gtk_menu.popup_at_pointer (Gtk.get_current_event ());
 
-        menu.show_all ();
-        uint button;
-        event.get_button (out button);
-        menu.popup_at_pointer (event);
         return true;
     }
 

@@ -50,12 +50,18 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     }
 
     construct {
+        var secondary_click_gesture = new Gtk.GestureClick () {
+            button = 2
+        };
+
+        var key_controller = new Gtk.EventControllerKey ();
+
         listbox = new Gtk.ListBox () {
             activate_on_single_click = false,
             selection_mode = Gtk.SelectionMode.MULTIPLE
         };
-        listbox.button_press_event.connect (on_button_press);
-        listbox.popup_menu.connect (on_popup_menu);
+        listbox.add_controller (key_controller);
+        listbox.add_controller (secondary_click_gesture);
         listbox.row_activated.connect (on_row_activated);
         listbox.set_sort_func (sort);
 
@@ -120,8 +126,8 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
             }
         });
 
-        listbox.key_release_event.connect ((event) => {
-            switch (event.keyval) {
+        key_controller.key_released.connect ((keyval, keycode, state) => {
+            switch (keyval) {
                 case Gdk.Key.Delete:
                 case Gdk.Key.BackSpace:
                     action_remove.activate (null);
@@ -129,9 +135,9 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
                 default:
                     break;
             }
-
-            return false;
         });
+
+        secondary_click_gesture.released.connect (popup_menu);
     }
 
     public void update () {
@@ -155,36 +161,26 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
         listbox.append (row);
     }
 
-    // private bool on_button_press (Gdk.EventButton event) {
-    //     if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == Gdk.BUTTON_SECONDARY) {
-    //         var clicked_row = listbox.get_row_at_y ((int)event.y);
-    //         var rows = listbox.get_selected_rows ();
-    //         var found = false;
-    //         foreach (var row in rows) {
-    //             if (clicked_row == row) {
-    //                 found = true;
-    //                 break;
-    //             }
-    //         }
+    private void popup_menu (int n_press, double x, double y) {
+        var clicked_row = listbox.get_row_at_y ((int) y);
+        var found = false;
+        foreach (unowned var row in listbox.get_selected_rows ()) {
+            if (clicked_row == row) {
+                found = true;
+                break;
+            }
+        }
 
-    //         if (!found) {
-    //             listbox.selected_foreach ((box, row) => {
-    //                 listbox.unselect_row (row);
-    //             });
+        if (!found) {
+            listbox.selected_foreach ((box, row) => {
+                listbox.unselect_row (row);
+            });
 
-    //             listbox.select_row (clicked_row);
-    //         }
+            listbox.select_row (clicked_row);
+        }
 
-    //         listbox.popup_menu ();
-    //         return true;
-    //     }
-    //     return false;
-    // }
-
-    private bool on_popup_menu () {
         var items = listbox.get_selected_rows ();
         var all_paused = true;
-
         foreach (unowned var selected_row in items) {
             if (!((TorrentListRow) selected_row).paused) {
                 all_paused = false;
@@ -211,11 +207,16 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
             menu.append (_("Show in File Browser"), ACTION_GROUP_PREFIX + ACTION_OPEN);
         }
 
-        var popover = new Gtk.PopoverMenu.from_model (menu);
+        var rect = Gdk.Rectangle () {
+            x = (int) x,
+            y = (int) y
+        };
+
+        var popover = new Gtk.PopoverMenu.from_model (menu) {
+            pointing_to = rect
+        };
         popover.set_parent (this);
         popover.popup ();
-
-        return true;
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {

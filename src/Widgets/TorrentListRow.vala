@@ -44,11 +44,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         this.torrent = torrent;
 
         green_progress_provider = new Gtk.CssProvider ();
-        try {
-            green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;".data);
-        } catch (Error e) {
-            warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
-        }
+        green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;".data);
 
         Icon icon;
         if (torrent.file_count > 1) {
@@ -235,8 +231,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public void copy_magnet_link () {
         var link = torrent.magnet_link;
-        var clipboard = Gtk.Clipboard.get_for_display (get_display (), Gdk.SELECTION_CLIPBOARD);
-        clipboard.set_text (link, -1);
+        var clipboard = Gdk.Display.get_default ().get_clipboard ();
+        clipboard.set_text (link);
     }
 
     public bool downloading { get { return torrent.downloading; } }

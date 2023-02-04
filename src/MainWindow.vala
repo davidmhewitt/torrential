@@ -343,7 +343,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         filech.response.connect ((response) => {
             if (response == Gtk.ResponseType.ACCEPT) {
-                add_files (filech.get_files ());
+                // add_files (filech.get_files ());
             }
         });
     }

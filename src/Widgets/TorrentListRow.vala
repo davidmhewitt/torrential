@@ -60,7 +60,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             }
         }
         var icon_image = new Gtk.Image.from_gicon (icon) {
-            icon_size = Gtk.IconSize.LARGE
+            pixel_size = 48
         };
 
         torrent_name = new Gtk.Label (torrent.name) {
@@ -104,11 +104,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
         var grid = new Gtk.Grid () {
              column_spacing = 12,
-             row_spacing = 3,
-             margin_top = 6,
-             margin_end = 12,
-             margin_bottom = 6,
-             margin_start = 12
+             row_spacing = 3
          };
         grid.attach (icon_image, 0, 0, 1, 4);
         grid.attach (torrent_name, 1, 0);

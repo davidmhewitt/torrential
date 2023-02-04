@@ -62,6 +62,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
             vexpand = true,
             selection_mode = Gtk.SelectionMode.MULTIPLE
         };
+        listbox.add_css_class (Granite.STYLE_CLASS_RICH_LIST);
         listbox.add_controller (key_controller);
         listbox.add_controller (secondary_click_gesture);
         listbox.row_activated.connect (on_row_activated);

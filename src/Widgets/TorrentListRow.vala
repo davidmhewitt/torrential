@@ -27,8 +27,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label torrent_name;
     private Gtk.Button pause_button;
 
-    private Gtk.CssProvider green_progress_provider;
-
     private const string PAUSE_ICON_NAME = "media-playback-pause-symbolic";
     private const string RESUME_ICON_NAME = "media-playback-start-symbolic";
 
@@ -40,11 +38,15 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         }
     }
 
+    class construct {
+        var green_progress_provider = new Gtk.CssProvider ();
+        green_progress_provider.load_from_data ("progressbar.seeding progress { background-color: @LIME_300; }".data);
+
+        Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+    }
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
-
-        green_progress_provider = new Gtk.CssProvider ();
-        green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;".data);
 
         Icon icon;
         if (torrent.file_count > 1) {
@@ -78,8 +80,8 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             hexpand = true,
             fraction = torrent.progress
         };
-        if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        if (seeding) {
+            progress.add_css_class ("seeding");
         }
 
         if (!torrent.paused) {
@@ -124,9 +126,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         pause_button.icon_name = torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME;
 
         if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+            if (!progress.has_css_class ("seeding")) {
+                progress.add_css_class ("seeding");
+            }
         } else {
-            progress.get_style_context ().remove_provider (green_progress_provider);
+            progress.remove_css_class ("seeding");
         }
     }
 

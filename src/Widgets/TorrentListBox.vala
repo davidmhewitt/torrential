@@ -58,6 +58,8 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
         listbox = new Gtk.ListBox () {
             activate_on_single_click = false,
+            hexpand = true,
+            vexpand = true,
             selection_mode = Gtk.SelectionMode.MULTIPLE
         };
         listbox.add_controller (key_controller);

@@ -97,9 +97,9 @@ public class Torrential.Application : Gtk.Application {
             }
 
             settings.bind ("window-maximized", window, "maximized", SettingsBindFlags.SET);
-        } else {
-            active_window.present ();
         }
+
+        active_window.present ();
     }
 
     public override int command_line (GLib.ApplicationCommandLine command_line) {

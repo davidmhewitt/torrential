@@ -214,7 +214,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    private Gtk.HeaderBar build_headerbar () {
+    private Gtk.Widget build_headerbar () {
         var headerbar = new Gtk.HeaderBar () {
             show_title_buttons = true
         };
@@ -224,8 +224,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         menu.append (_("_Quit"), ACTION_GROUP_PREFIX + ACTION_QUIT);
 
         var menu_button = new Gtk.MenuButton () {
-            child = new Gtk.Image.from_icon_name ("open-menu"),
+            icon_name = "open-menu",
             menu_model = menu,
+            primary = true,
             tooltip_text = _("Application menu")
         };
         headerbar.pack_end (menu_button);
@@ -277,7 +278,11 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         headerbar.title_widget = search_entry;
 
-        return headerbar;
+        var window_handle = new Gtk.WindowHandle () {
+            child = headerbar
+        };
+
+        return window_handle;
     }
 
     private void update_view () {
@@ -314,6 +319,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         prefs_window.on_close.connect (() => {
             torrent_manager.update_session_settings ();
         });
+        prefs_window.present ();
     }
 
     public void quit () {

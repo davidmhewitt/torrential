@@ -359,22 +359,20 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_open_magnet () {
-        var add_button = new Gtk.Button.with_label (_("Add Magnet Link")) {
-            sensitive = false
-        };
-
         var entry = new Gtk.Entry ();
 
         var clipboard = Gdk.Display.get_default ().get_clipboard ();
 
-        var value_string = Value (typeof (string));
-
         try {
-            clipboard.get_content ().get_value (ref value_string);
+            var contents = clipboard.get_content ();
+            if (contents != null) {
+                var value = Value (typeof (string));
+                contents.get_value (ref value);
 
-            string? contents = value_string.get_string ();
-            if (contents != null && contents.has_prefix ("magnet:")) {
-                entry.text = contents;
+                string? value_string = value.get_string ();
+                if (value_string!= null && value_string.has_prefix ("magnet:")) {
+                    entry.text = value_string;
+                }
             }
         } catch (Error e) {
             critical (e.message);
@@ -382,6 +380,10 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         var label = new Gtk.Label (_("Magnet URL:")) {
             halign = Gtk.Align.START
+        };
+
+        var add_button = new Gtk.Button.with_label (_("Add Magnet Link")) {
+            sensitive = entry.text.strip () != ""
         };
 
         var content_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3) {

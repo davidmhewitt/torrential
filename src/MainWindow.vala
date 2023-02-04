@@ -370,7 +370,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         filech.response.connect ((response) => {
             if (response == Gtk.ResponseType.ACCEPT) {
-                add_files (filech.get_uris ());
+                add_files (filech.get_files ());
             }
         });
     }
@@ -448,31 +448,24 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    public void add_files (SList<string> uris) {
-        Gee.ArrayList<string> errors = new Gee.ArrayList<string> ();
-        foreach (string uri in uris) {
-            string path = "";
-            try {
-                path = Filename.from_uri (uri);
-            } catch (ConvertError e) {
-                warning ("Error opening %s, error: %s", uri, e.message);
-                continue;
-            }
+    public void add_files (SList<File> files) {
+        var errors = new Gee.ArrayList<string> ();
+        foreach (unowned var file in files) {
             Torrent? new_torrent;
-            var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
+            var result = torrent_manager.add_torrent_by_path (file.get_path (), out new_torrent);
             if (result == Transmission.ParseResult.OK) {
                 list_box.add_torrent (new_torrent);
             } else if (result == Transmission.ParseResult.ERR) {
-                var basename = Filename.display_basename (path);
-                errors.add (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (basename));
+                errors.add (_("Failed to add \u201C%s\u201D as it doesn\u2019t appear to be a valid torrent.").printf (file.get_basename ()));
             } else {
-                var basename = Filename.display_basename (path);
-                errors.add (_("Didn\u2019t add \u201C%s\u201D. An identical torrent has already been added.").printf (basename));
+                errors.add (_("Didn\u2019t add \u201C%s\u201D. An identical torrent has already been added.").printf (file.get_basename ()));
             }
         }
-        if (uris.length () - errors.size > 0) {
+
+        if (files.length () - errors.size > 0) {
             enable_main_view ();
         }
+
         if (errors.size > 0) {
             infobar.add_errors (errors);
         }

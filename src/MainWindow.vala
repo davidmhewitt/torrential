@@ -229,18 +229,21 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             primary = true,
             tooltip_text = _("Application menu")
         };
+        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_end (menu_button);
 
         var open_button = new Gtk.Button.from_icon_name ("document-open") {
             action_name = ACTION_GROUP_PREFIX + ACTION_OPEN,
             tooltip_text = _("Open .torrent file")
         };
+        open_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start (open_button);
 
         magnet_button = new Gtk.Button.from_icon_name ("open-magnet") {
             action_name = ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET,
             tooltip_text = _("Open magnet link")
         };
+        magnet_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start (magnet_button);
 
         search_entry = new Gtk.SearchEntry () {
@@ -273,6 +276,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             menu_model = view_mode_model,
             tooltip_text = _("Filter")
         };
+        view_mode_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         headerbar.pack_end (view_mode_button);
 

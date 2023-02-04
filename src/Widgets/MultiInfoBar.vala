@@ -19,20 +19,31 @@
 * Authored by: David Hewitt <davidmhewitt@gmail.com>
 */
 
-public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
-    private Gtk.Label infobar_label = new Gtk.Label ("");
+public class Torrential.Widgets.MultiInfoBar : Gtk.Box {
+    private Gtk.Label infobar_label;
     private Gee.ArrayQueue<string> infobar_errors = new Gee.ArrayQueue<string> ();
     private Gtk.Button next_button;
+    private Gtk.InfoBar infobar;
 
     construct {
-        get_content_area ().add (infobar_label);
+        infobar_label = new Gtk.Label ("") {
+            wrap = true,
+            xalign = 0
+        };
 
-        next_button = (Gtk.Button) add_button (_("Next Warning"), 0);
+        infobar = new Gtk.InfoBar () {
+            message_type = Gtk.MessageType.WARNING,
+            revealed = false
+        };
+        infobar.get_content_area ().add (infobar_label);
+
+        next_button = (Gtk.Button) infobar.add_button (_("Next Warning"), 0);
         next_button.clicked.connect (() => next_error ());
 
-        var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
+        var close_button = (Gtk.Button) infobar.add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => close_bar ());
 
+        add (infobar);
         show_all ();
     }
 
@@ -54,7 +65,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
     }
 
     private void close_bar () {
-        revealed = false;
+        infobar.revealed = false;
         infobar_errors.clear ();
     }
 
@@ -69,7 +80,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.InfoBar {
                 next_button.hide ();
             }
             infobar_label.show ();
-            revealed = true;
+            infobar.revealed = true;
         }
     }
 }

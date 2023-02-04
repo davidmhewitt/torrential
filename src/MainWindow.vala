@@ -116,10 +116,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         });
         actions.add_action (filter_action);
 
-        infobar = new Widgets.MultiInfoBar () {
-            revealed = false,
-            message_type = Gtk.MessageType.WARNING
-        };
+        infobar = new Widgets.MultiInfoBar ();
 
         list_box = new Widgets.TorrentListBox (torrent_manager.get_torrents ());
         list_box.torrent_removed.connect ((torrent) => torrent_manager.remove_torrent (torrent));

@@ -64,21 +64,18 @@ public class Torrential.Application : Gtk.Application {
             var magnet = files[0].get_uri ();
             magnet = magnet.replace ("magnet:///?", "magnet:?");
 
-            if (active_window == null) {
-                activate ();
-            }
-
+            activate ();
             ((MainWindow) active_window).add_magnet (magnet);
             return;
         }
 
-        var uris = new SList<string> ();
-        foreach (var file in files) {
-            uris.append (file.get_uri ());
+        var file_list = new SList<File> ();
+        foreach (unowned var file in files) {
+            file_list.append (file);
         }
 
         activate ();
-        ((MainWindow) active_window).add_files (uris);
+        ((MainWindow) active_window).add_files (file_list);
     }
 
     public override void activate () {

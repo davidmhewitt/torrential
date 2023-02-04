@@ -55,7 +55,6 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
             selection_mode = Gtk.SelectionMode.MULTIPLE
         };
         listbox.button_press_event.connect (on_button_press);
-        listbox.popup_menu.connect (on_popup_menu);
         listbox.row_activated.connect (on_row_activated);
         listbox.set_sort_func (sort);
 
@@ -153,10 +152,9 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
     private bool on_button_press (Gdk.EventButton event) {
         if (event.type == Gdk.EventType.BUTTON_PRESS && event.button == Gdk.BUTTON_SECONDARY) {
-            var clicked_row = listbox.get_row_at_y ((int)event.y);
-            var rows = listbox.get_selected_rows ();
+            var clicked_row = listbox.get_row_at_y ((int) event.y);
             var found = false;
-            foreach (var row in rows) {
+            foreach (unowned var row in listbox.get_selected_rows ()) {
                 if (clicked_row == row) {
                     found = true;
                     break;
@@ -171,47 +169,52 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
                 listbox.select_row (clicked_row);
             }
 
-            listbox.popup_menu ();
+            var items = listbox.get_selected_rows ();
+            var all_paused = true;
+
+            foreach (unowned var selected_row in items) {
+                if (!((TorrentListRow) selected_row).paused) {
+                    all_paused = false;
+                    break;
+                }
+            }
+
+            var menu = new Menu ();
+            menu.append (_("Remove"), ACTION_REMOVE);
+            if (all_paused) {
+                menu.append (_("Resume"), ACTION_RESUME);
+            } else {
+                menu.append (_("Pause"), ACTION_PAUSE);
+            }
+
+            if (items.length () < 2) {
+                var selected_row = listbox.get_selected_row () as TorrentListRow;
+
+                if (selected_row != null && selected_row.multi_file_torrent) {
+                    menu.append (_("Select Files to Download"), ACTION_EDIT_FILES);
+                }
+
+                menu.append (_("Copy Magnet Link"), ACTION_COPY_MAGNET);
+                menu.append (_("Show in File Browser"), ACTION_OPEN);
+            }
+
+            var rect = Gdk.Rectangle () {
+                x = (int) event.x,
+                y = (int) event.y
+            };
+
+            var popover = new Gtk.PopoverMenu () {
+                pointing_to = rect,
+                relative_to = listbox,
+                position = Gtk.PositionType.BOTTOM
+            };
+            popover.bind_model (menu, "win");
+            popover.popup ();
+
             return true;
         }
+
         return false;
-    }
-
-    private bool on_popup_menu () {
-        var items = listbox.get_selected_rows ();
-        var all_paused = true;
-
-        foreach (unowned var selected_row in items) {
-            if (!((TorrentListRow) selected_row).paused) {
-                all_paused = false;
-                break;
-            }
-        }
-
-        var menu = new Menu ();
-        menu.append (_("Remove"), ACTION_GROUP_PREFIX + ACTION_REMOVE);
-        if (all_paused) {
-            menu.append (_("Resume"), ACTION_GROUP_PREFIX + ACTION_RESUME);
-        } else {
-            menu.append (_("Pause"), ACTION_GROUP_PREFIX + ACTION_PAUSE);
-        }
-
-        if (items.length () < 2) {
-            var selected_row = listbox.get_selected_row () as TorrentListRow;
-
-            if (selected_row != null && selected_row.multi_file_torrent) {
-                menu.append (_("Select Files to Download"), ACTION_GROUP_PREFIX + ACTION_EDIT_FILES);
-            }
-
-            menu.append (_("Copy Magnet Link"), ACTION_GROUP_PREFIX + ACTION_COPY_MAGNET);
-            menu.append (_("Show in File Browser"), ACTION_GROUP_PREFIX + ACTION_OPEN);
-        }
-
-        var gtk_menu = new Gtk.Menu.from_model (menu);
-        gtk_menu.attach_to_widget (this, null);
-        gtk_menu.popup_at_pointer (Gtk.get_current_event ());
-
-        return true;
     }
 
     private void on_row_activated (Gtk.ListBoxRow row) {

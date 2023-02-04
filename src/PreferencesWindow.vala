@@ -15,26 +15,19 @@
 */
 
 public class Torrential.PreferencesWindow : Granite.Dialog {
-
     public signal void on_close ();
 
-    private const int MIN_WIDTH = 420;
-    private const int MIN_HEIGHT = 300;
+    public weak MainWindow parent_window { private get; construct; }
 
     private GLib.Settings settings;
-
     private Gtk.Label location_chooser_label;
-
-    public weak MainWindow parent_window { private get; construct; }
 
     public PreferencesWindow (Torrential.MainWindow parent) {
         Object (parent_window: parent);
     }
 
     construct {
-        // Window properties
         title = _("Preferences");
-        set_default_size (MIN_WIDTH, MIN_HEIGHT);
         resizable = false;
         destroy_with_parent = true;
         set_transient_for (parent_window);
@@ -51,10 +44,10 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         };
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12) {
-            margin_top = 12,
             margin_end = 12,
             margin_bottom = 12,
-            margin_start = 12
+            margin_start = 12,
+            vexpand = true
         };
         box.append (switcher);
         box.append (stack);
@@ -67,11 +60,9 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
             destroy ();
         });
 
-        settings.changed.connect (on_saved_settings_changed);
-    }
-
-    private void on_saved_settings_changed () {
-        location_chooser_label.label = Utils.get_downloads_folder ();
+        settings.changed["download-folder"].connect (() => {
+            location_chooser_label.label = Utils.get_downloads_folder ();
+        });
     }
 
     private Gtk.Grid create_advanced_settings_widgets () {
@@ -88,11 +79,11 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         randomise_port_switch.bind_property ("active", port_entry, "sensitive", BindingFlags.BIDIRECTIONAL | BindingFlags.SYNC_CREATE | BindingFlags.INVERT_BOOLEAN);
         var port_label = create_label (_("Port number:"));
 
-        var advanced_grid = new Gtk.Grid ();
-        advanced_grid.hexpand = true;
-        advanced_grid.column_spacing = 12;
-        advanced_grid.row_spacing = 6;
-
+        var advanced_grid = new Gtk.Grid () {
+            column_spacing = 12,
+            row_spacing = 6,
+            hexpand = true
+        };
         advanced_grid.attach (new Granite.HeaderLabel (_("Security")), 0, 2, 1, 1);
         advanced_grid.attach (force_encryption_label, 0, 3, 1, 1);
         advanced_grid.attach (force_encryption_switch, 1, 3, 1, 1);
@@ -116,9 +107,7 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         var location_chooser = new Gtk.Button () {
             child = location_box,
             hexpand = true,
-            halign = Gtk.Align.FILL,
-            margin_start = 20,
-            margin_end = 20
+            margin_start = 12
         };
 
         location_chooser.clicked.connect (() => {
@@ -162,10 +151,11 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
         settings.bind ("hide-on-close", hide_on_close_switch, "active", SettingsBindFlags.DEFAULT);
         var hide_on_close_label = create_label (_("Continue downloads when closed:"));
 
-        var general_grid = new Gtk.Grid ();
-        general_grid.hexpand = true;
-        general_grid.column_spacing = 12;
-        general_grid.row_spacing = 6;
+        var general_grid = new Gtk.Grid () {
+            column_spacing = 12,
+            row_spacing = 6,
+            hexpand = true
+        };
 
         general_grid.attach (location_heading, 0, 0, 1, 1);
         general_grid.attach (location_chooser, 0, 1, 2, 1);
@@ -186,26 +176,27 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     }
 
     private Gtk.Switch create_switch () {
-        var toggle = new Gtk.Switch ();
-        toggle.halign = Gtk.Align.START;
-        toggle.hexpand = true;
+        var toggle = new Gtk.Switch () {
+            halign = Gtk.Align.START,
+            hexpand = true
+        };
 
         return toggle;
     }
 
     private Gtk.Label create_label (string text) {
-        var label = new Gtk.Label (text);
-        label.hexpand = true;
-        label.halign = Gtk.Align.END;
-        label.margin_start = 20;
+        var label = new Gtk.Label (text) {
+            halign = Gtk.Align.END,
+            margin_start = 12
+        };
 
         return label;
     }
 
     private Gtk.SpinButton create_spinbutton (double min, double max, double step) {
-        var button = new Gtk.SpinButton.with_range (min, max, step);
-        button.halign = Gtk.Align.START;
-        button.hexpand = true;
+        var button = new Gtk.SpinButton.with_range (min, max, step) {
+            hexpand = true
+        };
 
         return button;
     }

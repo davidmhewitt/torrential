@@ -205,7 +205,8 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
             var popover = new Gtk.PopoverMenu () {
                 pointing_to = rect,
-                relative_to = clicked_row
+                relative_to = listbox,
+                position = Gtk.PositionType.BOTTOM
             };
             popover.bind_model (menu, "win");
             popover.popup ();

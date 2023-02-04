@@ -28,6 +28,7 @@ dependencies = [
     meson.get_compiler('c').find_library('curl'),
     meson.get_compiler('c').find_library('ssl'),
     meson.get_compiler('c').find_library('crypto'),
+    meson.get_compiler('c').find_library('z'),
 ]
 
 subdir('data')

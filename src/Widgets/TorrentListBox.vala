@@ -166,6 +166,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
     private void popup_menu (int n_press, double x, double y) {
         var clicked_row = listbox.get_row_at_y ((int) y);
+        if (clicked_row == null) {
+            return;
+        }
+
         var found = false;
         foreach (unowned var row in listbox.get_selected_rows ()) {
             if (clicked_row == row) {

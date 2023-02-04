@@ -69,7 +69,7 @@ public class Torrential.Application : Gtk.Application {
             return;
         }
 
-        var file_list = new SList<File> ();
+        var file_list = new ListStore (typeof (File));
         foreach (unowned var file in files) {
             file_list.append (file);
         }

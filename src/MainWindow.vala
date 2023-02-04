@@ -353,7 +353,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         filech.response.connect ((response) => {
             if (response == Gtk.ResponseType.ACCEPT) {
-                // add_files (filech.get_files ());
+                add_files (filech.get_files ());
             }
         });
     }
@@ -442,9 +442,10 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    public void add_files (SList<File> files) {
+    public void add_files (ListModel files) {
         var errors = new Gee.ArrayList<string> ();
-        foreach (unowned var file in files) {
+        for (int i = 0; i < files.get_n_items (); i++) {
+            var file = (File) files.get_item (i);
             Torrent? new_torrent;
             var result = torrent_manager.add_torrent_by_path (file.get_path (), out new_torrent);
             if (result == Transmission.ParseResult.OK) {
@@ -456,7 +457,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
         }
 
-        if (files.length () - errors.size > 0) {
+        if (files.get_n_items () - errors.size > 0) {
             enable_main_view ();
         }
 

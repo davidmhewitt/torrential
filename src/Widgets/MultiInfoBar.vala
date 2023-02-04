@@ -32,6 +32,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.Box {
         };
 
         infobar = new Gtk.InfoBar () {
+            hexpand = true,
             message_type = Gtk.MessageType.WARNING,
             revealed = false
         };

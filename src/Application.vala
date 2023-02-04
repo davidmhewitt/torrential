@@ -108,6 +108,7 @@ public class Torrential.Application : Gtk.Application {
         if (options.contains ("quit")) {
             if (active_window != null) {
                 ((MainWindow) active_window).quit ();
+                return Posix.EXIT_SUCCESS;
             }
         }
 

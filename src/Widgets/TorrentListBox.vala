@@ -135,9 +135,13 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     }
 
     public void update () {
-        listbox.@foreach ((child) => {
-            ((TorrentListRow)child).update ();
-        });
+        var child = listbox.get_first_child ();
+        while (child != null) {
+            ((TorrentListRow) child).update ();
+
+            child = child.get_next_sibling ();
+        }
+
         listbox.invalidate_sort ();
     }
 
@@ -252,11 +256,15 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     }
 
     public bool has_visible_children () {
-        foreach (var child in get_children ()) {
+        var child = listbox.get_first_child ();
+        while (child != null) {
             if (child.get_child_visible ()) {
                 return true;
             }
+
+            child = child.get_next_sibling ();
         }
+
         return false;
     }
 

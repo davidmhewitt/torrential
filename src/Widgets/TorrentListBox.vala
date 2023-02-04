@@ -51,7 +51,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
     construct {
         var secondary_click_gesture = new Gtk.GestureClick () {
-            button = 2
+            button = Gdk.BUTTON_SECONDARY
         };
 
         var key_controller = new Gtk.EventControllerKey ();
@@ -183,6 +183,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
         var items = listbox.get_selected_rows ();
         var all_paused = true;
+
         foreach (unowned var selected_row in items) {
             if (!((TorrentListRow) selected_row).paused) {
                 all_paused = false;
@@ -215,7 +216,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
         };
 
         var popover = new Gtk.PopoverMenu.from_model (menu) {
-            pointing_to = rect
+            halign = Gtk.Align.START,
+            has_arrow = false,
+            pointing_to = rect,
+            position = Gtk.PositionType.BOTTOM
         };
         popover.set_parent (this);
         popover.popup ();

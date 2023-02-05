@@ -160,7 +160,10 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
     private void add_row (Torrent torrent) {
         var row = new TorrentListRow (torrent);
-        row.torrent_removed.connect ((torrent_to_remove) => torrent_removed (torrent_to_remove));
+        row.torrent_removed.connect ((torrent_to_remove) => {
+            listbox.remove (row);
+            torrent_removed (torrent_to_remove);
+        });
         listbox.append (row);
     }
 

@@ -32,10 +32,11 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.Box {
         };
 
         infobar = new Gtk.InfoBar () {
+            hexpand = true,
             message_type = Gtk.MessageType.WARNING,
             revealed = false
         };
-        infobar.get_content_area ().add (infobar_label);
+        infobar.add_child (infobar_label);
 
         next_button = (Gtk.Button) infobar.add_button (_("Next Warning"), 0);
         next_button.clicked.connect (() => next_error ());
@@ -43,8 +44,7 @@ public class Torrential.Widgets.MultiInfoBar : Gtk.Box {
         var close_button = (Gtk.Button) infobar.add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => close_bar ());
 
-        add (infobar);
-        show_all ();
+        append (infobar);
     }
 
     public void add_errors (Gee.ArrayList<string> errors) {

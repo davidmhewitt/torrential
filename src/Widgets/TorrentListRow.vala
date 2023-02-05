@@ -27,8 +27,6 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
     private Gtk.Label torrent_name;
     private Gtk.Button pause_button;
 
-    private Gtk.CssProvider green_progress_provider;
-
     private const string PAUSE_ICON_NAME = "media-playback-pause-symbolic";
     private const string RESUME_ICON_NAME = "media-playback-start-symbolic";
 
@@ -40,15 +38,15 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         }
     }
 
+    class construct {
+        var green_progress_provider = new Gtk.CssProvider ();
+        green_progress_provider.load_from_data ("progressbar.seeding progress { background-color: @LIME_300; }".data);
+
+        Gtk.StyleContext.add_provider_for_display (Gdk.Display.get_default (), green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+    }
+
     public TorrentListRow (Torrent torrent) {
         this.torrent = torrent;
-
-        green_progress_provider = new Gtk.CssProvider ();
-        try {
-            green_progress_provider.load_from_data ("@define-color accent_color @LIME_300;");
-        } catch (Error e) {
-            warning ("Failed to load custom CSS to make green progress bars. Error: %s", e.message);
-        }
 
         Icon icon;
         if (torrent.file_count > 1) {
@@ -63,25 +61,27 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
                 icon = ContentType.get_icon ("application/x-bittorrent");
             }
         }
-        var icon_image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
+        var icon_image = new Gtk.Image.from_gicon (icon) {
+            pixel_size = 48
+        };
 
         torrent_name = new Gtk.Label (torrent.name) {
             ellipsize = Pango.EllipsizeMode.END,
             halign = Gtk.Align.START
         };
-        torrent_name.get_style_context ().add_class (Granite.STYLE_CLASS_H3_LABEL);
+        torrent_name.add_css_class (Granite.STYLE_CLASS_H3_LABEL);
 
         completeness = new Gtk.Label (generate_completeness_text ()) {
             halign = Gtk.Align.START
         };
-        completeness.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
+        completeness.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
         progress = new Gtk.ProgressBar () {
             hexpand = true,
             fraction = torrent.progress
         };
-        if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+        if (seeding) {
+            progress.add_css_class ("seeding");
         }
 
         if (!torrent.paused) {
@@ -94,7 +94,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
             };
         }
 
-        pause_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        pause_button.add_css_class (Granite.STYLE_CLASS_ROUNDED);
         pause_button.clicked.connect (() => {
             toggle_pause ();
         });
@@ -102,15 +102,11 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         status = new Gtk.Label (generate_status_text ()) {
             halign = Gtk.Align.START
         };
-        status.get_style_context ().add_class (Granite.STYLE_CLASS_SMALL_LABEL);
+        status.add_css_class (Granite.STYLE_CLASS_SMALL_LABEL);
 
         var grid = new Gtk.Grid () {
              column_spacing = 12,
-             row_spacing = 3,
-             margin_top = 6,
-             margin_end = 12,
-             margin_bottom = 6,
-             margin_start = 12
+             row_spacing = 3
          };
         grid.attach (icon_image, 0, 0, 1, 4);
         grid.attach (torrent_name, 1, 0);
@@ -119,8 +115,7 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         grid.attach (pause_button, 2, 1, 1, 4);
         grid.attach (status, 1, 3, 1, 1);
 
-        add (grid);
-        show_all ();
+        child = grid;
     }
 
     public void update () {
@@ -128,17 +123,20 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
         progress.fraction = torrent.progress;
         completeness.label = generate_completeness_text ();
         status.label = generate_status_text ();
-        pause_button.set_image (new Gtk.Image.from_icon_name (torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
+        pause_button.icon_name = torrent.paused ? RESUME_ICON_NAME : PAUSE_ICON_NAME;
+
         if (torrent.seeding) {
-            progress.get_style_context ().add_provider (green_progress_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER);
+            if (!progress.has_css_class ("seeding")) {
+                progress.add_css_class ("seeding");
+            }
         } else {
-            progress.get_style_context ().remove_provider (green_progress_provider);
+            progress.remove_css_class ("seeding");
         }
     }
 
     public void edit_files () {
         var dialog = new Dialogs.FileSelectDialog (torrent) {
-            transient_for = (Gtk.Window) get_toplevel ()
+            transient_for = (Gtk.Window) get_root ()
         };
         dialog.present ();
         dialog.response.connect (dialog.destroy);
@@ -221,20 +219,20 @@ public class Torrential.Widgets.TorrentListRow : Gtk.ListBoxRow {
 
     public void pause_torrent () {
         torrent.pause ();
-        pause_button.set_image (new Gtk.Image.from_icon_name (RESUME_ICON_NAME, Gtk.IconSize.BUTTON));
+        pause_button.icon_name = RESUME_ICON_NAME;
         pause_button.tooltip_text = _("Resume torrent");
     }
 
     public void resume_torrent () {
         torrent.unpause ();
-        pause_button.set_image (new Gtk.Image.from_icon_name (PAUSE_ICON_NAME, Gtk.IconSize.BUTTON));
+        pause_button.icon_name = PAUSE_ICON_NAME;
         pause_button.tooltip_text = _("Pause torrent");
     }
 
     public void copy_magnet_link () {
         var link = torrent.magnet_link;
-        var clipboard = Gtk.Clipboard.get_for_display (get_display (), Gdk.SELECTION_CLIPBOARD);
-        clipboard.set_text (link, -1);
+        var clipboard = Gdk.Display.get_default ().get_clipboard ();
+        clipboard.set_text (link);
     }
 
     public bool downloading { get { return torrent.downloading; } }

@@ -47,7 +47,7 @@ public class Torrential.Application : Gtk.Application {
         Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
         Intl.textdomain (GETTEXT_PACKAGE);
 
-        Gtk.IconTheme.get_default ().add_resource_path ("/com/github/davidmhewitt/torrential");
+        Gtk.IconTheme.get_for_display (Gdk.Display.get_default ()).add_resource_path ("/com/github/davidmhewitt/torrential");
 
         var granite_settings = Granite.Settings.get_default ();
         var gtk_settings = Gtk.Settings.get_default ();
@@ -69,7 +69,7 @@ public class Torrential.Application : Gtk.Application {
             return;
         }
 
-        var file_list = new SList<File> ();
+        var file_list = new ListStore (typeof (File));
         foreach (unowned var file in files) {
             file_list.append (file);
         }
@@ -82,9 +82,24 @@ public class Torrential.Application : Gtk.Application {
         if (active_window == null) {
             var window = new MainWindow (this, torrent_manager);
             add_window (window);
-        } else {
-            active_window.present ();
+
+            /*
+            * This is very finicky. Bind size after present else set_titlebar gives us bad sizes
+            * Set maximize after height/width else window is min size on unmaximize
+            * Bind maximize as SET else get get bad sizes
+            */
+            var settings = new Settings ("com.github.davidmhewitt.torrential.settings");
+            settings.bind ("window-height", window, "default-height", SettingsBindFlags.DEFAULT);
+            settings.bind ("window-width", window, "default-width", SettingsBindFlags.DEFAULT);
+
+            if (settings.get_boolean ("window-maximized")) {
+                window.maximize ();
+            }
+
+            settings.bind ("window-maximized", window, "maximized", SettingsBindFlags.SET);
         }
+
+        active_window.present ();
     }
 
     public override int command_line (GLib.ApplicationCommandLine command_line) {
@@ -93,6 +108,7 @@ public class Torrential.Application : Gtk.Application {
         if (options.contains ("quit")) {
             if (active_window != null) {
                 ((MainWindow) active_window).quit ();
+                return Posix.EXIT_SUCCESS;
             }
         }
 

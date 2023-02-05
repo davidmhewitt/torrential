@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <enum id="com.github.davidmhewitt.torrential.windowstate">
-    <value value="0" nick="normal"/>
-    <value value="1" nick="maximized"/>
-  </enum>
   <schema path="/com/github/davidmhewitt/torrential/settings/" id="com.github.davidmhewitt.torrential.settings">
     <key type="i" name="window-width">
       <default>1100</default>
@@ -15,10 +11,10 @@
       <summary>Window height</summary>
       <description>Window height</description>
     </key>
-    <key enum="com.github.davidmhewitt.torrential.windowstate" name="window-state">
-      <default>'normal'</default>
-      <summary>The saved state of the window</summary>
-      <description>The saved state of the window</description>
+    <key name="window-maximized" type="b">
+      <default>false</default>
+      <summary>Open window maximized.</summary>
+      <description>Whether the main window of the application should open maximized or not.</description>
     </key>
     <key type="s" name="download-folder">
       <default>""</default>

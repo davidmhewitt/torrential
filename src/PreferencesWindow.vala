@@ -49,10 +49,10 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
             margin_start = 12,
             vexpand = true
         };
-        box.add (switcher);
-        box.add (stack);
+        box.append (switcher);
+        box.append (stack);
 
-        get_content_area ().add (box);
+        get_content_area ().append (box);
 
         var close_button = (Gtk.Button) add_button (_("Close"), Gtk.ResponseType.CLOSE);
         close_button.clicked.connect (() => {
@@ -98,7 +98,14 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
     private Gtk.Grid create_general_settings_widgets () {
         var location_heading = new Granite.HeaderLabel (_("Download Location"));
 
+        location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
+
+        var location_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
+        location_box.append (new Gtk.Image.from_icon_name ("folder"));
+        location_box.append (location_chooser_label);
+
         var location_chooser = new Gtk.Button () {
+            child = location_box,
             hexpand = true,
             margin_start = 12
         };
@@ -121,14 +128,6 @@ public class Torrential.PreferencesWindow : Granite.Dialog {
                 chooser.destroy ();
             });
         });
-
-        location_chooser_label = new Gtk.Label (Utils.get_downloads_folder ());
-
-        var location_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
-        location_box.add (new Gtk.Image.from_icon_name ("folder", Gtk.IconSize.BUTTON));
-        location_box.add (location_chooser_label);
-
-        location_chooser.add (location_box);
 
         var download_heading = new Granite.HeaderLabel (_("Limits"));
 

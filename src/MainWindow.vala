@@ -22,8 +22,7 @@
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Button magnet_button;
     private Gtk.Stack stack;
-    private Granite.Widgets.Welcome welcome_screen;
-    private Granite.Widgets.Toast toast;
+    private Granite.Toast toast;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
 
@@ -32,7 +31,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private SimpleActionGroup actions = new SimpleActionGroup ();
 
     public TorrentManager torrent_manager;
-    private GLib.Settings settings;
     private FileMonitor download_monitor;
 
     private const string ACTION_GROUP_PREFIX_NAME = "tor";
@@ -71,22 +69,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
 
         this.torrent_manager = torrent_manager;
 
-        settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
-
-        set_default_size (
-            settings.get_int ("window-width"),
-            settings.get_int ("window-height")
-        );
-
-        // Maximize window if necessary
-        switch (settings.get_string ("window-state")) {
-            case "maximized":
-                this.maximize ();
-                break;
-            default:
-                break;
-        }
-
         actions.add_action_entries (action_entries, this);
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
         foreach (var action in action_accelerators.get_keys ()) {
@@ -123,13 +105,38 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         list_box.open_torrent.connect ((id) => torrent_manager.open_torrent (id));
         list_box.open_torrent_location.connect ((id) => torrent_manager.open_torrent_location (id));
         list_box.link_copied.connect (on_link_copied);
-        var list_box_scroll = new Gtk.ScrolledWindow (null, null);
-        list_box_scroll.add (list_box);
 
-        build_welcome_screen ();
+        var list_box_scroll = new Gtk.ScrolledWindow () {
+            child = list_box
+        };
 
-        var no_results_alertview = new Granite.Widgets.AlertView (_("No Search Results"), _("Try changing search terms"), "edit-find-symbolic");
-        var empty_category_alertview = new Granite.Widgets.AlertView (_("No Torrents Here"), _("Try a different category"), "edit-find-symbolic");
+        var welcome_screen = new Granite.Placeholder (_("No Torrents Added")) {
+            description = _("Add a torrent file to begin downloading.")
+        };
+
+        var open_button = welcome_screen.append_button (
+            new ThemedIcon ("folder"),
+            _("Open Torrent"),
+            _("Open a torrent file from your computer.")
+        );
+        open_button.action_name = ACTION_GROUP_PREFIX + ACTION_OPEN;
+
+        var preferences_button = welcome_screen.append_button (
+            new ThemedIcon ("open-menu"),
+            _("Preferences"),
+            _("Set download folder and other preferences.")
+        );
+        preferences_button.action_name = ACTION_GROUP_PREFIX + ACTION_PREFERENCES;
+
+        var no_results_alertview = new Granite.Placeholder (_("No Search Results")) {
+            description = _("Try changing search terms"),
+            icon = new ThemedIcon ("edit-find-symbolic")
+        };
+
+        var empty_category_alertview = new Granite.Placeholder (_("No Torrents Here")) {
+            description = _("Try a different category"),
+            icon = new ThemedIcon ("edit-find-symbolic")
+        };
 
         stack = new Gtk.Stack ();
         stack.add_named (welcome_screen, "welcome");
@@ -139,18 +146,18 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         stack.visible_child_name = "welcome";
 
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        box.add (infobar);
-        box.add (stack);
+        box.append (infobar);
+        box.append (stack);
+
+        toast = new Granite.Toast ("");
 
         var overlay = new Gtk.Overlay ();
-        toast = new Granite.Widgets.Toast ("");
         overlay.add_overlay (box);
         overlay.add_overlay (toast);
 
-        add (overlay);
+        child = overlay;
 
         set_titlebar (build_headerbar ());
-        show_all ();
 
         var torrents = torrent_manager.get_torrents ();
         if (torrents.size > 0) {
@@ -159,7 +166,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
 
         torrent_manager.torrent_completed.connect ((torrent) => {
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused) {
                 var notification = new Notification (_("Torrent Complete"));
                 notification.set_body (_("\u201C%s\u201D has finished downloading").printf (torrent.name));
@@ -172,7 +179,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             list_box.update ();
             update_category_totals (torrent_manager.get_torrents ());
             Granite.Services.Application.set_progress.begin (torrent_manager.get_overall_progress ());
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused && list_box.has_visible_children ()) {
                 Granite.Services.Application.set_progress_visible.begin (true);
             } else {
@@ -181,20 +188,10 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             return true;
         });
 
-        delete_event.connect (() => {
+        close_request.connect (() => {
+            var settings = new GLib.Settings ("com.github.davidmhewitt.torrential.settings");
             if (!quitting && settings.get_boolean ("hide-on-close") && torrent_manager.has_active_torrents ()) {
-                return hide_on_delete ();
-            }
-
-            int window_width;
-            int window_height;
-            get_size (out window_width, out window_height);
-            settings.set_int ("window-width", window_width);
-            settings.set_int ("window-height", window_height);
-            if (is_maximized) {
-                settings.set_string ("window-state", "maximized");
-            } else {
-                settings.set_string ("window-state", "normal");
+                return hide_on_close;
             }
 
             return false;
@@ -217,10 +214,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    private Gtk.HeaderBar build_headerbar () {
+    private Gtk.Widget build_headerbar () {
         var headerbar = new Gtk.HeaderBar () {
-            show_close_button = true,
-            title = title
+            show_title_buttons = true
         };
 
         var menu = new Menu ();
@@ -228,23 +224,26 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         menu.append (_("_Quit"), ACTION_GROUP_PREFIX + ACTION_QUIT);
 
         var menu_button = new Gtk.MenuButton () {
-            image = new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR),
+            icon_name = "open-menu",
             menu_model = menu,
-            tooltip_text = _("Application menu"),
-            use_popover = false
+            primary = true,
+            tooltip_text = _("Application menu")
         };
+        menu_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_end (menu_button);
 
-        var open_button = new Gtk.Button.from_icon_name ("document-open", Gtk.IconSize.LARGE_TOOLBAR) {
+        var open_button = new Gtk.Button.from_icon_name ("document-open") {
             action_name = ACTION_GROUP_PREFIX + ACTION_OPEN,
             tooltip_text = _("Open .torrent file")
         };
+        open_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start (open_button);
 
-        magnet_button = new Gtk.Button.from_icon_name ("open-magnet", Gtk.IconSize.LARGE_TOOLBAR) {
+        magnet_button = new Gtk.Button.from_icon_name ("open-magnet") {
             action_name = ACTION_GROUP_PREFIX + ACTION_OPEN_MAGNET,
             tooltip_text = _("Open magnet link")
         };
+        magnet_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start (magnet_button);
 
         search_entry = new Gtk.SearchEntry () {
@@ -273,17 +272,21 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         );
 
         var view_mode_button = new Gtk.MenuButton () {
-            image = new Gtk.Image.from_icon_name ("filter", Gtk.IconSize.LARGE_TOOLBAR),
+            icon_name = "filter",
             menu_model = view_mode_model,
-            tooltip_text = _("Filter"),
-            use_popover = false
+            tooltip_text = _("Filter")
         };
+        view_mode_button.add_css_class (Granite.STYLE_CLASS_LARGE_ICONS);
 
         headerbar.pack_end (view_mode_button);
 
-        headerbar.set_custom_title (search_entry);
+        headerbar.title_widget = search_entry;
 
-        return headerbar;
+        var window_handle = new Gtk.WindowHandle () {
+            child = headerbar
+        };
+
+        return window_handle;
     }
 
     private void update_view () {
@@ -304,25 +307,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    private void build_welcome_screen () {
-        welcome_screen = new Granite.Widgets.Welcome (_("No Torrents Added"), _("Add a torrent file to begin downloading."));
-        welcome_screen.append ("folder", _("Open Torrent"), _("Open a torrent file from your computer."));
-        welcome_screen.append ("open-menu", _("Preferences"), _("Set download folder and other preferences."));
-
-        welcome_screen.activated.connect ((index) => {
-            switch (index) {
-                case 0:
-                    actions.activate_action (ACTION_OPEN, null);
-                    break;
-                case 1:
-                    actions.activate_action (ACTION_PREFERENCES, null);
-                    break;
-                default:
-                    break;
-            }
-        });
-    }
-
     private void enable_main_view () {
         search_entry.sensitive = true;
         ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (true);
@@ -339,8 +323,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         prefs_window.on_close.connect (() => {
             torrent_manager.update_session_settings ();
         });
-
-        prefs_window.show_all ();
+        prefs_window.present ();
     }
 
     public void quit () {
@@ -376,13 +359,49 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_open_magnet () {
-        Gtk.Popover popover = new Gtk.Popover (magnet_button);
+        var entry = new Gtk.Entry ();
 
-        var add_button = new Gtk.Button.with_label (_("Add Magnet Link")) {
-            sensitive = false
+        var clipboard = Gdk.Display.get_default ().get_clipboard ();
+
+        try {
+            var contents = clipboard.get_content ();
+            if (contents != null) {
+                var value = Value (typeof (string));
+                contents.get_value (ref value);
+
+                string? value_string = value.get_string ();
+                if (value_string!= null && value_string.has_prefix ("magnet:")) {
+                    entry.text = value_string;
+                }
+            }
+        } catch (Error e) {
+            critical (e.message);
+        }
+
+        var label = new Gtk.Label (_("Magnet URL:")) {
+            halign = Gtk.Align.START
         };
 
-        var entry = new Gtk.Entry ();
+        var add_button = new Gtk.Button.with_label (_("Add Magnet Link")) {
+            sensitive = entry.text.strip () != ""
+        };
+
+        var content_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3) {
+            margin_top = 6,
+            margin_end = 6,
+            margin_bottom = 6,
+            margin_start = 6
+        };
+        content_box.append (label);
+        content_box.append (entry);
+        content_box.append (add_button);
+
+        var popover = new Gtk.Popover () {
+            child = content_box
+        };
+        popover.set_parent (magnet_button);
+        popover.popup ();
+
         entry.changed.connect (() => {
             // Only allow OK when there's text in the box.
             add_button.sensitive = entry.text.strip () != "";
@@ -396,31 +415,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             add_magnet (entry.text, true);
             popover.popdown ();
         });
-
-        var clipboard = Gtk.Clipboard.get (Gdk.SELECTION_CLIPBOARD);
-        string? contents = clipboard.wait_for_text ();
-        if (contents != null && contents.has_prefix ("magnet:")) {
-            entry.text = contents;
-        }
-
-        var label = new Gtk.Label (_("Magnet URL:")) {
-            halign = Gtk.Align.START
-        };
-
-        var content_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3) {
-            margin_top = 6,
-            margin_end = 6,
-            margin_bottom = 6,
-            margin_start = 6
-        };
-        content_box.add (label);
-        content_box.add (entry);
-        content_box.add (add_button);
-
-        popover.add (content_box);
-
-        popover.show_all ();
-        popover.popup ();
     }
 
     private void on_download_folder_changed (File file, File? other_file, FileMonitorEvent event) {
@@ -432,7 +426,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void add_monitored_file (string path) {
-        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+        var focused = application.get_active_window ().is_active;
 
         Torrent? new_torrent;
         var result = torrent_manager.add_torrent_by_path (path, out new_torrent);
@@ -448,9 +442,10 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         }
     }
 
-    public void add_files (SList<File> files) {
+    public void add_files (ListModel files) {
         var errors = new Gee.ArrayList<string> ();
-        foreach (unowned var file in files) {
+        for (int i = 0; i < files.get_n_items (); i++) {
+            var file = (File) files.get_item (i);
             Torrent? new_torrent;
             var result = torrent_manager.add_torrent_by_path (file.get_path (), out new_torrent);
             if (result == Transmission.ParseResult.OK) {
@@ -462,7 +457,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             }
         }
 
-        if (files.length () - errors.size > 0) {
+        if (files.get_n_items () - errors.size > 0) {
             enable_main_view ();
         }
 
@@ -477,7 +472,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         if (result == Transmission.ParseResult.OK) {
             list_box.add_torrent (new_torrent);
             enable_main_view ();
-            var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+            var focused = application.get_active_window ().is_active;
             if (!focused && !silent) {
                 var notification = new Notification (_("Magnet Link"));
                 notification.set_body (_("Successfully added magnet link"));
@@ -494,7 +489,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void send_magnet_error_notification () {
-        var focused = (get_window ().get_state () & Gdk.WindowState.FOCUSED) != 0;
+        var focused = application.get_active_window ().is_active;
         if (!focused) {
             var notification = new Notification (_("Magnet Link"));
             notification.set_body (_("Failed to add magnet link"));

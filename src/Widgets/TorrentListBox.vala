@@ -44,6 +44,9 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     private const string ACTION_OPEN = "action-open";
 
     private Gtk.ListBox listbox;
+    private Gtk.Stack stack;
+    private Granite.Placeholder search_placeholder;
+    private Granite.Placeholder welcome_placeholder;
 
     public TorrentListBox (Gee.ArrayList<Torrent> torrents) {
         Object (torrents: torrents);
@@ -56,6 +59,33 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
 
         var key_controller = new Gtk.EventControllerKey ();
 
+        welcome_placeholder = new Granite.Placeholder (_("No Torrents Added")) {
+            description = _("Add a torrent file to begin downloading.")
+        };
+
+        var open_button = welcome_placeholder.append_button (
+            new ThemedIcon ("folder"),
+            _("Open Torrent"),
+            _("Open a torrent file from your computer.")
+        );
+        open_button.action_name = MainWindow.ACTION_GROUP_PREFIX + MainWindow.ACTION_OPEN;
+
+        var preferences_button = welcome_placeholder.append_button (
+            new ThemedIcon ("open-menu"),
+            _("Preferences"),
+            _("Set download folder and other preferences.")
+        );
+        preferences_button.action_name = MainWindow.ACTION_GROUP_PREFIX + MainWindow.ACTION_PREFERENCES;
+
+        search_placeholder = new Granite.Placeholder ("") {
+            icon = new ThemedIcon ("edit-find-symbolic")
+        };
+
+        stack = new Gtk.Stack ();
+        stack.add_child (welcome_placeholder);
+        stack.add_child (search_placeholder);
+        stack.visible_child = welcome_placeholder;
+
         listbox = new Gtk.ListBox () {
             activate_on_single_click = false,
             hexpand = true,
@@ -67,6 +97,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
         listbox.add_controller (secondary_click_gesture);
         listbox.row_activated.connect (on_row_activated);
         listbox.set_sort_func (sort);
+        listbox.set_placeholder (stack);
 
         append (listbox);
 
@@ -146,7 +177,9 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     public void update () {
         var child = listbox.get_first_child ();
         while (child != null) {
-            ((TorrentListRow) child).update ();
+            if (child is TorrentListRow) {
+                ((TorrentListRow) child).update ();
+            }
 
             child = child.get_next_sibling ();
         }
@@ -241,6 +274,19 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     }
 
     public void filter (FilterType filter, string? search_term) {
+        if (has_visible_children ()) {
+            stack.visible_child = search_placeholder;
+            if (search_term != null && search_term != "") {
+                search_placeholder.title = _("No Search Results");
+                search_placeholder.description = _("Try changing search terms");
+            } else {
+                search_placeholder.title = _("No Torrents Here");
+                search_placeholder.description = _("Try a different category");
+            }
+        } else {
+            stack.visible_child = welcome_placeholder;
+        }
+
         switch (filter) {
             case FilterType.ALL:
                 listbox.set_filter_func (null);
@@ -273,7 +319,7 @@ public class Torrential.Widgets.TorrentListBox : Gtk.Box {
     public bool has_visible_children () {
         var child = listbox.get_first_child ();
         while (child != null) {
-            if (child.get_child_visible ()) {
+            if (child is TorrentListRow && child.visible) {
                 return true;
             }
 

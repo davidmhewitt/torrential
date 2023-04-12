@@ -13,4 +13,4 @@ You'll need the following dependencies to build:
 
 ## How To Build
 
-    flatpak-builder build com.github.davidmhewitt.torrential.yml
+    flatpak-builder build com.github.davidmhewitt.torrential.json

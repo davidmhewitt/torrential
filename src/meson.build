@@ -1,32 +1,62 @@
-sources = files(
-    'Dialogs/FileSelectDialog.vala',
-    'Widgets/FileSelectTreeView.vala',
-    'Widgets/MultiInfoBar.vala',
-    'Widgets/TorrentListBox.vala',
-    'Widgets/TorrentListRow.vala',
-    'Application.vala',
-    'MainWindow.vala',
-    'PreferencesWindow.vala',
-    'Utils.vala',
-    'Torrent.vala',
-    'TorrentManager.vala',
+pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
+gnome = import('gnome')
+
+gnome.compile_resources('torrential',
+  'torrential.gresource.xml',
+  gresource_bundle: true,
+  install: true,
+  install_dir: pkgdatadir,
 )
 
-config_data = configuration_data()
-config_data.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
-config_data.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-config_file = configure_file(
-    input: 'Config.vala.in',
-    output: '@BASENAME@',
-    configuration: config_data
+conf = configuration_data()
+conf.set_quoted('APP_ID', 'com.github.davidmhewitt.torrential')
+conf.set_quoted('VERSION', meson.project_version())
+conf.set_quoted('GETTEXT_PACKAGE', 'torrential')
+conf.set_quoted('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
+conf.set_quoted('PKGDATADIR', pkgdatadir)
+
+configure_file(
+    input: 'config.rs.in',
+    output: 'config.rs',
+    configuration: conf
 )
 
-executable(
-    meson.project_name(),
-    sources,
-    config_file,
-    icons_gresource,
-    dependencies: dependencies,
-    install: true
+# Copy the config.rs output to the source directory.
+run_command(
+  'cp',
+  join_paths(meson.project_build_root(), 'src', 'config.rs'),
+  join_paths(meson.project_source_root(), 'src', 'config.rs'),
+  check: true
 )
 
+cargo_bin  = find_program('cargo')
+cargo_opt  = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml' ]
+cargo_opt += [ '--target-dir', meson.project_build_root()  / 'src' ]
+if get_option('offline')
+  cargo_opt += [ '--offline' ]
+  cargo_env  = [ 'CARGO_HOME=' + meson.project_source_root()  / 'cargo' ]
+else
+  cargo_env  = [ 'CARGO_HOME=' + meson.project_build_root()  / 'cargo-home' ]
+endif
+
+if get_option('buildtype') == 'release'
+  cargo_options += [ '--release' ]
+  rust_target = 'release'
+else
+  rust_target = 'debug'
+endif
+
+cargo_build = custom_target(
+  'cargo-build',
+  build_by_default: true,
+  build_always_stale: true,
+  output: 'torrential',
+  console: true,
+  install: true,
+  install_dir: get_option('bindir'),
+  command: [
+    'env', cargo_env,
+    cargo_bin, 'build',
+    cargo_opt, '&&', 'cp', 'src' / rust_target / 'torrential', '@OUTPUT@',
+  ]
+)

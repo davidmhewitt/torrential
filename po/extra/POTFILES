@@ -1,2 +1,3 @@
 data/com.github.davidmhewitt.torrential.desktop.in
-data/torrential.metainfo.xml.in
+data/com.github.davidmhewitt.torrential.appdata.xml.in
+data/com.github.davidmhewitt.torrential.gschema.xml

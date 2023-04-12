@@ -25,7 +25,7 @@
 
 mod application;
 mod config;
-mod welcome;
+mod widgets;
 mod window;
 
 use self::application::TorrentialApplication;

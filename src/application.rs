@@ -1,7 +1,8 @@
-use gtk::glib::VariantTy;
-use gtk::prelude::*;
+use gettextrs::gettext;
+use gtk::glib::{clone, VariantTy};
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
+use gtk::{prelude::*, ResponseType};
 
 use crate::TorrentialWindow;
 
@@ -112,11 +113,55 @@ impl TorrentialApplication {
             })
             .build();
 
+        let open_action = gio::ActionEntry::builder("open")
+            .activate(move |app: &Self, _, _| {
+                let all_files_filter = gtk::FileFilter::new();
+                all_files_filter.set_name(Some(&gettext("All files")));
+                all_files_filter.add_pattern("*");
+
+                let torrent_files_filter = gtk::FileFilter::new();
+                torrent_files_filter.set_name(Some(&gettext("Torrent files")));
+                torrent_files_filter.add_mime_type("application/x-bittorrent");
+
+                let filech = gtk::FileChooserNative::new(
+                    Some(&gettext("Open some torrents")),
+                    Some(&TorrentialWindow::default()),
+                    gtk::FileChooserAction::Open,
+                    None,
+                    None,
+                );
+
+                filech.set_select_multiple(true);
+                filech.add_filter(&torrent_files_filter);
+                filech.add_filter(&all_files_filter);
+
+                filech.connect_response(clone!(@strong filech, @weak app => move |_, response| {
+                    if response == ResponseType::Accept {
+                        app.add_files (filech.files());
+                    }
+                }));
+
+                filech.show();
+            })
+            .build();
+
         self.add_action_entries([
-            quit_action,
+            open_action,
             open_torrent_action,
-            show_window_action,
             preferences_action,
+            quit_action,
+            show_window_action,
         ]);
+    }
+
+    fn add_files(&self, _files: gio::ListModel) {}
+}
+
+impl Default for TorrentialApplication {
+    fn default() -> Self {
+        gio::Application::default()
+            .expect("Could not get default GApplication")
+            .downcast()
+            .unwrap()
     }
 }

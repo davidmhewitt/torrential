@@ -3,6 +3,9 @@ use gtk::subclass::prelude::*;
 use gtk::{gio, gio::Settings, glib, prelude::*};
 use once_cell::sync::OnceCell;
 
+use crate::application::TorrentialApplication;
+use crate::widgets::TorrentListBox;
+
 #[derive(Copy, Clone)]
 enum FilterType {
     All = 0,
@@ -19,8 +22,6 @@ impl ToVariant for FilterType {
 }
 
 mod imp {
-    use crate::welcome::WelcomeView;
-
     use super::*;
 
     #[derive(Debug, Default)]
@@ -45,7 +46,17 @@ mod imp {
             obj.load_window_size();
 
             obj.set_titlebar(Some(&obj.build_headerbar()));
-            obj.set_child(Some(&WelcomeView::new()));
+
+            let listbox = TorrentListBox::new();
+            let listbox_scroll = gtk::ScrolledWindow::builder().child(&listbox).build();
+
+            let container = gtk::Box::new(gtk::Orientation::Vertical, 0);
+            // TODO: container.append(infobar);
+            container.append(&listbox_scroll);
+
+            // TODO: Toast overlay
+
+            obj.set_child(Some(&container));
         }
     }
     impl WidgetImpl for TorrentialWindow {}
@@ -203,5 +214,15 @@ impl TorrentialWindow {
         if is_maximized {
             self.maximize();
         }
+    }
+}
+
+impl Default for TorrentialWindow {
+    fn default() -> Self {
+        TorrentialApplication::default()
+            .active_window()
+            .unwrap()
+            .downcast()
+            .unwrap()
     }
 }

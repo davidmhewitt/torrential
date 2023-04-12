@@ -21,7 +21,6 @@
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Button magnet_button;
-    private Gtk.Stack stack;
     private Granite.Toast toast;
     private Widgets.MultiInfoBar infobar;
     private Widgets.TorrentListBox list_box;
@@ -33,13 +32,13 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     public TorrentManager torrent_manager;
     private FileMonitor download_monitor;
 
-    private const string ACTION_GROUP_PREFIX_NAME = "tor";
-    private const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
+    public const string ACTION_GROUP_PREFIX_NAME = "tor";
+    public const string ACTION_GROUP_PREFIX = ACTION_GROUP_PREFIX_NAME + ".";
 
     private const string ACTION_FILTER = "action-filter";
-    private const string ACTION_PREFERENCES = "preferences";
+    public const string ACTION_PREFERENCES = "preferences";
     private const string ACTION_QUIT = "quit";
-    private const string ACTION_OPEN = "open";
+    public const string ACTION_OPEN = "open";
     private const string ACTION_OPEN_MAGNET = "open-magnet";
     private const string ACTION_OPEN_COMPLETED_TORRENT = "show-torrent";
     private const string ACTION_SHOW_WINDOW = "show-window";
@@ -110,44 +109,9 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
             child = list_box
         };
 
-        var welcome_screen = new Granite.Placeholder (_("No Torrents Added")) {
-            description = _("Add a torrent file to begin downloading.")
-        };
-
-        var open_button = welcome_screen.append_button (
-            new ThemedIcon ("folder"),
-            _("Open Torrent"),
-            _("Open a torrent file from your computer.")
-        );
-        open_button.action_name = ACTION_GROUP_PREFIX + ACTION_OPEN;
-
-        var preferences_button = welcome_screen.append_button (
-            new ThemedIcon ("open-menu"),
-            _("Preferences"),
-            _("Set download folder and other preferences.")
-        );
-        preferences_button.action_name = ACTION_GROUP_PREFIX + ACTION_PREFERENCES;
-
-        var no_results_alertview = new Granite.Placeholder (_("No Search Results")) {
-            description = _("Try changing search terms"),
-            icon = new ThemedIcon ("edit-find-symbolic")
-        };
-
-        var empty_category_alertview = new Granite.Placeholder (_("No Torrents Here")) {
-            description = _("Try a different category"),
-            icon = new ThemedIcon ("edit-find-symbolic")
-        };
-
-        stack = new Gtk.Stack ();
-        stack.add_named (welcome_screen, "welcome");
-        stack.add_named (list_box_scroll, "main");
-        stack.add_named (no_results_alertview, "no_results");
-        stack.add_named (empty_category_alertview, "empty_category");
-        stack.visible_child_name = "welcome";
-
         var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         box.append (infobar);
-        box.append (stack);
+        box.append (list_box_scroll);
 
         toast = new Granite.Toast ("");
 
@@ -210,7 +174,6 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         if (torrents.size == 0) {
             search_entry.sensitive = false;
             ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (false);
-            stack.visible_child_name = "welcome";
         }
     }
 
@@ -290,27 +253,12 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void update_view () {
-        if (search_entry.text != "") {
-            list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
-            if (!list_box.has_visible_children ()) {
-                stack.visible_child_name = "no_results";
-            } else {
-                stack.visible_child_name = "main";
-            }
-            return;
-        }
-
-        if (!list_box.has_visible_children ()) {
-            stack.visible_child_name = "empty_category";
-        } else {
-            stack.visible_child_name = "main";
-        }
+        list_box.filter (Widgets.TorrentListBox.FilterType.SEARCH, search_entry.text);
     }
 
     private void enable_main_view () {
         search_entry.sensitive = true;
         ((SimpleAction) actions.lookup_action (ACTION_FILTER)).set_enabled (true);
-        stack.visible_child_name = "main";
     }
 
     private void on_link_copied () {

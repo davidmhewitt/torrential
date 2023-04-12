@@ -1,3 +1,4 @@
+use gtk::glib::VariantTy;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
@@ -26,6 +27,7 @@ mod imp {
             let obj = self.obj();
             obj.setup_gactions();
             obj.set_accels_for_action("app.quit", &["<primary>q"]);
+            obj.set_accels_for_action("app.preferences", &["<primary>comma"])
         }
     }
 
@@ -85,6 +87,36 @@ impl TorrentialApplication {
         let quit_action = gio::ActionEntry::builder("quit")
             .activate(move |app: &Self, _, _| app.quit())
             .build();
-        self.add_action_entries([quit_action]);
+
+        let open_torrent_action = gio::ActionEntry::builder("show-torrent")
+            .parameter_type(Some(VariantTy::INT32))
+            .activate(move |_, _, param| {
+                if param.is_some() {
+                    // TODO: Open it!
+                }
+            })
+            .build();
+
+        let show_window_action = gio::ActionEntry::builder("show-window")
+            .activate(move |app: &Self, _, _| {
+                if let Some(window) = app.active_window() {
+                    window.present();
+                    window.present_with_time(0);
+                }
+            })
+            .build();
+
+        let preferences_action = gio::ActionEntry::builder("preferences")
+            .activate(move |_, _, _| {
+                // TODO: this
+            })
+            .build();
+
+        self.add_action_entries([
+            quit_action,
+            open_torrent_action,
+            show_window_action,
+            preferences_action,
+        ]);
     }
 }

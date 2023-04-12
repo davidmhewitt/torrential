@@ -5,16 +5,16 @@ use once_cell::sync::OnceCell;
 
 #[derive(Copy, Clone)]
 enum FilterType {
-    ALL = 0,
-    DOWNLOADING = 1,
-    SEEDING = 2,
-    PAUSED = 3,
-    _SEARCH = 4,
+    All = 0,
+    Downloading = 1,
+    Seeding = 2,
+    Paused = 3,
+    _Search = 4,
 }
 
 impl ToVariant for FilterType {
     fn to_variant(&self) -> glib::Variant {
-        return (*self as u8).to_variant();
+        (*self as u8).to_variant()
     }
 }
 
@@ -126,7 +126,7 @@ impl TorrentialWindow {
             Some(&gettext("All")),
             Some(&gio::Action::print_detailed_name(
                 "app.filter",
-                Some(&FilterType::ALL.to_variant()),
+                Some(&FilterType::All.to_variant()),
             )),
         );
 
@@ -134,7 +134,7 @@ impl TorrentialWindow {
             Some(&gettext("Downloading")),
             Some(&gio::Action::print_detailed_name(
                 "app.filter",
-                Some(&FilterType::DOWNLOADING.to_variant()),
+                Some(&FilterType::Downloading.to_variant()),
             )),
         );
 
@@ -142,7 +142,7 @@ impl TorrentialWindow {
             Some(&gettext("Seeding")),
             Some(&gio::Action::print_detailed_name(
                 "app.filter",
-                Some(&FilterType::SEEDING.to_variant()),
+                Some(&FilterType::Seeding.to_variant()),
             )),
         );
 
@@ -150,7 +150,7 @@ impl TorrentialWindow {
             Some(&gettext("Paused")),
             Some(&gio::Action::print_detailed_name(
                 "app.filter",
-                Some(&FilterType::PAUSED.to_variant()),
+                Some(&FilterType::Paused.to_variant()),
             )),
         );
 
@@ -164,7 +164,7 @@ impl TorrentialWindow {
         headerbar.pack_end(&view_mode_button);
         headerbar.set_title_widget(Some(&search_entry));
 
-        return headerbar.into();
+        headerbar.into()
     }
 
     fn setup_settings(&self) {

@@ -44,9 +44,8 @@ fn main() {
     textdomain(GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
 
     // Load resources
-    let resources =
-        gio::Resource::load(PKGDATADIR.to_owned() + "/torrential.gresource")
-            .expect("Could not load resources");
+    let resources = gio::Resource::load(PKGDATADIR.to_owned() + "/torrential.gresource")
+        .expect("Could not load resources");
     gio::resources_register(&resources);
 
     let app = TorrentialApplication::new(APP_ID, &gio::ApplicationFlags::empty());

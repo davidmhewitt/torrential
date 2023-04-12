@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.davidmhewitt.torrential\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 13:07+0100\n"
+"POT-Creation-Date: 2023-04-12 15:00+0100\n"
 "PO-Revision-Date: 2023-04-12 13:07+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -36,10 +36,46 @@ msgstr ""
 msgid "Rust docs for the Granite crate"
 msgstr ""
 
-#: src/window.rs:35
-msgid "Light Background"
+#: src/window.rs:82
+msgid "_Preferences"
 msgstr ""
 
-#: src/window.rs:36
-msgid "Dark Background"
+#: src/window.rs:83
+msgid "_Quit"
+msgstr ""
+
+#: src/window.rs:89
+msgid "Application menu"
+msgstr ""
+
+#: src/window.rs:98
+msgid "Open .torrent file"
+msgstr ""
+
+#: src/window.rs:107
+msgid "Open magnet link"
+msgstr ""
+
+#: src/window.rs:115
+msgid "Search Torrents"
+msgstr ""
+
+#: src/window.rs:126
+msgid "All"
+msgstr ""
+
+#: src/window.rs:134
+msgid "Downloading"
+msgstr ""
+
+#: src/window.rs:142
+msgid "Seeding"
+msgstr ""
+
+#: src/window.rs:150
+msgid "Paused"
+msgstr ""
+
+#: src/window.rs:160
+msgid "Filter"
 msgstr ""

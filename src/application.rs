@@ -49,6 +49,10 @@ mod imp {
         fn startup(&self) {
             self.parent_startup();
 
+            let display = gtk::gdk::Display::default().expect("Couldn't get GDK display");
+            gtk::IconTheme::for_display(&display)
+                .add_resource_path("/com/github/davidmhewitt/torrential");
+
             let gtk_settings =
                 gtk::Settings::default().expect("Unable to get the GtkSettings object");
             let granite_settings =

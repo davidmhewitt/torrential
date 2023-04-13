@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: elementary/docker:stable
+      image: elementary/docker:ubuntu-lunar-unstable
 
     steps:
     - uses: actions/checkout@v3

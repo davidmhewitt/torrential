@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: elementary/docker:ubuntu-lunar-unstable
+      image: ghcr.io/elementary/docker:ubuntu-lunar-unstable
 
     steps:
     - uses: actions/checkout@v3
@@ -55,7 +55,7 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
     container:
-      image: elementary/docker:stable
+      image: ghcr.io/elementary/docker:ubuntu-lunar-unstable
 
     steps:
     - uses: actions/checkout@v3

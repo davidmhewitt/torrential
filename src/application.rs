@@ -28,7 +28,8 @@ mod imp {
             let obj = self.obj();
             obj.setup_gactions();
             obj.set_accels_for_action("app.quit", &["<primary>q"]);
-            obj.set_accels_for_action("app.preferences", &["<primary>comma"])
+            obj.set_accels_for_action("app.preferences", &["<primary>comma"]);
+            obj.set_accels_for_action("app.open", &["<primary>o"]);
         }
     }
 
@@ -48,6 +49,8 @@ mod imp {
 
         fn startup(&self) {
             self.parent_startup();
+
+            granite::init();
 
             let display = gtk::gdk::Display::default().expect("Couldn't get GDK display");
             gtk::IconTheme::for_display(&display)

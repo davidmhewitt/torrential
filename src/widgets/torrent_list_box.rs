@@ -1,8 +1,11 @@
 use gettextrs::gettext;
-use gtk::glib::Object;
+use gtk::glib::{GString, Object, Variant};
 use gtk::subclass::prelude::*;
 use gtk::{glib, prelude::*};
+use int_enum::IntEnum;
 use once_cell::sync::OnceCell;
+
+use crate::window::FilterType;
 
 mod imp {
     use granite::traits::PlaceholderExt;
@@ -84,8 +87,7 @@ mod imp {
                 .selection_mode(gtk::SelectionMode::Multiple)
                 .build();
 
-            // TODO: Make sure we get this style class
-            // listbox.add_css_class(granite::STYLE_CLASS_RICH_LIST);
+            listbox.add_css_class(granite::STYLE_CLASS_RICH_LIST);
             listbox.add_controller(key_controller);
             listbox.add_controller(secondary_click_gesture);
             listbox.set_placeholder(Some(&stack));
@@ -115,6 +117,27 @@ impl TorrentListBox {
 
     fn popup_menu(&self, _n_press: i32, _x: f64, _y: f64) {
         // TODO: stuff and things
+    }
+
+    fn listbox(&self) -> &gtk::ListBox {
+        self.imp()
+            .listbox
+            .get()
+            .expect("listbox not initialized before get")
+    }
+
+    pub fn filter_torrents(&self, filter_type: &Variant, _search_term: Option<GString>) {
+        let filter_type =
+            FilterType::from_int(filter_type.get::<u8>().expect("invalid filter param"))
+                .expect("unable to parse filter type");
+
+        match filter_type {
+            FilterType::All => self.listbox().set_filter_func(|_| true),
+            FilterType::Downloading => todo!(),
+            FilterType::Seeding => todo!(),
+            FilterType::Paused => todo!(),
+            FilterType::Search => todo!(),
+        }
     }
 }
 

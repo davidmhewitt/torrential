@@ -1,18 +1,22 @@
 use gettextrs::gettext;
+use gtk::gio::ActionEntry;
+use gtk::glib::{clone, VariantTy};
 use gtk::subclass::prelude::*;
 use gtk::{gio, gio::Settings, glib, prelude::*};
+use int_enum::IntEnum;
 use once_cell::sync::OnceCell;
 
 use crate::application::TorrentialApplication;
 use crate::widgets::TorrentListBox;
 
-#[derive(Copy, Clone)]
-enum FilterType {
+#[repr(u8)]
+#[derive(Copy, Clone, IntEnum)]
+pub enum FilterType {
     All = 0,
     Downloading = 1,
     Seeding = 2,
     Paused = 3,
-    _Search = 4,
+    Search = 4,
 }
 
 impl ToVariant for FilterType {
@@ -27,6 +31,7 @@ mod imp {
     #[derive(Debug, Default)]
     pub struct TorrentialWindow {
         pub settings: OnceCell<Settings>,
+        pub listbox: OnceCell<TorrentListBox>,
     }
 
     #[glib::object_subclass]
@@ -44,11 +49,16 @@ mod imp {
 
             obj.setup_settings();
             obj.load_window_size();
+            obj.setup_gactions();
 
             obj.set_titlebar(Some(&obj.build_headerbar()));
 
             let listbox = TorrentListBox::new();
             let listbox_scroll = gtk::ScrolledWindow::builder().child(&listbox).build();
+            obj.imp()
+                .listbox
+                .set(listbox)
+                .expect("Can only set listbox once");
 
             let container = gtk::Box::new(gtk::Orientation::Vertical, 0);
             // TODO: container.append(infobar);
@@ -118,7 +128,7 @@ impl TorrentialWindow {
             .tooltip_text(gettext("Open magnet link"))
             .build();
 
-        open_button.add_css_class(granite::STYLE_CLASS_LARGE_ICONS);
+        magnet_button.add_css_class(granite::STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start(&magnet_button);
 
         let search_entry = gtk::SearchEntry::builder()
@@ -128,15 +138,21 @@ impl TorrentialWindow {
             .valign(gtk::Align::Center)
             .build();
 
-        search_entry.connect_changed(move |_| {
-            // TODO: this
-        });
+        search_entry.connect_changed(clone!(@weak self as win => move |entry| {
+            let text = if entry.text().is_empty() {
+                None
+            } else {
+                Some(entry.text())
+            };
+
+            win.listbox().filter_torrents(&FilterType::Search.to_variant(), text)
+        }));
 
         let view_mode_model = gio::Menu::new();
         view_mode_model.append(
             Some(&gettext("All")),
             Some(&gio::Action::print_detailed_name(
-                "app.filter",
+                "win.filter",
                 Some(&FilterType::All.to_variant()),
             )),
         );
@@ -144,7 +160,7 @@ impl TorrentialWindow {
         view_mode_model.append(
             Some(&gettext("Downloading")),
             Some(&gio::Action::print_detailed_name(
-                "app.filter",
+                "win.filter",
                 Some(&FilterType::Downloading.to_variant()),
             )),
         );
@@ -152,7 +168,7 @@ impl TorrentialWindow {
         view_mode_model.append(
             Some(&gettext("Seeding")),
             Some(&gio::Action::print_detailed_name(
-                "app.filter",
+                "win.filter",
                 Some(&FilterType::Seeding.to_variant()),
             )),
         );
@@ -160,7 +176,7 @@ impl TorrentialWindow {
         view_mode_model.append(
             Some(&gettext("Paused")),
             Some(&gio::Action::print_detailed_name(
-                "app.filter",
+                "win.filter",
                 Some(&FilterType::Paused.to_variant()),
             )),
         );
@@ -176,6 +192,27 @@ impl TorrentialWindow {
         headerbar.set_title_widget(Some(&search_entry));
 
         headerbar.into()
+    }
+
+    fn setup_gactions(&self) {
+        let filter_action: ActionEntry<TorrentialWindow> = gio::ActionEntry::builder("filter")
+            .parameter_type(Some(VariantTy::BYTE))
+            .state(FilterType::All.to_variant())
+            .activate(move |win: &Self, action, param| {
+                let param = param.expect("No parameter sent to filter action");
+                win.listbox().filter_torrents(param, None);
+                action.set_state(param.clone());
+            })
+            .build();
+
+        self.add_action_entries([filter_action]);
+    }
+
+    fn listbox(&self) -> &TorrentListBox {
+        self.imp()
+            .listbox
+            .get()
+            .expect("`listbox` fetched before init")
     }
 
     fn setup_settings(&self) {

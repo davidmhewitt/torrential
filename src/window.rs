@@ -209,7 +209,7 @@ impl TorrentialWindow {
     }
 
     fn build_magnet_popover(&self) -> gtk::Popover {
-        let entry = gtk::Entry::builder().activates_default(true).build();
+        let entry = gtk::Entry::new();
 
         let label = gtk::Label::builder()
             .label(gettext("Magnet URL:"))
@@ -219,7 +219,6 @@ impl TorrentialWindow {
         let add_button = gtk::Button::builder()
             .label(gettext("Add Magnet Link"))
             .sensitive(entry.text().trim() != "")
-            .receives_default(true)
             .build();
 
         let content_box = gtk::Box::builder()
@@ -255,6 +254,10 @@ impl TorrentialWindow {
 
         entry.connect_changed(clone!(@weak add_button => move |entry| {
             add_button.set_sensitive(entry.text().trim() != "");
+        }));
+
+        entry.connect_activate(clone!(@weak add_button => move |_| {
+            add_button.activate();
         }));
 
         add_button.connect_clicked(clone!(@weak popover => move |_| {

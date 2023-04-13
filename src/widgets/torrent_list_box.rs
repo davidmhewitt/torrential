@@ -43,7 +43,7 @@ mod imp {
                     &gettext("Open a torrent file from your computer."),
                 )
                 .expect("Unable to create placeholder button");
-            open_button.set_action_name(Some("app.open"));
+            open_button.set_action_name(Some("win.open"));
 
             let preferences_button = welcome_placeholder
                 .append_button(

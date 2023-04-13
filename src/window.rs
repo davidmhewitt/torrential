@@ -1,6 +1,6 @@
 use gettextrs::gettext;
 use gtk::gio::ActionEntry;
-use gtk::glib::{clone, VariantTy};
+use gtk::glib::{clone, MainContext, VariantTy};
 use gtk::subclass::prelude::*;
 use gtk::{gio, gio::Settings, glib, prelude::*};
 use int_enum::IntEnum;
@@ -122,9 +122,9 @@ impl TorrentialWindow {
         open_button.add_css_class(granite::STYLE_CLASS_LARGE_ICONS);
         headerbar.pack_start(&open_button);
 
-        let magnet_button = gtk::Button::builder()
+        let magnet_button = gtk::MenuButton::builder()
             .icon_name("open-magnet")
-            .action_name("app.open-magnet")
+            .popover(&self.build_magnet_popover())
             .tooltip_text(gettext("Open magnet link"))
             .build();
 
@@ -206,6 +206,63 @@ impl TorrentialWindow {
             .build();
 
         self.add_action_entries([filter_action]);
+    }
+
+    fn build_magnet_popover(&self) -> gtk::Popover {
+        let entry = gtk::Entry::builder().activates_default(true).build();
+
+        let label = gtk::Label::builder()
+            .label(gettext("Magnet URL:"))
+            .halign(gtk::Align::Start)
+            .build();
+
+        let add_button = gtk::Button::builder()
+            .label(gettext("Add Magnet Link"))
+            .sensitive(entry.text().trim() != "")
+            .receives_default(true)
+            .build();
+
+        let content_box = gtk::Box::builder()
+            .margin_bottom(6)
+            .margin_end(6)
+            .margin_start(6)
+            .margin_top(6)
+            .build();
+
+        content_box.append(&label);
+        content_box.append(&entry);
+        content_box.append(&add_button);
+
+        let popover = gtk::Popover::builder().child(&content_box).build();
+        popover.connect_visible_notify(clone!(@weak entry => move |popover| {
+            if !popover.is_visible() {
+                return;
+            }
+
+            let clipboard = gtk::gdk::Display::default()
+                .expect("Unable to get display")
+                .clipboard();
+
+            let main_context = MainContext::default();
+            main_context.spawn_local(clone!(@weak entry => async move {
+                if let Ok(Some(text)) = clipboard.read_text_future().await {
+                    if text.starts_with("magnet:") {
+                        entry.set_text(&text);
+                    }
+                }
+            }));
+        }));
+
+        entry.connect_changed(clone!(@weak add_button => move |entry| {
+            add_button.set_sensitive(entry.text().trim() != "");
+        }));
+
+        add_button.connect_clicked(clone!(@weak popover => move |_| {
+            // TODO: Add the torrent
+            popover.popdown();
+        }));
+
+        popover
     }
 
     fn listbox(&self) -> &TorrentListBox {

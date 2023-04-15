@@ -25,6 +25,8 @@
 
 mod application;
 mod config;
+mod dialogs;
+mod utils;
 mod widgets;
 mod window;
 

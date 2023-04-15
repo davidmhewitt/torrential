@@ -27,7 +27,7 @@ mod imp {
             let obj = self.obj();
             obj.setup_gactions();
             obj.set_accels_for_action("app.quit", &["<primary>q"]);
-            obj.set_accels_for_action("app.preferences", &["<primary>comma"]);
+            obj.set_accels_for_action("win.preferences", &["<primary>comma"]);
             obj.set_accels_for_action("win.open", &["<primary>o"]);
         }
     }
@@ -113,18 +113,7 @@ impl TorrentialApplication {
             })
             .build();
 
-        let preferences_action = gio::ActionEntry::builder("preferences")
-            .activate(move |_, _, _| {
-                // TODO: this
-            })
-            .build();
-
-        self.add_action_entries([
-            open_torrent_action,
-            preferences_action,
-            quit_action,
-            show_window_action,
-        ]);
+        self.add_action_entries([open_torrent_action, quit_action, show_window_action]);
     }
 }
 

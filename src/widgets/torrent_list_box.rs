@@ -52,7 +52,7 @@ mod imp {
                     &gettext("Set download folder and other preferences."),
                 )
                 .expect("Unable to create placeholder button");
-            preferences_button.set_action_name(Some("app.preferences"));
+            preferences_button.set_action_name(Some("win.preferences"));
 
             let search_placeholder = granite::Placeholder::builder()
                 .icon(&ThemedIcon::new("edit-find-symbolic"))

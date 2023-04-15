@@ -7,6 +7,7 @@ use int_enum::IntEnum;
 use once_cell::sync::OnceCell;
 
 use crate::application::TorrentialApplication;
+use crate::dialogs::PreferencesDialog;
 use crate::widgets::TorrentListBox;
 
 #[repr(u8)]
@@ -100,7 +101,7 @@ impl TorrentialWindow {
         let headerbar = gtk::HeaderBar::builder().show_title_buttons(true).build();
 
         let menu = gio::Menu::new();
-        menu.append(Some(&gettext("_Preferences")), Some("app.preferences"));
+        menu.append(Some(&gettext("_Preferences")), Some("win.preferences"));
         menu.append(Some(&gettext("_Quit")), Some("app.quit"));
 
         let menu_button = gtk::MenuButton::builder()
@@ -235,7 +236,19 @@ impl TorrentialWindow {
             })
             .build();
 
-        self.add_action_entries([filter_action, open_action]);
+        let preferences_action: ActionEntry<TorrentialWindow> =
+            gio::ActionEntry::builder("preferences")
+                .activate(move |win: &Self, _, _| {
+                    let prefs_window = PreferencesDialog::new(win);
+                    #[allow(deprecated)]
+                    prefs_window.connect_response(|prefs_window, _response| {
+                        prefs_window.destroy();
+                    });
+                    prefs_window.present();
+                })
+                .build();
+
+        self.add_action_entries([filter_action, open_action, preferences_action]);
     }
 
     fn add_files(&self, files: gio::ListModel) {

@@ -117,6 +117,13 @@ impl PreferencesDialog {
 
         let location_chooser_label = gtk::Label::new(Some(&crate::utils::get_downloads_folder()));
 
+        settings.connect_changed(
+            Some("download-folder"),
+            clone!(@weak location_chooser_label => move |_, _| {
+                location_chooser_label.set_label(&crate::utils::get_downloads_folder());
+            }),
+        );
+
         let location_box = gtk::Box::new(gtk::Orientation::Horizontal, 3);
         location_box.append(&gtk::Image::from_icon_name("folder"));
         location_box.append(&location_chooser_label);
@@ -164,23 +171,19 @@ impl PreferencesDialog {
 
         let download_heading = granite::HeaderLabel::new(&gettext("Limits"));
 
-        let max_downloads_label = gtk::Label::builder()
-            .halign(gtk::Align::End)
-            .margin_start(12)
-            .label(gettext("Max simultaneous downloads:"))
-            .build();
         let max_downloads_entry = gtk::SpinButton::with_range(1., 100., 1.);
         max_downloads_entry.set_hexpand(true);
         settings
             .bind("max-downloads", &max_downloads_entry, "value")
             .flags(SettingsBindFlags::DEFAULT)
             .build();
-
-        let download_speed_limit_label = gtk::Label::builder()
+        let max_downloads_label = gtk::Label::builder()
             .halign(gtk::Align::End)
             .margin_start(12)
-            .label(gettext("Download speed limit (KBps):"))
+            .label(gettext("Max simultaneous downloads:"))
+            .mnemonic_widget(&max_downloads_entry)
             .build();
+
         let download_speed_limit_entry = gtk::SpinButton::with_range(0., 1000000., 25.);
         download_speed_limit_entry.set_hexpand(true);
         download_speed_limit_entry.set_tooltip_text(Some(&gettext("0 means unlimited")));
@@ -188,12 +191,13 @@ impl PreferencesDialog {
             .bind("download-speed-limit", &download_speed_limit_entry, "value")
             .flags(SettingsBindFlags::DEFAULT)
             .build();
-
-        let upload_speed_limit_label = gtk::Label::builder()
+        let download_speed_limit_label = gtk::Label::builder()
             .halign(gtk::Align::End)
             .margin_start(12)
-            .label(gettext("Upload speed limit (KBps):"))
+            .label(gettext("Download speed limit (KBps):"))
+            .mnemonic_widget(&download_speed_limit_entry)
             .build();
+
         let upload_speed_limit_entry = gtk::SpinButton::with_range(0., 1000000., 25.);
         upload_speed_limit_entry.set_hexpand(true);
         upload_speed_limit_entry.set_tooltip_text(Some(&gettext("0 means unlimited")));
@@ -201,17 +205,24 @@ impl PreferencesDialog {
             .bind("upload-speed-limit", &upload_speed_limit_entry, "value")
             .flags(SettingsBindFlags::DEFAULT)
             .build();
+        let upload_speed_limit_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Upload speed limit (KBps):"))
+            .mnemonic_widget(&upload_speed_limit_entry)
+            .build();
 
         let desktop_heading = granite::HeaderLabel::new(&gettext("Desktop Integration"));
 
+        let hide_on_close_switch = gtk::Switch::builder()
+            .halign(gtk::Align::Start)
+            .hexpand(true)
+            .build();
         let hide_on_close_label = gtk::Label::builder()
             .halign(gtk::Align::End)
             .margin_start(12)
             .label(gettext("Continue downloads while closed:"))
-            .build();
-        let hide_on_close_switch = gtk::Switch::builder()
-            .halign(gtk::Align::Start)
-            .hexpand(true)
+            .mnemonic_widget(&hide_on_close_switch)
             .build();
 
         settings
@@ -244,10 +255,77 @@ impl PreferencesDialog {
     }
 
     fn create_advanced_settings_widgets(&self) -> gtk::Grid {
-        gtk::Grid::builder()
+        let settings = self.imp().settings.get().expect("Couldn't get settings");
+
+        let force_encryption_switch = gtk::Switch::builder()
+            .halign(gtk::Align::Start)
+            .hexpand(true)
+            .build();
+
+        settings
+            .bind("force-encryption", &force_encryption_switch, "active")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        let force_encryption_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Only connect to encrypted peers:"))
+            .mnemonic_widget(&force_encryption_switch)
+            .build();
+
+        let randomise_port_switch = gtk::Switch::builder()
+            .halign(gtk::Align::Start)
+            .hexpand(true)
+            .build();
+
+        settings
+            .bind("randomize-port", &randomise_port_switch, "active")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        let randomise_port_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Randomise BitTorrent port on launch:"))
+            .mnemonic_widget(&randomise_port_switch)
+            .build();
+
+        let port_entry = gtk::SpinButton::with_range(49152., 65535., 1.);
+        port_entry.set_hexpand(true);
+
+        settings
+            .bind("peer-port", &port_entry, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+        randomise_port_switch
+            .bind_property("active", &port_entry, "sensitive")
+            .sync_create()
+            .bidirectional()
+            .invert_boolean()
+            .build();
+
+        let port_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Port number:"))
+            .mnemonic_widget(&port_entry)
+            .build();
+
+        let advanced_grid = gtk::Grid::builder()
             .column_spacing(12)
             .row_spacing(6)
             .hexpand(true)
-            .build()
+            .build();
+
+        advanced_grid.attach(&granite::HeaderLabel::new(&gettext("Security")), 0, 2, 1, 1);
+        advanced_grid.attach(&force_encryption_label, 0, 3, 1, 1);
+        advanced_grid.attach(&force_encryption_switch, 1, 3, 1, 1);
+        advanced_grid.attach(&randomise_port_label, 0, 4, 1, 1);
+        advanced_grid.attach(&randomise_port_switch, 1, 4, 1, 1);
+        advanced_grid.attach(&port_label, 0, 5, 1, 1);
+        advanced_grid.attach(&port_entry, 1, 5, 1, 1);
+
+        advanced_grid
     }
 }

@@ -1,15 +1,18 @@
 // TODO: Gtk.Dialog is deprecated, switch away from it
 #![allow(deprecated)]
 
+use crate::window::TorrentialWindow;
 use gettextrs::gettext;
 use granite::subclass::prelude::*;
 use gtk::gio;
+use gtk::gio::SettingsBindFlags;
 use gtk::glib;
+use gtk::glib::clone;
 use gtk::glib::Properties;
 use gtk::prelude::*;
+use gtk::ResponseType;
+use once_cell::sync::OnceCell;
 use std::cell::RefCell;
-
-use crate::window::TorrentialWindow;
 
 mod imp {
     use super::*;
@@ -19,6 +22,7 @@ mod imp {
     pub struct PreferencesDialog {
         #[property(get, set)]
         window: RefCell<gtk::Window>,
+        pub settings: OnceCell<gio::Settings>,
     }
 
     #[glib::object_subclass]
@@ -51,7 +55,8 @@ mod imp {
             obj.set_destroy_with_parent(true);
             obj.set_transient_for(Some(&obj.window()));
 
-            let _settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+            let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+            obj.imp().settings.set(settings);
 
             let stack = gtk::Stack::new();
             stack.add_titled(
@@ -104,6 +109,7 @@ impl PreferencesDialog {
     }
 
     fn create_general_settings_widgets(&self) -> gtk::Grid {
+        let settings = self.imp().settings.get().expect("Couldn't get settings");
         let location_heading = granite::HeaderLabel::new(&gettext("Download Location"));
 
         let location_chooser_label = gtk::Label::new(Some(&crate::utils::get_downloads_folder()));
@@ -118,6 +124,95 @@ impl PreferencesDialog {
             .margin_start(12)
             .build();
 
+        location_chooser.connect_clicked(clone!(@weak self as this, @weak settings => move |_| {
+            let chooser = gtk::FileChooserDialog::new(
+                Some(gettext("Select Download Folder")),
+                Some(&this),
+                gtk::FileChooserAction::SelectFolder,
+                &[
+                    (&gettext("Cancel"), ResponseType::Cancel),
+                    (&gettext("Select"), ResponseType::Accept)
+                ]
+            );
+
+            chooser.connect_response(clone!(@weak settings => move |dialog, response| {
+                if response == ResponseType::Accept {
+                    settings
+                        .set_string(
+                            "download-folder",
+                            dialog
+                                .file()
+                                .expect("No file selected")
+                                .path()
+                                .expect("No path for file")
+                                .to_str()
+                                .expect("Couldn't convert path to string")
+                        );
+                }
+
+                dialog.destroy();
+            }));
+
+            chooser.present();
+        }));
+
+        let download_heading = granite::HeaderLabel::new(&gettext("Limits"));
+
+        let max_downloads_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Max simultaneous downloads:"))
+            .build();
+        let max_downloads_entry = gtk::SpinButton::with_range(1., 100., 1.);
+        max_downloads_entry.set_hexpand(true);
+        settings
+            .bind("max-downloads", &max_downloads_entry, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        let download_speed_limit_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Download speed limit (KBps):"))
+            .build();
+        let download_speed_limit_entry = gtk::SpinButton::with_range(0., 1000000., 25.);
+        download_speed_limit_entry.set_hexpand(true);
+        download_speed_limit_entry.set_tooltip_text(Some(&gettext("0 means unlimited")));
+        settings
+            .bind("download-speed-limit", &download_speed_limit_entry, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        let upload_speed_limit_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Upload speed limit (KBps):"))
+            .build();
+        let upload_speed_limit_entry = gtk::SpinButton::with_range(0., 1000000., 25.);
+        upload_speed_limit_entry.set_hexpand(true);
+        upload_speed_limit_entry.set_tooltip_text(Some(&gettext("0 means unlimited")));
+        settings
+            .bind("upload-speed-limit", &upload_speed_limit_entry, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        let desktop_heading = granite::HeaderLabel::new(&gettext("Desktop Integration"));
+
+        let hide_on_close_label = gtk::Label::builder()
+            .halign(gtk::Align::End)
+            .margin_start(12)
+            .label(gettext("Continue downloads while closed:"))
+            .build();
+        let hide_on_close_switch = gtk::Switch::builder()
+            .halign(gtk::Align::Start)
+            .hexpand(true)
+            .build();
+
+        settings
+            .bind("hide-on-close", &hide_on_close_switch, "active")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
         let general_grid = gtk::Grid::builder()
             .column_spacing(12)
             .row_spacing(6)
@@ -126,6 +221,18 @@ impl PreferencesDialog {
 
         general_grid.attach(&location_heading, 0, 0, 1, 1);
         general_grid.attach(&location_chooser, 0, 1, 2, 1);
+
+        general_grid.attach(&download_heading, 0, 2, 1, 1);
+        general_grid.attach(&max_downloads_label, 0, 3, 1, 1);
+        general_grid.attach(&max_downloads_entry, 1, 3, 1, 1);
+        general_grid.attach(&download_speed_limit_label, 0, 4, 1, 1);
+        general_grid.attach(&download_speed_limit_entry, 1, 4, 1, 1);
+        general_grid.attach(&upload_speed_limit_label, 0, 5, 1, 1);
+        general_grid.attach(&upload_speed_limit_entry, 1, 5, 1, 1);
+
+        general_grid.attach(&desktop_heading, 0, 7, 1, 1);
+        general_grid.attach(&hide_on_close_label, 0, 8, 1, 1);
+        general_grid.attach(&hide_on_close_switch, 1, 8, 1, 1);
 
         general_grid
     }

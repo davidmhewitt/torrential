@@ -152,7 +152,7 @@ impl PreferencesDialog {
                                 .expect("Couldn't convert path to string")
                         ) {
                             Ok(_) => {},
-                            Err(e) => glib::g_warning!("Unable to set download folder: {}", e),
+                            Err(e) => glib::g_warning!("preferences_dialog", "Unable to set download folder: {}", e),
                         }
                 }
 

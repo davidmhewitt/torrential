@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.davidmhewitt.torrential\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-12 15:00+0100\n"
+"POT-Creation-Date: 2023-04-19 21:36+0100\n"
 "PO-Revision-Date: 2023-04-12 13:07+0100\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,66 +17,162 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/welcome.rs:52
-msgid "Welcome"
+#: src/dialogs/preferences_dialog.rs:53 src/widgets/torrent_list_box.rs:51
+msgid "Preferences"
 msgstr ""
 
-#: src/welcome.rs:58
-msgid "Info"
+#: src/dialogs/preferences_dialog.rs:68
+msgid "General"
 msgstr ""
 
-#: src/welcome.rs:59
-msgid "Learn more about this application"
+#: src/dialogs/preferences_dialog.rs:74
+msgid "Advanced"
 msgstr ""
 
-#: src/welcome.rs:74
-msgid "Docs"
+#: src/dialogs/preferences_dialog.rs:95
+msgid "Close"
 msgstr ""
 
-#: src/welcome.rs:75
-msgid "Rust docs for the Granite crate"
+#: src/dialogs/preferences_dialog.rs:116
+msgid "Download Location"
 msgstr ""
 
-#: src/window.rs:82
+#: src/dialogs/preferences_dialog.rs:139
+msgid "Select Download Folder"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:143
+msgid "Cancel"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:144
+msgid "Select"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:172
+msgid "Limits"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:183
+msgid "Max simultaneous downloads:"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:189 src/dialogs/preferences_dialog.rs:203
+msgid "0 means unlimited"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:197
+msgid "Download speed limit (KBps):"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:211
+msgid "Upload speed limit (KBps):"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:215
+msgid "Desktop Integration"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:224
+msgid "Continue downloads while closed:"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:273
+msgid "Only connect to encrypted peers:"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:290
+msgid "Randomise BitTorrent port on launch:"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:311
+msgid "Port number:"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:321
+msgid "Security"
+msgstr ""
+
+#: src/widgets/torrent_list_box.rs:35
+msgid "No Torrents Added"
+msgstr ""
+
+#: src/widgets/torrent_list_box.rs:36
+msgid "Add a torrent file to begin downloading."
+msgstr ""
+
+#: src/widgets/torrent_list_box.rs:42
+msgid "Open Torrent"
+msgstr ""
+
+#: src/widgets/torrent_list_box.rs:43
+msgid "Open a torrent file from your computer."
+msgstr ""
+
+#: src/widgets/torrent_list_box.rs:52
+msgid "Set download folder and other preferences."
+msgstr ""
+
+#: src/window.rs:104
 msgid "_Preferences"
 msgstr ""
 
-#: src/window.rs:83
+#: src/window.rs:105
 msgid "_Quit"
 msgstr ""
 
-#: src/window.rs:89
+#: src/window.rs:111
 msgid "Application menu"
 msgstr ""
 
-#: src/window.rs:98
-msgid "Open .torrent file"
+#: src/window.rs:120
+msgid "Open .torrent files"
 msgstr ""
 
-#: src/window.rs:107
+#: src/window.rs:129
 msgid "Open magnet link"
 msgstr ""
 
-#: src/window.rs:115
+#: src/window.rs:137
 msgid "Search Torrents"
 msgstr ""
 
-#: src/window.rs:126
+#: src/window.rs:154
 msgid "All"
 msgstr ""
 
-#: src/window.rs:134
+#: src/window.rs:162
 msgid "Downloading"
 msgstr ""
 
-#: src/window.rs:142
+#: src/window.rs:170
 msgid "Seeding"
 msgstr ""
 
-#: src/window.rs:150
+#: src/window.rs:178
 msgid "Paused"
 msgstr ""
 
-#: src/window.rs:160
+#: src/window.rs:188
 msgid "Filter"
+msgstr ""
+
+#: src/window.rs:212
+msgid "All files"
+msgstr ""
+
+#: src/window.rs:216
+msgid "Torrent files"
+msgstr ""
+
+#: src/window.rs:225
+msgid "Open some torrents"
+msgstr ""
+
+#: src/window.rs:263
+msgid "Magnet URL:"
+msgstr ""
+
+#: src/window.rs:268
+msgid "Add Magnet Link"
 msgstr ""

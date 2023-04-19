@@ -1,2 +1,3 @@
-src/welcome.rs
+src/dialogs/preferences_dialog.rs
+src/widgets/torrent_list_box.rs
 src/window.rs

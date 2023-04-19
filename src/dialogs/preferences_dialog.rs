@@ -56,7 +56,10 @@ mod imp {
             obj.set_transient_for(Some(&obj.window()));
 
             let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
-            obj.imp().settings.set(settings);
+            obj.imp()
+                .settings
+                .set(settings)
+                .expect("Settings should be assigned only once");
 
             let stack = gtk::Stack::new();
             stack.add_titled(
@@ -137,7 +140,7 @@ impl PreferencesDialog {
 
             chooser.connect_response(clone!(@weak settings => move |dialog, response| {
                 if response == ResponseType::Accept {
-                    settings
+                    match settings
                         .set_string(
                             "download-folder",
                             dialog
@@ -147,7 +150,10 @@ impl PreferencesDialog {
                                 .expect("No path for file")
                                 .to_str()
                                 .expect("Couldn't convert path to string")
-                        );
+                        ) {
+                            Ok(_) => {},
+                            Err(e) => glib::g_warning!("Unable to set download folder: {}", e),
+                        }
                 }
 
                 dialog.destroy();

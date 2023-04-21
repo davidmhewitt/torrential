@@ -11,8 +11,8 @@ case $1 in
     pot)
         TMPDIR=$(basename `mktemp -u`)
         mkdir "$TMPDIR"
-        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
-        echo "ninja extra-pot; ninja $PROJECT_NAME-pot" | flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.json" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
+        echo "ninja extra-pot; ninja $PROJECT_NAME-pot" | flatpak-builder build "$PROJECT_NAME.json" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
         cp "$TMPDIR/build/$MODULE_NAME/po/extra/extra.pot" po/extra/
         cp "$TMPDIR/build/$MODULE_NAME/po/$PROJECT_NAME.pot" po/
         rm -rf "$TMPDIR"
@@ -20,8 +20,8 @@ case $1 in
     po)
         TMPDIR=$(basename `mktemp -u`)
         mkdir "$TMPDIR"
-        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
-        echo "ninja extra-update-po; ninja $PROJECT_NAME-update-po" | flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.json" --force-clean --stop-at="$MODULE_NAME" --state-dir="$TMPDIR"
+        echo "ninja extra-update-po; ninja $PROJECT_NAME-update-po" | flatpak-builder build "$PROJECT_NAME.json" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
         cp "$TMPDIR/build/$MODULE_NAME/po/extra/"*.po po/extra/
         cp "$TMPDIR/build/$MODULE_NAME/po/"*.po po/
         rm -rf "$TMPDIR"
@@ -29,11 +29,11 @@ case $1 in
     shell)
         TMPDIR=$(basename `mktemp -u`)
         mkdir "$TMPDIR"
-        flatpak-builder build "$PROJECT_NAME.yml" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
+        flatpak-builder build "$PROJECT_NAME.json" --force-clean --build-shell="$MODULE_NAME" --state-dir="$TMPDIR"
         rm -rf "$TMPDIR"
         ;;
     build)
-        flatpak-builder --install --force-clean --user build $PROJECT_NAME.yml
+        flatpak-builder --install --force-clean --user build $PROJECT_NAME.json
         ;;
     run)
         flatpak run --user $PROJECT_NAME

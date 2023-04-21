@@ -206,69 +206,72 @@ impl TorrentialWindow {
             })
             .build();
 
-        #[cfg(feature = "gtk4_6")]
-        let open_action = gio::ActionEntry::builder("open")
-            .activate(move |win: &Self, _, _| {
-                let all_files_filter = gtk::FileFilter::new();
-                all_files_filter.set_name(Some(&gettext("All files")));
-                all_files_filter.add_pattern("*");
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "gtk4_6")] {
+                let open_action = gio::ActionEntry::builder("open")
+                    .activate(move |win: &Self, _, _| {
+                        let all_files_filter = gtk::FileFilter::new();
+                        all_files_filter.set_name(Some(&gettext("All files")));
+                        all_files_filter.add_pattern("*");
 
-                let torrent_files_filter = gtk::FileFilter::new();
-                torrent_files_filter.set_name(Some(&gettext("Torrent files")));
-                torrent_files_filter.add_mime_type("application/x-bittorrent");
+                        let torrent_files_filter = gtk::FileFilter::new();
+                        torrent_files_filter.set_name(Some(&gettext("Torrent files")));
+                        torrent_files_filter.add_mime_type("application/x-bittorrent");
 
-                let filech = gtk::FileChooserNative::new(
-                    Some(&gettext("Open some torrents")),
-                    Some(&TorrentialWindow::default()),
-                    gtk::FileChooserAction::Open,
-                    None,
-                    None,
-                );
+                        let filech = gtk::FileChooserNative::new(
+                            Some(&gettext("Open some torrents")),
+                            Some(&TorrentialWindow::default()),
+                            gtk::FileChooserAction::Open,
+                            None,
+                            None,
+                        );
 
-                filech.set_select_multiple(true);
-                filech.add_filter(&torrent_files_filter);
-                filech.add_filter(&all_files_filter);
+                        filech.set_select_multiple(true);
+                        filech.add_filter(&torrent_files_filter);
+                        filech.add_filter(&all_files_filter);
 
-                filech.connect_response(clone!(@strong filech, @weak win => move |_, response| {
-                    if response == gtk::ResponseType::Accept {
-                        win.add_files (filech.files());
-                    }
-                }));
+                        filech.connect_response(clone!(@strong filech, @weak win => move |_, response| {
+                            if response == gtk::ResponseType::Accept {
+                                win.add_files (filech.files());
+                            }
+                        }));
 
-                filech.show();
-            })
-            .build();
-
-        #[cfg(feature = "gtk4_10")]
-        let open_action = gio::ActionEntry::builder("open")
-            .activate(move |win: &Self, _, _| {
-                let all_files_filter = gtk::FileFilter::new();
-                all_files_filter.set_name(Some(&gettext("All files")));
-                all_files_filter.add_pattern("*");
-
-                let torrent_files_filter = gtk::FileFilter::new();
-                torrent_files_filter.set_name(Some(&gettext("Torrent files")));
-                torrent_files_filter.add_mime_type("application/x-bittorrent");
-
-                let filters = gio::ListStore::new(all_files_filter.type_());
-                filters.append(&all_files_filter);
-                filters.append(&torrent_files_filter);
-
-                let file_dialog = gtk::FileDialog::builder()
-                    .filters(&filters)
-                    .title(gettext("Open some torrents"))
+                        filech.show();
+                    })
                     .build();
+            } else {
+                #[cfg(feature = "gtk4_10")]
+                let open_action = gio::ActionEntry::builder("open")
+                    .activate(move |win: &Self, _, _| {
+                        let all_files_filter = gtk::FileFilter::new();
+                        all_files_filter.set_name(Some(&gettext("All files")));
+                        all_files_filter.add_pattern("*");
 
-                let main_context = MainContext::default();
-                main_context.spawn_local(clone!(@weak win, @strong file_dialog => async move {
-                    let file_model = file_dialog.open_multiple_future(Some(&win)).await;
-                    match file_model {
-                        Ok(files) => win.add_files(files),
-                        Err(e) => g_warning!("window", "Error getting files from file dialog: {}", e),
-                    }
-                }));
-            })
-            .build();
+                        let torrent_files_filter = gtk::FileFilter::new();
+                        torrent_files_filter.set_name(Some(&gettext("Torrent files")));
+                        torrent_files_filter.add_mime_type("application/x-bittorrent");
+
+                        let filters = gio::ListStore::new(all_files_filter.type_());
+                        filters.append(&all_files_filter);
+                        filters.append(&torrent_files_filter);
+
+                        let file_dialog = gtk::FileDialog::builder()
+                            .filters(&filters)
+                            .title(gettext("Open some torrents"))
+                            .build();
+
+                        let main_context = MainContext::default();
+                        main_context.spawn_local(clone!(@weak win, @strong file_dialog => async move {
+                            let file_model = file_dialog.open_multiple_future(Some(&win)).await;
+                            match file_model {
+                                Ok(files) => win.add_files(files),
+                                Err(e) => gtk::glib::g_warning!("window", "Error getting files from file dialog: {}", e),
+                            }
+                        }));
+                    })
+                    .build();
+            }
+        }
 
         let preferences_action: ActionEntry<TorrentialWindow> =
             gio::ActionEntry::builder("preferences")

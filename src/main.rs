@@ -24,6 +24,7 @@
  */
 
 mod application;
+mod backend;
 mod config;
 mod dialogs;
 mod utils;

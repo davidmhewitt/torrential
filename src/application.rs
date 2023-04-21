@@ -1,24 +1,32 @@
+use granite::traits::SettingsExt;
+use gtk::glib::clone;
 use gtk::glib::VariantTy;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;
 use gtk::{gio, glib};
 
+use crate::backend::TransmissionConnection;
 use crate::TorrentialWindow;
 
 mod imp {
-    use granite::traits::SettingsExt;
-    use gtk::glib::clone;
-
     use super::*;
 
     #[derive(Debug, Default)]
-    pub struct TorrentialApplication {}
+    pub struct TorrentialApplication {
+        pub connection_handler: TransmissionConnection,
+    }
 
     #[glib::object_subclass]
     impl ObjectSubclass for TorrentialApplication {
         const NAME: &'static str = "TorrentialApplication";
         type Type = super::TorrentialApplication;
         type ParentType = gtk::Application;
+
+        fn new() -> Self {
+            Self {
+                connection_handler: TransmissionConnection::new(),
+            }
+        }
     }
 
     impl ObjectImpl for TorrentialApplication {

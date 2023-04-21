@@ -53,7 +53,7 @@ else
   rust_target = 'debug'
 endif
 
-if gtk_dep.version() >= '4.10'
+if gtk_dep.version().version_compare('>=4.10')
   cargo_opt += [ '--features', 'gtk4_10' ]
 endif
 

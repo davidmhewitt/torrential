@@ -207,7 +207,37 @@ impl TorrentialWindow {
             .build();
 
         cfg_if::cfg_if! {
-            if #[cfg(feature = "gtk4_6")] {
+            if #[cfg(feature = "gtk4_10")] {
+                let open_action = gio::ActionEntry::builder("open")
+                    .activate(move |win: &Self, _, _| {
+                        let all_files_filter = gtk::FileFilter::new();
+                        all_files_filter.set_name(Some(&gettext("All files")));
+                        all_files_filter.add_pattern("*");
+
+                        let torrent_files_filter = gtk::FileFilter::new();
+                        torrent_files_filter.set_name(Some(&gettext("Torrent files")));
+                        torrent_files_filter.add_mime_type("application/x-bittorrent");
+
+                        let filters = gio::ListStore::new(all_files_filter.type_());
+                        filters.append(&all_files_filter);
+                        filters.append(&torrent_files_filter);
+
+                        let file_dialog = gtk::FileDialog::builder()
+                            .filters(&filters)
+                            .title(gettext("Open some torrents"))
+                            .build();
+
+                        let main_context = MainContext::default();
+                        main_context.spawn_local(clone!(@weak win, @strong file_dialog => async move {
+                            let file_model = file_dialog.open_multiple_future(Some(&win)).await;
+                            match file_model {
+                                Ok(files) => win.add_files(files),
+                                Err(e) => gtk::glib::g_warning!("window", "Error getting files from file dialog: {}", e),
+                            }
+                        }));
+                    })
+                    .build();
+            } else {
                 let open_action = gio::ActionEntry::builder("open")
                     .activate(move |win: &Self, _, _| {
                         let all_files_filter = gtk::FileFilter::new();
@@ -237,37 +267,6 @@ impl TorrentialWindow {
                         }));
 
                         filech.show();
-                    })
-                    .build();
-            } else {
-                #[cfg(feature = "gtk4_10")]
-                let open_action = gio::ActionEntry::builder("open")
-                    .activate(move |win: &Self, _, _| {
-                        let all_files_filter = gtk::FileFilter::new();
-                        all_files_filter.set_name(Some(&gettext("All files")));
-                        all_files_filter.add_pattern("*");
-
-                        let torrent_files_filter = gtk::FileFilter::new();
-                        torrent_files_filter.set_name(Some(&gettext("Torrent files")));
-                        torrent_files_filter.add_mime_type("application/x-bittorrent");
-
-                        let filters = gio::ListStore::new(all_files_filter.type_());
-                        filters.append(&all_files_filter);
-                        filters.append(&torrent_files_filter);
-
-                        let file_dialog = gtk::FileDialog::builder()
-                            .filters(&filters)
-                            .title(gettext("Open some torrents"))
-                            .build();
-
-                        let main_context = MainContext::default();
-                        main_context.spawn_local(clone!(@weak win, @strong file_dialog => async move {
-                            let file_model = file_dialog.open_multiple_future(Some(&win)).await;
-                            match file_model {
-                                Ok(files) => win.add_files(files),
-                                Err(e) => gtk::glib::g_warning!("window", "Error getting files from file dialog: {}", e),
-                            }
-                        }));
                     })
                     .build();
             }

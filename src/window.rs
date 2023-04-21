@@ -1,6 +1,6 @@
 use gettextrs::gettext;
 use gtk::gio::ActionEntry;
-use gtk::glib::{clone, g_warning, MainContext, VariantTy};
+use gtk::glib::{clone, MainContext, VariantTy};
 use gtk::subclass::prelude::*;
 use gtk::{gio, gio::Settings, glib, prelude::*};
 use int_enum::IntEnum;
@@ -206,6 +206,40 @@ impl TorrentialWindow {
             })
             .build();
 
+        #[cfg(feature = "gtk4_6")]
+        let open_action = gio::ActionEntry::builder("open")
+            .activate(move |win: &Self, _, _| {
+                let all_files_filter = gtk::FileFilter::new();
+                all_files_filter.set_name(Some(&gettext("All files")));
+                all_files_filter.add_pattern("*");
+
+                let torrent_files_filter = gtk::FileFilter::new();
+                torrent_files_filter.set_name(Some(&gettext("Torrent files")));
+                torrent_files_filter.add_mime_type("application/x-bittorrent");
+
+                let filech = gtk::FileChooserNative::new(
+                    Some(&gettext("Open some torrents")),
+                    Some(&TorrentialWindow::default()),
+                    gtk::FileChooserAction::Open,
+                    None,
+                    None,
+                );
+
+                filech.set_select_multiple(true);
+                filech.add_filter(&torrent_files_filter);
+                filech.add_filter(&all_files_filter);
+
+                filech.connect_response(clone!(@strong filech, @weak win => move |_, response| {
+                    if response == gtk::ResponseType::Accept {
+                        win.add_files (filech.files());
+                    }
+                }));
+
+                filech.show();
+            })
+            .build();
+
+        #[cfg(feature = "gtk4_10")]
         let open_action = gio::ActionEntry::builder("open")
             .activate(move |win: &Self, _, _| {
                 let all_files_filter = gtk::FileFilter::new();

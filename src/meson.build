@@ -29,6 +29,13 @@ run_command(
   check: true
 )
 
+gtk4_10_dep = dependency('gtk4', version: '>=4.10', required: false)
+if gtk4_10_dep.found()
+  gtk_dep = gtk4_10_dep
+else
+  gtk_dep = dependency('gtk4', version: '>=4.6')
+endif
+
 cargo_bin  = find_program('cargo')
 cargo_opt  = [ '--manifest-path', meson.project_source_root() / 'Cargo.toml' ]
 cargo_opt += [ '--target-dir', meson.project_build_root()  / 'src' ]
@@ -40,10 +47,14 @@ else
 endif
 
 if get_option('buildtype') == 'release'
-  cargo_options += [ '--release' ]
+  cargo_opt += [ '--release' ]
   rust_target = 'release'
 else
   rust_target = 'debug'
+endif
+
+if gtk_dep.version() >= '4.10'
+  cargo_opt += [ '--features', 'gtk4_10' ]
 endif
 
 cargo_build = custom_target(

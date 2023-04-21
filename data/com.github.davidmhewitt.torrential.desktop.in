@@ -3,7 +3,7 @@ Name=Torrential
 GenericName=Torrent Client
 Comment=Download torrent files
 Categories=Network;
-Exec=com.github.davidmhewitt.torrential %U
+Exec=torrential %U
 Icon=com.github.davidmhewitt.torrential
 Terminal=false
 Type=Application
@@ -14,5 +14,5 @@ MimeType=application/x-bittorrent;x-scheme-handler/magnet;
 X-GNOME-UsesNotifications=true
 
 [Desktop Action Quit]
-Exec=com.github.davidmhewitt.torrential --quit
+Exec=torrential --quit
 Name=Quit

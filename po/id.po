@@ -1,407 +1,177 @@
+# Indonesian translations for com.github.davidmhewitt.torrential package.
+# Copyright (C) 2023 THE com.github.davidmhewitt.torrential'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.davidmhewitt.torrential package.
+# Automatically generated, 2023.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: com.github.davidmhewitt.torrential\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-30 00:43+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: sva_h4cky0 <sva_h4cky0@protonmail.com>\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2023-04-19 21:36+0100\n"
+"PO-Revision-Date: 2023-04-12 13:07+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.0.2\n"
 
-#: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
-#: ../src/Widgets/MultiInfoBar.vala:35
-msgid "Close"
-msgstr "Tutup"
-
-#: ../src/MainWindow.vala:128
-msgid "No Search Results"
-msgstr "Tidak Ada Hasil Pencarian"
-
-#: ../src/MainWindow.vala:128
-msgid "Try changing search terms"
-msgstr "Coba ubah istilah penelusuran"
-
-#: ../src/MainWindow.vala:129
-msgid "No Torrents Here"
-msgstr "Tidak Ada Torrent Disini"
-
-#: ../src/MainWindow.vala:129
-msgid "Try a different category"
-msgstr "Coba kategori lain"
-
-#: ../src/MainWindow.vala:161
-msgid "Torrent Complete"
-msgstr "Torrent Selesai"
-
-#: ../src/MainWindow.vala:162
-msgid "“%s” has finished downloading"
-msgstr "“%s” telah selesai diunduh"
-
-#: ../src/MainWindow.vala:169
-msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
-"Gagal memuat daftar hitam. Semua torrent dijeda sebagai tindakan pencegahan."
-
-#: ../src/MainWindow.vala:250
-msgid "Application menu"
-msgstr "Menu aplikasi"
-
-#: ../src/MainWindow.vala:256
-msgid "Open .torrent file"
-msgstr "Buka berkas .torrent"
-
-#: ../src/MainWindow.vala:262
-#, fuzzy
-msgid "Open magnet link"
-msgstr "Tautan Magnet"
-
-#: ../src/MainWindow.vala:266
-msgid "Search Torrents"
-msgstr "Pencarian Torrent"
-
-#: ../src/MainWindow.vala:277
-msgid "All"
-msgstr "Semua"
-
-#: ../src/MainWindow.vala:278
-msgid "Downloading"
-msgstr "Mengunduh"
-
-#: ../src/MainWindow.vala:279
-msgid "Seeding"
-msgstr "Seeding"
-
-#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
-msgid "Paused"
-msgstr "Dijeda"
-
-#: ../src/MainWindow.vala:334
-msgid "No Torrents Added"
-msgstr "Tidak Ada Torrent Ditambahkan"
-
-#: ../src/MainWindow.vala:334
-msgid "Add a torrent file to begin downloading."
-msgstr "Tambahkan berkas torrent untuk memulai mengunduh."
-
-#: ../src/MainWindow.vala:335
-msgid "Open Torrent"
-msgstr "Buka Torrent"
-
-#: ../src/MainWindow.vala:335
-msgid "Open a torrent file from your computer."
-msgstr "Buka berkas torrent dari komputer anda."
-
-#: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
+#: src/dialogs/preferences_dialog.rs:53 src/widgets/torrent_list_box.rs:51
 msgid "Preferences"
-msgstr "Preferensi"
-
-#: ../src/MainWindow.vala:336
-msgid "Set download folder and other preferences."
-msgstr "Tentukan folder unduhan dan preferensi lainnya."
-
-#: ../src/MainWindow.vala:361
-msgid "_Preferences"
-msgstr "_Preferences"
-
-#: ../src/MainWindow.vala:367
-msgid "_Quit"
-msgstr "_Quit"
-
-#: ../src/MainWindow.vala:377
-msgid "Magnet Link Copied To Clipboard"
 msgstr ""
 
-#: ../src/MainWindow.vala:412
-msgid "Open some torrents"
-msgstr "Buka beberapa torrent"
-
-#: ../src/MainWindow.vala:414
-msgid "Cancel"
-msgstr "Batal"
-
-#: ../src/MainWindow.vala:415
-msgid "Open"
-msgstr "Buka"
-
-#: ../src/MainWindow.vala:420
-msgid "All files"
-msgstr "Semua berkas"
-
-#: ../src/MainWindow.vala:423
-msgid "Torrent files"
-msgstr "Berkas torrent"
-
-#: ../src/MainWindow.vala:449
-#, fuzzy
-msgid "Magnet URL:"
-msgstr "Tautan Magnet"
-
-#: ../src/MainWindow.vala:491
-#, fuzzy
-msgid "Torrent Added"
-msgstr "Tidak Ada Torrent Ditambahkan"
-
-#: ../src/MainWindow.vala:492
-#, fuzzy
-msgid "Successfully added torrent file from Downloads"
-msgstr "Berhasil menambahkan tautan magnet"
-
-#: ../src/MainWindow.vala:515
-msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr "Gagal menambahkan “%s” karena sepertinya torrent tidak valid."
-
-#: ../src/MainWindow.vala:518
-msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr "Tidak menambahkan “%s”. Karena torrent yang sama sudah ada."
-
-#: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
-msgid "Magnet Link"
-msgstr "Tautan Magnet"
-
-#: ../src/MainWindow.vala:539
-msgid "Successfully added magnet link"
-msgstr "Berhasil menambahkan tautan magnet"
-
-#: ../src/MainWindow.vala:544
-msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr "Gagal menambahkan tautan magnet karena sepertinya torrent tidak valid."
-
-#: ../src/MainWindow.vala:548
-msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr "Tidak menambahkan tautan magnet. Karena torrent yang sama sudah ada."
-
-#: ../src/MainWindow.vala:558
-msgid "Failed to add magnet link"
-msgstr "Gagal menambahkan tautan magnet"
-
-#: ../src/PreferencesWindow.vala:47
+#: src/dialogs/preferences_dialog.rs:68
 msgid "General"
-msgstr "Umum"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:48
+#: src/dialogs/preferences_dialog.rs:74
 msgid "Advanced"
-msgstr "Tingkat lanjut"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:95
-msgid "Blocklist last downloaded: never"
-msgstr "Daftar hitam terakhir diunduh: tidak pernah"
+#: src/dialogs/preferences_dialog.rs:95
+msgid "Close"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:98
-msgid "Last downloaded: %s"
-msgstr "Terakhir diunduh: %s"
-
-#: ../src/PreferencesWindow.vala:98
-msgid "%a %e, %b %H:%M"
-msgstr "%a %e, %b %H:%M"
-
-#: ../src/PreferencesWindow.vala:105
-msgid "Only connect to encrypted peers:"
-msgstr "Hanya terhubung ke peer terenkripsi:"
-
-#: ../src/PreferencesWindow.vala:109
-msgid "Randomise BitTorrent port on launch:"
-msgstr "Acak port BitTorrent saat memulai:"
-
-#: ../src/PreferencesWindow.vala:114
-msgid "Port number:"
-msgstr "Nomor port:"
-
-#: ../src/PreferencesWindow.vala:116
-msgid "Update Blocklist"
-msgstr "Perbarui Daftar Hitam"
-
-#: ../src/PreferencesWindow.vala:122
-msgid "Blocklist URL:"
-msgstr "Daftar Hitam URL:"
-
-#: ../src/PreferencesWindow.vala:145
-msgid "Security"
-msgstr "Keamanan"
-
-#: ../src/PreferencesWindow.vala:152
-msgid "Blocklist"
-msgstr "Daftar Hitam"
-
-#: ../src/PreferencesWindow.vala:167
+#: src/dialogs/preferences_dialog.rs:116
 msgid "Download Location"
-msgstr "Lokasi Unduhan"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:169
-msgid "Select Download Folder…"
-msgstr "Pilih Folder Unduhan…"
+#: src/dialogs/preferences_dialog.rs:139
+msgid "Select Download Folder"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:179
+#: src/dialogs/preferences_dialog.rs:143
+msgid "Cancel"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:144
+msgid "Select"
+msgstr ""
+
+#: src/dialogs/preferences_dialog.rs:172
 msgid "Limits"
-msgstr "Batasan"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:183
+#: src/dialogs/preferences_dialog.rs:183
 msgid "Max simultaneous downloads:"
-msgstr "Unduhan bersamaan maksimal:"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:186 ../src/PreferencesWindow.vala:191
+#: src/dialogs/preferences_dialog.rs:189 src/dialogs/preferences_dialog.rs:203
 msgid "0 means unlimited"
-msgstr "0 berarti tak terbatas"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:188
+#: src/dialogs/preferences_dialog.rs:197
 msgid "Download speed limit (KBps):"
-msgstr "Batasan kecepatan unduh (KBps):"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:193
+#: src/dialogs/preferences_dialog.rs:211
 msgid "Upload speed limit (KBps):"
-msgstr "Batasan kecepatan unggah (KBps):"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:195
-msgid "Seed Limit Ratio:"
-msgstr "Rasio Batasan Benih:"
-
-#: ../src/PreferencesWindow.vala:202
+#: src/dialogs/preferences_dialog.rs:215
 msgid "Desktop Integration"
-msgstr "Integrasi Desktop"
+msgstr ""
 
-#: ../src/PreferencesWindow.vala:206
-msgid "Continue downloads when closed:"
-msgstr "Tetap mengunduh ketika ditutup:"
+#: src/dialogs/preferences_dialog.rs:224
+msgid "Continue downloads while closed:"
+msgstr ""
 
-#: ../src/TorrentManager.vala:50
-msgid "KB"
-msgstr "KB"
+#: src/dialogs/preferences_dialog.rs:273
+msgid "Only connect to encrypted peers:"
+msgstr ""
 
-#: ../src/TorrentManager.vala:50
-msgid "MB"
-msgstr "MB"
+#: src/dialogs/preferences_dialog.rs:290
+msgid "Randomise BitTorrent port on launch:"
+msgstr ""
 
-#: ../src/TorrentManager.vala:50
-msgid "GB"
-msgstr "GB"
+#: src/dialogs/preferences_dialog.rs:311
+msgid "Port number:"
+msgstr ""
 
-#: ../src/TorrentManager.vala:50
-msgid "TB"
-msgstr "TB"
+#: src/dialogs/preferences_dialog.rs:321
+msgid "Security"
+msgstr ""
 
-#: ../src/TorrentManager.vala:51
-msgid "KB/s"
-msgstr "KB/det"
+#: src/widgets/torrent_list_box.rs:35
+msgid "No Torrents Added"
+msgstr ""
 
-#: ../src/TorrentManager.vala:51
-msgid "MB/s"
-msgstr "MB/det"
+#: src/widgets/torrent_list_box.rs:36
+msgid "Add a torrent file to begin downloading."
+msgstr ""
 
-#: ../src/TorrentManager.vala:51
-msgid "GB/s"
-msgstr "GB/det"
+#: src/widgets/torrent_list_box.rs:42
+msgid "Open Torrent"
+msgstr ""
 
-#: ../src/TorrentManager.vala:51
-msgid "TB/s"
-msgstr "TB/det"
+#: src/widgets/torrent_list_box.rs:43
+msgid "Open a torrent file from your computer."
+msgstr ""
 
-#: ../src/Widgets/MultiInfoBar.vala:33
-msgid "Next Warning"
-msgstr "Peringatan Selanjutnya"
+#: src/widgets/torrent_list_box.rs:52
+msgid "Set download folder and other preferences."
+msgstr ""
 
-#: ../src/Widgets/MultiInfoBar.vala:69
-msgid "(Plus %d more warning…)"
-msgid_plural "(Plus %d more warnings…)"
-msgstr[0] "(Plus %d peringatan lebih lanjut…)"
-msgstr[1] "(Plus %d peringatan lebih lanjut…)"
+#: src/window.rs:104
+msgid "_Preferences"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:108
-msgid "Remove"
-msgstr "Menghapus"
+#: src/window.rs:105
+msgid "_Quit"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:115
-#, fuzzy
-msgid "Pause"
-msgstr "Dijeda"
+#: src/window.rs:111
+msgid "Application menu"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:122
-#, fuzzy
-msgid "Resume"
-msgstr "Mulai lagi torrent"
+#: src/window.rs:120
+msgid "Open .torrent files"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:129
-#, fuzzy
-msgid "Select Files to Download"
-msgstr "Pilih Folder Unduhan…"
+#: src/window.rs:129
+msgid "Open magnet link"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:137
-msgid "Show in File Browser"
-msgstr "Tampilkan pada Peramban Berkas"
+#: src/window.rs:137
+msgid "Search Torrents"
+msgstr ""
 
-#: ../src/Widgets/TorrentListBox.vala:145
-#, fuzzy
-msgid "Copy Magnet Link"
-msgstr "Tautan Magnet"
+#: src/window.rs:154
+msgid "All"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
-#: ../src/Widgets/TorrentListRow.vala:222
-msgid "Pause torrent"
-msgstr "Jeda torrent"
+#: src/window.rs:162
+msgid "Downloading"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:100
-#: ../src/Widgets/TorrentListRow.vala:200
-#: ../src/Widgets/TorrentListRow.vala:216
-msgid "Resume torrent"
-msgstr "Mulai lagi torrent"
+#: src/window.rs:170
+msgid "Seeding"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:138
-msgid "Trying to find metadata for magnet link"
-msgstr "Mencoba mencari metadata untuk tautan magnet"
+#: src/window.rs:178
+msgid "Paused"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:140
-msgid "%s of %s — %s remaining"
-msgstr "%s dari %s — %s tersisa"
+#: src/window.rs:188
+msgid "Filter"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:142
-msgid "%s of %s"
-msgstr "%s dari %s"
+#: src/window.rs:212
+msgid "All files"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:144
-msgid "%s uploaded"
-msgstr "%s terunggah"
+#: src/window.rs:216
+msgid "Torrent files"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:155
-msgid "%i of %i peers connected. ⬇%s ⬆%s"
-msgstr "%i dari %i peer-peer terhubung. ⬇%s ⬆%s"
+#: src/window.rs:225
+msgid "Open some torrents"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:159
-msgid "Waiting in queue"
-msgstr "Menunggu di antrian"
+#: src/window.rs:263
+msgid "Magnet URL:"
+msgstr ""
 
-#: ../src/Widgets/TorrentListRow.vala:171
-msgid "%u day"
-msgid_plural "%u days"
-msgstr[0] "%u hari"
-msgstr[1] "%u hari"
-
-#: ../src/Widgets/TorrentListRow.vala:172
-msgid "%u hour"
-msgid_plural "%u hours"
-msgstr[0] "%u jam"
-msgstr[1] "%u jam"
-
-#: ../src/Widgets/TorrentListRow.vala:173
-msgid "%u minute"
-msgid_plural "%u minutes"
-msgstr[0] "%u menit"
-msgstr[1] "%u menit"
-
-#: ../src/Widgets/TorrentListRow.vala:174
-msgid "%u second"
-msgid_plural "%u seconds"
-msgstr[0] "%u detik"
-msgstr[1] "%u detik"
-
-#, fuzzy
-#~ msgid "Failed to Add Torrent"
-#~ msgstr "Gagal menambahkan tautan magnet"
-
-#~ msgid "_About"
-#~ msgstr "_About"
-
-#~ msgid "translator-credits"
-#~ msgstr "sva_h4cky0 <sva_h4cky0@protonmail.com>"
+#: src/window.rs:268
+msgid "Add Magnet Link"
+msgstr ""

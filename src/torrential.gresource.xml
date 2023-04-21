@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/com/github/davidmhewitt/torrential">
+    <file alias="filter.svg" preprocess="xml-stripblanks">../data/icons/filter.svg</file>
+    <file alias="open-magnet.svg" preprocess="xml-stripblanks">../data/icons/open-magnet.svg</file>
+  </gresource>
+</gresources>

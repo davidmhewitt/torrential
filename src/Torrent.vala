@@ -234,6 +234,14 @@ public class Torrential.Torrent {
         torrent.set_file_downloads ({index}, download);
     }
 
+    public void set_files_download (uint32[] indexes, bool download) {
+        torrent.set_file_downloads (indexes, download);
+    }
+
+    public bool is_file_wanted (uint32 index) {
+        return files[index].dnd == 0;
+    }
+
     public void pause () {
         torrent.stop ();
     }

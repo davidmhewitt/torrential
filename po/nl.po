@@ -1,27 +1,34 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-30 00:43+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 2.2.4\n"
 
 #: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
 #: ../src/Widgets/MultiInfoBar.vala:35
 msgid "Close"
-msgstr "Sluit"
+msgstr "Sluiten"
 
 #: ../src/MainWindow.vala:128
 msgid "No Search Results"
-msgstr "Geen Zoekresultaten"
+msgstr "Geen zoekresultaten"
 
 #: ../src/MainWindow.vala:128
 msgid "Try changing search terms"
-msgstr "Probeer andere zoektermen"
+msgstr "Probeer andere zoektermen te gebruiken"
 
 #: ../src/MainWindow.vala:129
 msgid "No Torrents Here"
-msgstr "Geen Torrents Hier"
+msgstr "Geen torrents"
 
 #: ../src/MainWindow.vala:129
 msgid "Try a different category"
@@ -29,32 +36,31 @@ msgstr "Probeer een andere categorie"
 
 #: ../src/MainWindow.vala:161
 msgid "Torrent Complete"
-msgstr "Torrent Voltooid"
+msgstr "Torrent is gedownload"
 
 #: ../src/MainWindow.vala:162
 msgid "“%s” has finished downloading"
-msgstr "“%s” is klaar met downloaden"
+msgstr "'%s' is klaar met downloaden"
 
 #: ../src/MainWindow.vala:169
 msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr "Blocklist laden mislukt. Alle torrents werden uit voorzorg gepauzeerd."
+msgstr "Kan de blokkadelijst niet laden. Alle torrents zijn uit voorzorg gepauzeerd."
 
 #: ../src/MainWindow.vala:250
 msgid "Application menu"
-msgstr "Applicatie menu"
+msgstr "Toepassingsmenu"
 
 #: ../src/MainWindow.vala:256
 msgid "Open .torrent file"
-msgstr "Open .torrent bestand"
+msgstr ".torrent-bestand openen"
 
 #: ../src/MainWindow.vala:262
-#, fuzzy
 msgid "Open magnet link"
-msgstr "Magnet Link"
+msgstr "Magnetlink openen"
 
 #: ../src/MainWindow.vala:266
 msgid "Search Torrents"
-msgstr "Zoek Torrents"
+msgstr "Zoeken naar torrents"
 
 #: ../src/MainWindow.vala:277
 msgid "All"
@@ -62,11 +68,11 @@ msgstr "Alle"
 
 #: ../src/MainWindow.vala:278
 msgid "Downloading"
-msgstr "Downloaden"
+msgstr "Bezig met downloaden"
 
 #: ../src/MainWindow.vala:279
 msgid "Seeding"
-msgstr "Seeden"
+msgstr "Bezig met seeden"
 
 #: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
 msgid "Paused"
@@ -74,19 +80,19 @@ msgstr "Gepauzeerd"
 
 #: ../src/MainWindow.vala:334
 msgid "No Torrents Added"
-msgstr "Geen Torrents Toegevoegd"
+msgstr "Geen torrents toegevoegd"
 
 #: ../src/MainWindow.vala:334
 msgid "Add a torrent file to begin downloading."
-msgstr "Voeg een torrent bestand toe om te beginnen downloaden."
+msgstr "Voeg een torrentbestand toe om te beginnen met downloaden."
 
 #: ../src/MainWindow.vala:335
 msgid "Open Torrent"
-msgstr "Open Torrent"
+msgstr "Torrent openen"
 
 #: ../src/MainWindow.vala:335
 msgid "Open a torrent file from your computer."
-msgstr "Open een lokaal torrent bestand."
+msgstr "Open een lokaal torrentbestand."
 
 #: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
 msgid "Preferences"
@@ -94,7 +100,7 @@ msgstr "Voorkeuren"
 
 #: ../src/MainWindow.vala:336
 msgid "Set download folder and other preferences."
-msgstr "Stel download map en andere voorkeuren in."
+msgstr "Stel de downloadmap en andere voorkeuren in."
 
 #: ../src/MainWindow.vala:361
 msgid "_Preferences"
@@ -106,7 +112,7 @@ msgstr "_Afsluiten"
 
 #: ../src/MainWindow.vala:377
 msgid "Magnet Link Copied To Clipboard"
-msgstr ""
+msgstr "De magnetlink is gekopieerd naar het klembord"
 
 #: ../src/MainWindow.vala:412
 msgid "Open some torrents"
@@ -114,7 +120,7 @@ msgstr "Open enkele torrents"
 
 #: ../src/MainWindow.vala:414
 msgid "Cancel"
-msgstr "Annuleer"
+msgstr "Annuleren"
 
 #: ../src/MainWindow.vala:415
 msgid "Open"
@@ -126,52 +132,47 @@ msgstr "Alle bestanden"
 
 #: ../src/MainWindow.vala:423
 msgid "Torrent files"
-msgstr "Torrent bestanden"
+msgstr "Torrentbestanden"
 
 #: ../src/MainWindow.vala:449
-#, fuzzy
 msgid "Magnet URL:"
-msgstr "Magnet Link"
+msgstr "Magnetlink:"
 
 #: ../src/MainWindow.vala:491
-#, fuzzy
 msgid "Torrent Added"
-msgstr "Geen Torrents Toegevoegd"
+msgstr "Torrent is toegevoegd"
 
 #: ../src/MainWindow.vala:492
-#, fuzzy
 msgid "Successfully added torrent file from Downloads"
-msgstr "Magnet link succesvol toegevoegd"
+msgstr "Het torrentbestand is toegevoegd uit de Downloadsmap"
 
 #: ../src/MainWindow.vala:515
 msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr ""
-"Kon “%s” niet toevoegen. Het blijkt geen geldig torrent bestand te zijn."
+msgstr "Kan '%s' niet toevoegen: het lijkt geen geldig torrentbestand te zijn."
 
 #: ../src/MainWindow.vala:518
 msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr ""
-"De torrent “%s” werd niet toegevoegd omdat deze reeds eerder geladen werd."
+msgstr "De torrent, %s, is al eerder toegevoegd."
 
 #: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
 msgid "Magnet Link"
-msgstr "Magnet Link"
+msgstr "Magnetlink"
 
 #: ../src/MainWindow.vala:539
 msgid "Successfully added magnet link"
-msgstr "Magnet link succesvol toegevoegd"
+msgstr "Magnetlink toegevoegd"
 
 #: ../src/MainWindow.vala:544
 msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr "Kon magnet link niet openen omdat deze niet geldig lijkt te zijn."
+msgstr "Kan de magnetlink niet toevoegen omdat deze niet geldig lijkt te zijn."
 
 #: ../src/MainWindow.vala:548
 msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr "De magnet link werd niet geopend omdat deze reeds eerder geladen werd."
+msgstr "De magnetlink is al eerder toegevoegd."
 
 #: ../src/MainWindow.vala:558
 msgid "Failed to add magnet link"
-msgstr "Kon magnet link niet openen"
+msgstr "Kan magnetlink niet toevoegen"
 
 #: ../src/PreferencesWindow.vala:47
 msgid "General"
@@ -183,11 +184,11 @@ msgstr "Geavanceerd"
 
 #: ../src/PreferencesWindow.vala:95
 msgid "Blocklist last downloaded: never"
-msgstr "Blocklist laatst gedownload: nooit"
+msgstr "Blokkadelijst bijgewerkt: nooit"
 
 #: ../src/PreferencesWindow.vala:98
 msgid "Last downloaded: %s"
-msgstr "Laatst gedownload: %s"
+msgstr "Laatst bijgewerkt: %s"
 
 #: ../src/PreferencesWindow.vala:98
 msgid "%a %e, %b %H:%M"
@@ -195,23 +196,23 @@ msgstr "%a %e, %b %H:%M"
 
 #: ../src/PreferencesWindow.vala:105
 msgid "Only connect to encrypted peers:"
-msgstr "Verbind uitsluitend met geëncrypteerde peers:"
+msgstr "Alleen verbinding maken met versleutelde peers:"
 
 #: ../src/PreferencesWindow.vala:109
 msgid "Randomise BitTorrent port on launch:"
-msgstr "Randomiseer BitTorrent poort bij opstarten:"
+msgstr "Willekeurige BitTorrent-poort bij opstarten:"
 
 #: ../src/PreferencesWindow.vala:114
 msgid "Port number:"
-msgstr "Poort nummer:"
+msgstr "Poortnummer:"
 
 #: ../src/PreferencesWindow.vala:116
 msgid "Update Blocklist"
-msgstr "Update Blocklist"
+msgstr "Blokkadelijst bijwerken"
 
 #: ../src/PreferencesWindow.vala:122
 msgid "Blocklist URL:"
-msgstr "Blocklist URL:"
+msgstr "URL van blokkadelijst:"
 
 #: ../src/PreferencesWindow.vala:145
 msgid "Security"
@@ -219,47 +220,47 @@ msgstr "Beveiliging"
 
 #: ../src/PreferencesWindow.vala:152
 msgid "Blocklist"
-msgstr "Blocklist"
+msgstr "Blokkadelijst"
 
 #: ../src/PreferencesWindow.vala:167
 msgid "Download Location"
-msgstr "Download Locatie"
+msgstr "Downloadlocatie"
 
 #: ../src/PreferencesWindow.vala:169
 msgid "Select Download Folder…"
-msgstr "Selecteer Download Map…"
+msgstr "Kies een downloadmap…"
 
 #: ../src/PreferencesWindow.vala:179
 msgid "Limits"
-msgstr "Limieten"
+msgstr "Beperkingen"
 
 #: ../src/PreferencesWindow.vala:183
 msgid "Max simultaneous downloads:"
-msgstr "Max gelijktijdige downloads:"
+msgstr "Max. aantal gelijktijdige downloads:"
 
 #: ../src/PreferencesWindow.vala:186 ../src/PreferencesWindow.vala:191
 msgid "0 means unlimited"
-msgstr "0 betekent ongelimiteerd"
+msgstr "0 = ongelimiteerd"
 
 #: ../src/PreferencesWindow.vala:188
 msgid "Download speed limit (KBps):"
-msgstr "Download snelheidslimiet (KBps):"
+msgstr "Downloadsnelheidslimiet (KBps):"
 
 #: ../src/PreferencesWindow.vala:193
 msgid "Upload speed limit (KBps):"
-msgstr "Upload snelheidslimiet (KBps):"
+msgstr "Uploadsnelheidslimiet (KBps):"
 
 #: ../src/PreferencesWindow.vala:195
 msgid "Seed Limit Ratio:"
-msgstr "Seed ratio limiet:"
+msgstr "Seedverhoudingslimiet:"
 
 #: ../src/PreferencesWindow.vala:202
 msgid "Desktop Integration"
-msgstr "Bureaublad Integratie"
+msgstr "Werkomgevingsintegratie"
 
 #: ../src/PreferencesWindow.vala:206
 msgid "Continue downloads when closed:"
-msgstr "Vervolg downloaden na sluiten:"
+msgstr "Downloaden voortzetten na sluiten van venster:"
 
 #: ../src/TorrentManager.vala:50
 msgid "KB"
@@ -295,60 +296,56 @@ msgstr "TB/s"
 
 #: ../src/Widgets/MultiInfoBar.vala:33
 msgid "Next Warning"
-msgstr "Volgende Waarschuwing"
+msgstr "Volgende waarschuwing"
 
 #: ../src/Widgets/MultiInfoBar.vala:69
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
-msgstr[0] "(En %d andere waarschuwing…)"
-msgstr[1] "(En %d andere waarschuwingen…)"
+msgstr[0] "(en %d andere waarschuwing…)"
+msgstr[1] "(en %d andere waarschuwingen…)"
 
 #: ../src/Widgets/TorrentListBox.vala:108
 msgid "Remove"
-msgstr "Verwijder"
+msgstr "Verwijderen"
 
 #: ../src/Widgets/TorrentListBox.vala:115
-#, fuzzy
 msgid "Pause"
-msgstr "Gepauzeerd"
+msgstr "Pauzeren"
 
 #: ../src/Widgets/TorrentListBox.vala:122
-#, fuzzy
 msgid "Resume"
-msgstr "Hervat torrent"
+msgstr "Hervatten"
 
 #: ../src/Widgets/TorrentListBox.vala:129
-#, fuzzy
 msgid "Select Files to Download"
-msgstr "Selecteer Download Map…"
+msgstr "Selecteer te downloaden bestanden"
 
 #: ../src/Widgets/TorrentListBox.vala:137
 msgid "Show in File Browser"
-msgstr "Toon in Bestandsbrowser"
+msgstr "Tonen in bestandsbeheerder"
 
 #: ../src/Widgets/TorrentListBox.vala:145
-#, fuzzy
 msgid "Copy Magnet Link"
-msgstr "Magnet Link"
+msgstr "Magnetlink kopiëren"
 
 #: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
 #: ../src/Widgets/TorrentListRow.vala:222
 msgid "Pause torrent"
-msgstr "Pauzeer torrent"
+msgstr "Torrent pauzeren"
 
 #: ../src/Widgets/TorrentListRow.vala:100
 #: ../src/Widgets/TorrentListRow.vala:200
 #: ../src/Widgets/TorrentListRow.vala:216
 msgid "Resume torrent"
-msgstr "Hervat torrent"
+msgstr "Torrent hervatten"
 
 #: ../src/Widgets/TorrentListRow.vala:138
 msgid "Trying to find metadata for magnet link"
-msgstr "Metadata ophalen voor magnet link"
+msgstr "Bezig met ophalen van metagegevens voor magnetlink"
 
 #: ../src/Widgets/TorrentListRow.vala:140
 msgid "%s of %s — %s remaining"
-msgstr "%s of %s — %s resterend"
+msgstr "%s van %s — %s resterend"
 
 #: ../src/Widgets/TorrentListRow.vala:142
 msgid "%s of %s"
@@ -376,7 +373,7 @@ msgstr[1] "%u dagen"
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u uur"
-msgstr[1] "%u uren"
+msgstr[1] "%u uur"
 
 #: ../src/Widgets/TorrentListRow.vala:173
 msgid "%u minute"

@@ -1,5 +1,4 @@
-src/Dialogs/FileSelectDialog.vala
-src/Widgets/FileSelectTreeView.vala
+src/FileSelector/FileSelectDialog.vala
 src/Widgets/MultiInfoBar.vala
 src/Widgets/TorrentListBox.vala
 src/Widgets/TorrentListRow.vala

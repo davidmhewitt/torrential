@@ -1,23 +1,23 @@
 /*
-* Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 2 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*
-* Authored by: David Hewitt <davidmhewitt@gmail.com>
-*/
+ * Copyright (c) 2017-2021 David Hewitt (https://github.com/davidmhewitt)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ *
+ * Authored by: David Hewitt <davidmhewitt@gmail.com>
+ */
 
 public class Torrential.MainWindow : Gtk.ApplicationWindow {
     private Gtk.Button magnet_button;
@@ -72,7 +72,7 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
         insert_action_group (ACTION_GROUP_PREFIX_NAME, actions);
         foreach (var action in action_accelerators.get_keys ()) {
             application.set_accels_for_action (ACTION_GROUP_PREFIX + action,
-                                       action_accelerators[action].to_array ());
+                action_accelerators[action].to_array ());
         }
 
         SimpleAction open_torrent = new SimpleAction (ACTION_OPEN_COMPLETED_TORRENT, VariantType.INT32);

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-30 00:43+0100\n"
+"POT-Creation-Date: 2023-05-04 21:41+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Maxim Taranov <png2378@gmail.com>\n"
 "Language-Team: \n"
@@ -14,394 +14,420 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: ../src/Dialogs/FileSelectDialog.vala:50 ../src/PreferencesWindow.vala:57
-#: ../src/Widgets/MultiInfoBar.vala:35
+#: src/FileSelector/FileSelectDialog.vala:52 src/Widgets/MultiInfoBar.vala:44
+#: src/PreferencesWindow.vala:57
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../src/MainWindow.vala:128
-msgid "No Search Results"
-msgstr "Ничего не найдено"
-
-#: ../src/MainWindow.vala:128
-msgid "Try changing search terms"
-msgstr "Попробуйте изменить поисковый запрос"
-
-#: ../src/MainWindow.vala:129
-msgid "No Torrents Here"
-msgstr "Здесь ничего нет"
-
-#: ../src/MainWindow.vala:129
-msgid "Try a different category"
-msgstr "Попробуйте выбрать другую категорию"
-
-#: ../src/MainWindow.vala:161
-msgid "Torrent Complete"
-msgstr "Торрент завершён"
-
-#: ../src/MainWindow.vala:162
-msgid "“%s” has finished downloading"
-msgstr "Загрузка «%s» завершена"
-
-#: ../src/MainWindow.vala:169
-msgid "Failed to load blocklist. All torrents paused as a precaution."
-msgstr ""
-"Не удалось загрузить «чёрный список». Все торренты приостановлены в качестве "
-"меры предосторожности."
-
-#: ../src/MainWindow.vala:250
-msgid "Application menu"
-msgstr "Меню приложения"
-
-#: ../src/MainWindow.vala:256
-msgid "Open .torrent file"
-msgstr "Открыть torrent-файл"
-
-#: ../src/MainWindow.vala:262
-#, fuzzy
-msgid "Open magnet link"
-msgstr "Magnet-ссылка"
-
-#: ../src/MainWindow.vala:266
-msgid "Search Torrents"
-msgstr "Поиск торрентов"
-
-#: ../src/MainWindow.vala:277
-msgid "All"
-msgstr "Все"
-
-#: ../src/MainWindow.vala:278
-msgid "Downloading"
-msgstr "Загрузки"
-
-#: ../src/MainWindow.vala:279
-msgid "Seeding"
-msgstr "Раздачи"
-
-#: ../src/MainWindow.vala:280 ../src/Widgets/TorrentListRow.vala:157
-msgid "Paused"
-msgstr "Приостановлено"
-
-#: ../src/MainWindow.vala:334
-msgid "No Torrents Added"
-msgstr "Нет добавленных торрентов"
-
-#: ../src/MainWindow.vala:334
-msgid "Add a torrent file to begin downloading."
-msgstr "Добавьте торрент-файл для загрузки."
-
-#: ../src/MainWindow.vala:335
-msgid "Open Torrent"
-msgstr "Открыть торрент-файл"
-
-#: ../src/MainWindow.vala:335
-msgid "Open a torrent file from your computer."
-msgstr "Открыть локальный торрент-файл."
-
-#: ../src/MainWindow.vala:336 ../src/PreferencesWindow.vala:38
-msgid "Preferences"
-msgstr "Параметры"
-
-#: ../src/MainWindow.vala:336
-msgid "Set download folder and other preferences."
-msgstr "Выбор папки загрузок и другие параметры."
-
-#: ../src/MainWindow.vala:361
-msgid "_Preferences"
-msgstr "_Параметры"
-
-#: ../src/MainWindow.vala:367
-msgid "_Quit"
-msgstr "_Выйти"
-
-#: ../src/MainWindow.vala:377
-msgid "Magnet Link Copied To Clipboard"
-msgstr ""
-
-#: ../src/MainWindow.vala:412
-msgid "Open some torrents"
-msgstr "Открыть несколько торрентов"
-
-#: ../src/MainWindow.vala:414
-msgid "Cancel"
-msgstr "Отмена"
-
-#: ../src/MainWindow.vala:415
-msgid "Open"
-msgstr "Открыть"
-
-#: ../src/MainWindow.vala:420
-msgid "All files"
-msgstr "Все файлы"
-
-#: ../src/MainWindow.vala:423
-msgid "Torrent files"
-msgstr "Торрент-файлы"
-
-#: ../src/MainWindow.vala:449
-#, fuzzy
-msgid "Magnet URL:"
-msgstr "Magnet-ссылка"
-
-#: ../src/MainWindow.vala:491
-#, fuzzy
-msgid "Torrent Added"
-msgstr "Нет добавленных торрентов"
-
-#: ../src/MainWindow.vala:492
-#, fuzzy
-msgid "Successfully added torrent file from Downloads"
-msgstr "Magnet-ссылка успешно добавлена"
-
-#: ../src/MainWindow.vala:515
-msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
-msgstr "Не удалось добавить «%s», поскольку это некорректный торрент."
-
-#: ../src/MainWindow.vala:518
-msgid "Didn’t add “%s”. An identical torrent has already been added."
-msgstr "«%s» не добавлен. Уже существует идентичный торрент."
-
-#: ../src/MainWindow.vala:538 ../src/MainWindow.vala:557
-msgid "Magnet Link"
-msgstr "Magnet-ссылка"
-
-#: ../src/MainWindow.vala:539
-msgid "Successfully added magnet link"
-msgstr "Magnet-ссылка успешно добавлена"
-
-#: ../src/MainWindow.vala:544
-msgid "Failed to add magnet link as it doesn’t appear to be valid."
-msgstr "Не удалось добавить magnet-ссылку, поскольку она некорректна."
-
-#: ../src/MainWindow.vala:548
-msgid "Didn’t add magnet link. An identical torrent has already been added."
-msgstr "Magnet-ссылка не добавлена. Уже существует идентичный торрент."
-
-#: ../src/MainWindow.vala:558
-msgid "Failed to add magnet link"
-msgstr "Не удалось добавить magnet-ссылку"
-
-#: ../src/PreferencesWindow.vala:47
-msgid "General"
-msgstr "Основные"
-
-#: ../src/PreferencesWindow.vala:48
-msgid "Advanced"
-msgstr "Дополнительные"
-
-#: ../src/PreferencesWindow.vala:95
-msgid "Blocklist last downloaded: never"
-msgstr "Последнее обновление: никогда"
-
-#: ../src/PreferencesWindow.vala:98
-msgid "Last downloaded: %s"
-msgstr "Последний раз загружался: %s"
-
-#: ../src/PreferencesWindow.vala:98
-msgid "%a %e, %b %H:%M"
-msgstr "%a, %e %b %H:%M"
-
-#: ../src/PreferencesWindow.vala:105
-msgid "Only connect to encrypted peers:"
-msgstr "Только безопасные подключения:"
-
-#: ../src/PreferencesWindow.vala:109
-msgid "Randomise BitTorrent port on launch:"
-msgstr "Случайный порт при запуске:"
-
-#: ../src/PreferencesWindow.vala:114
-msgid "Port number:"
-msgstr "Номер порта:"
-
-#: ../src/PreferencesWindow.vala:116
-msgid "Update Blocklist"
-msgstr "Обновить список"
-
-#: ../src/PreferencesWindow.vala:122
-msgid "Blocklist URL:"
-msgstr "Блокируемый URL:"
-
-#: ../src/PreferencesWindow.vala:145
-msgid "Security"
-msgstr "Конфиденциальность"
-
-#: ../src/PreferencesWindow.vala:152
-msgid "Blocklist"
-msgstr "Чёрный список"
-
-#: ../src/PreferencesWindow.vala:167
-msgid "Download Location"
-msgstr "Сохранять в папку"
-
-#: ../src/PreferencesWindow.vala:169
-msgid "Select Download Folder…"
-msgstr "Выбор папки загрузок…"
-
-#: ../src/PreferencesWindow.vala:179
-msgid "Limits"
-msgstr "Ограничения"
-
-#: ../src/PreferencesWindow.vala:183
-msgid "Max simultaneous downloads:"
-msgstr "Максимум одновременных загрузок:"
-
-#: ../src/PreferencesWindow.vala:186 ../src/PreferencesWindow.vala:191
-msgid "0 means unlimited"
-msgstr "0 означает неограниченное"
-
-#: ../src/PreferencesWindow.vala:188
-msgid "Download speed limit (KBps):"
-msgstr "Ограничение скорости загрузки (КБ/С)"
-
-#: ../src/PreferencesWindow.vala:193
-msgid "Upload speed limit (KBps):"
-msgstr "Ограничение скорости раздачи (КБ/С)"
-
-#: ../src/PreferencesWindow.vala:195
-msgid "Seed Limit Ratio:"
-msgstr "Прекратить раздачу при рейтинге:"
-
-#: ../src/PreferencesWindow.vala:202
-msgid "Desktop Integration"
-msgstr "Интеграция с окружением"
-
-#: ../src/PreferencesWindow.vala:206
-msgid "Continue downloads when closed:"
-msgstr "Продолжать загрузки после закрытия:"
-
-#: ../src/TorrentManager.vala:50
-msgid "KB"
-msgstr "КБ"
-
-#: ../src/TorrentManager.vala:50
-msgid "MB"
-msgstr "МБ"
-
-#: ../src/TorrentManager.vala:50
-msgid "GB"
-msgstr "ГБ"
-
-#: ../src/TorrentManager.vala:50
-msgid "TB"
-msgstr "ТБ"
-
-#: ../src/TorrentManager.vala:51
-msgid "KB/s"
-msgstr "КБ/С"
-
-#: ../src/TorrentManager.vala:51
-msgid "MB/s"
-msgstr "МБ/С"
-
-#: ../src/TorrentManager.vala:51
-msgid "GB/s"
-msgstr "ГБ/С"
-
-#: ../src/TorrentManager.vala:51
-msgid "TB/s"
-msgstr "ТБ/С"
-
-#: ../src/Widgets/MultiInfoBar.vala:33
+#: src/Widgets/MultiInfoBar.vala:41
 msgid "Next Warning"
 msgstr "Следующее предупреждение"
 
-#: ../src/Widgets/MultiInfoBar.vala:69
+#: src/Widgets/MultiInfoBar.vala:77
+#, c-format
 msgid "(Plus %d more warning…)"
 msgid_plural "(Plus %d more warnings…)"
 msgstr[0] "(Плюс ещё %d предупреждение…)"
 msgstr[1] "(Плюс ещё %d предупреждения…)"
 msgstr[2] "(Плюс ещё %d предупреждений…)"
 
-#: ../src/Widgets/TorrentListBox.vala:108
+#: src/Widgets/TorrentListBox.vala:62
+msgid "No Torrents Added"
+msgstr "Нет добавленных торрентов"
+
+#: src/Widgets/TorrentListBox.vala:63
+msgid "Add a torrent file to begin downloading."
+msgstr "Добавьте торрент-файл для загрузки."
+
+#: src/Widgets/TorrentListBox.vala:68
+msgid "Open Torrent"
+msgstr "Открыть торрент-файл"
+
+#: src/Widgets/TorrentListBox.vala:69
+msgid "Open a torrent file from your computer."
+msgstr "Открыть локальный торрент-файл."
+
+#: src/Widgets/TorrentListBox.vala:75 src/PreferencesWindow.vala:30
+msgid "Preferences"
+msgstr "Параметры"
+
+#: src/Widgets/TorrentListBox.vala:76
+msgid "Set download folder and other preferences."
+msgstr "Выбор папки загрузок и другие параметры."
+
+#: src/Widgets/TorrentListBox.vala:236
 msgid "Remove"
 msgstr "Удалить"
 
-#: ../src/Widgets/TorrentListBox.vala:115
-#, fuzzy
-msgid "Pause"
-msgstr "Приостановлено"
-
-#: ../src/Widgets/TorrentListBox.vala:122
+#: src/Widgets/TorrentListBox.vala:238
 #, fuzzy
 msgid "Resume"
 msgstr "Продолжить загрузку торрента"
 
-#: ../src/Widgets/TorrentListBox.vala:129
+#: src/Widgets/TorrentListBox.vala:240
+#, fuzzy
+msgid "Pause"
+msgstr "Приостановлено"
+
+#: src/Widgets/TorrentListBox.vala:247
 #, fuzzy
 msgid "Select Files to Download"
 msgstr "Выбор папки загрузок…"
 
-#: ../src/Widgets/TorrentListBox.vala:137
-msgid "Show in File Browser"
-msgstr "Показать в файловом менеджере"
-
-#: ../src/Widgets/TorrentListBox.vala:145
+#: src/Widgets/TorrentListBox.vala:250
 #, fuzzy
 msgid "Copy Magnet Link"
 msgstr "Magnet-ссылка"
 
-#: ../src/Widgets/TorrentListRow.vala:97 ../src/Widgets/TorrentListRow.vala:204
-#: ../src/Widgets/TorrentListRow.vala:222
+#: src/Widgets/TorrentListBox.vala:251
+msgid "Show in File Browser"
+msgstr "Показать в файловом менеджере"
+
+#: src/Widgets/TorrentListBox.vala:280
+msgid "No Search Results"
+msgstr "Ничего не найдено"
+
+#: src/Widgets/TorrentListBox.vala:281
+msgid "Try changing search terms"
+msgstr "Попробуйте изменить поисковый запрос"
+
+#: src/Widgets/TorrentListBox.vala:283
+msgid "No Torrents Here"
+msgstr "Здесь ничего нет"
+
+#: src/Widgets/TorrentListBox.vala:284
+msgid "Try a different category"
+msgstr "Попробуйте выбрать другую категорию"
+
+#: src/Widgets/TorrentListRow.vala:89 src/Widgets/TorrentListRow.vala:229
 msgid "Pause torrent"
 msgstr "Приостановить загрузку торрента"
 
-#: ../src/Widgets/TorrentListRow.vala:100
-#: ../src/Widgets/TorrentListRow.vala:200
-#: ../src/Widgets/TorrentListRow.vala:216
+#: src/Widgets/TorrentListRow.vala:93 src/Widgets/TorrentListRow.vala:223
 msgid "Resume torrent"
 msgstr "Продолжить загрузку торрента"
 
-#: ../src/Widgets/TorrentListRow.vala:138
+#: src/Widgets/TorrentListRow.vala:147
 msgid "Trying to find metadata for magnet link"
 msgstr "Попытка найти метаданные для magnet-ссылки"
 
-#: ../src/Widgets/TorrentListRow.vala:140
+#: src/Widgets/TorrentListRow.vala:149
+#, c-format
 msgid "%s of %s — %s remaining"
 msgstr "%s из %s — осталось %s"
 
-#: ../src/Widgets/TorrentListRow.vala:142
+#: src/Widgets/TorrentListRow.vala:151
+#, c-format
 msgid "%s of %s"
 msgstr "%s из %s"
 
-#: ../src/Widgets/TorrentListRow.vala:144
+#: src/Widgets/TorrentListRow.vala:153
+#, c-format
 msgid "%s uploaded"
 msgstr "%s отдано"
 
-#: ../src/Widgets/TorrentListRow.vala:155
+#: src/Widgets/TorrentListRow.vala:164
+#, c-format
 msgid "%i of %i peers connected. ⬇%s ⬆%s"
 msgstr "%i из %i участников подключено. ⬇%s ⬆%s"
 
-#: ../src/Widgets/TorrentListRow.vala:159
+#: src/Widgets/TorrentListRow.vala:166 src/MainWindow.vala:233
+msgid "Paused"
+msgstr "Приостановлено"
+
+#: src/Widgets/TorrentListRow.vala:168
 msgid "Waiting in queue"
 msgstr "Ожидание в очереди"
 
-#: ../src/Widgets/TorrentListRow.vala:171
+#: src/Widgets/TorrentListRow.vala:170
+msgid "Checking"
+msgstr ""
+
+#: src/Widgets/TorrentListRow.vala:186
+#, c-format
 msgid "%u day"
 msgid_plural "%u days"
 msgstr[0] "%u день"
 msgstr[1] "%u дня"
 msgstr[2] "%u дней"
 
-#: ../src/Widgets/TorrentListRow.vala:172
+#: src/Widgets/TorrentListRow.vala:187
+#, c-format
 msgid "%u hour"
 msgid_plural "%u hours"
 msgstr[0] "%u час"
 msgstr[1] "%u часа"
 msgstr[2] "%u часов"
 
-#: ../src/Widgets/TorrentListRow.vala:173
+#: src/Widgets/TorrentListRow.vala:188
+#, c-format
 msgid "%u minute"
 msgid_plural "%u minutes"
 msgstr[0] "%u минута"
 msgstr[1] "%u минуты"
 msgstr[2] "%u минут"
 
-#: ../src/Widgets/TorrentListRow.vala:174
+#: src/Widgets/TorrentListRow.vala:189
+#, c-format
 msgid "%u second"
 msgid_plural "%u seconds"
 msgstr[0] "%u секунда"
 msgstr[1] "%u секунды"
 msgstr[2] "%u секунд"
+
+#: src/Application.vala:26
+msgid "Quit running instance"
+msgstr ""
+
+#: src/Application.vala:27
+msgid "[FILE…]"
+msgstr ""
+
+#: src/MainWindow.vala:135
+msgid "Torrent Complete"
+msgstr "Торрент завершён"
+
+#: src/MainWindow.vala:136
+#, c-format
+msgid "“%s” has finished downloading"
+msgstr "Загрузка «%s» завершена"
+
+#: src/MainWindow.vala:186
+msgid "_Preferences"
+msgstr "_Параметры"
+
+#: src/MainWindow.vala:187
+msgid "_Quit"
+msgstr "_Выйти"
+
+#: src/MainWindow.vala:193
+msgid "Application menu"
+msgstr "Меню приложения"
+
+#: src/MainWindow.vala:200
+msgid "Open .torrent file"
+msgstr "Открыть torrent-файл"
+
+#: src/MainWindow.vala:207
+#, fuzzy
+msgid "Open magnet link"
+msgstr "Magnet-ссылка"
+
+#: src/MainWindow.vala:214
+msgid "Search Torrents"
+msgstr "Поиск торрентов"
+
+#: src/MainWindow.vala:224
+msgid "All"
+msgstr "Все"
+
+#: src/MainWindow.vala:227
+msgid "Downloading"
+msgstr "Загрузки"
+
+#: src/MainWindow.vala:230
+msgid "Seeding"
+msgstr "Раздачи"
+
+#: src/MainWindow.vala:240
+msgid "Filter"
+msgstr ""
+
+#: src/MainWindow.vala:265
+msgid "Magnet Link Copied To Clipboard"
+msgstr ""
+
+#: src/MainWindow.vala:288
+msgid "All files"
+msgstr "Все файлы"
+
+#: src/MainWindow.vala:292
+msgid "Torrent files"
+msgstr "Торрент-файлы"
+
+#: src/MainWindow.vala:295
+msgid "Open some torrents"
+msgstr "Открыть несколько торрентов"
+
+#: src/MainWindow.vala:295
+msgid "Open"
+msgstr "Открыть"
+
+#: src/MainWindow.vala:295 src/PreferencesWindow.vala:118
+msgid "Cancel"
+msgstr "Отмена"
+
+#: src/MainWindow.vala:329
+#, fuzzy
+msgid "Magnet URL:"
+msgstr "Magnet-ссылка"
+
+#: src/MainWindow.vala:333
+#, fuzzy
+msgid "Add Magnet Link"
+msgstr "Magnet-ссылка"
+
+#: src/MainWindow.vala:385
+#, fuzzy
+msgid "Torrent Added"
+msgstr "Нет добавленных торрентов"
+
+#: src/MainWindow.vala:386
+#, fuzzy
+msgid "Successfully added torrent file from Downloads"
+msgstr "Magnet-ссылка успешно добавлена"
+
+#: src/MainWindow.vala:402
+#, c-format
+msgid "Failed to add “%s” as it doesn’t appear to be a valid torrent."
+msgstr "Не удалось добавить «%s», поскольку это некорректный торрент."
+
+#: src/MainWindow.vala:404
+#, c-format
+msgid "Didn’t add “%s”. An identical torrent has already been added."
+msgstr "«%s» не добавлен. Уже существует идентичный торрент."
+
+#: src/MainWindow.vala:425 src/MainWindow.vala:442
+msgid "Magnet Link"
+msgstr "Magnet-ссылка"
+
+#: src/MainWindow.vala:426
+msgid "Successfully added magnet link"
+msgstr "Magnet-ссылка успешно добавлена"
+
+#: src/MainWindow.vala:431
+msgid "Failed to add magnet link as it doesn’t appear to be valid."
+msgstr "Не удалось добавить magnet-ссылку, поскольку она некорректна."
+
+#: src/MainWindow.vala:434
+msgid "Didn’t add magnet link. An identical torrent has already been added."
+msgstr "Magnet-ссылка не добавлена. Уже существует идентичный торрент."
+
+#: src/MainWindow.vala:443
+msgid "Failed to add magnet link"
+msgstr "Не удалось добавить magnet-ссылку"
+
+#: src/PreferencesWindow.vala:38
+msgid "General"
+msgstr "Основные"
+
+#: src/PreferencesWindow.vala:39
+msgid "Advanced"
+msgstr "Дополнительные"
+
+#: src/PreferencesWindow.vala:71
+msgid "Only connect to encrypted peers:"
+msgstr "Только безопасные подключения:"
+
+#: src/PreferencesWindow.vala:75
+msgid "Randomise BitTorrent port on launch:"
+msgstr "Случайный порт при запуске:"
+
+#: src/PreferencesWindow.vala:80
+msgid "Port number:"
+msgstr "Номер порта:"
+
+#: src/PreferencesWindow.vala:87
+msgid "Security"
+msgstr "Конфиденциальность"
+
+#: src/PreferencesWindow.vala:99
+msgid "Download Location"
+msgstr "Сохранять в папку"
+
+#: src/PreferencesWindow.vala:115
+msgid "Select Download Folder…"
+msgstr "Выбор папки загрузок…"
+
+#: src/PreferencesWindow.vala:119
+msgid "Select"
+msgstr ""
+
+#: src/PreferencesWindow.vala:132
+msgid "Limits"
+msgstr "Ограничения"
+
+#: src/PreferencesWindow.vala:136
+msgid "Max simultaneous downloads:"
+msgstr "Максимум одновременных загрузок:"
+
+#: src/PreferencesWindow.vala:139 src/PreferencesWindow.vala:144
+msgid "0 means unlimited"
+msgstr "0 означает неограниченное"
+
+#: src/PreferencesWindow.vala:141
+msgid "Download speed limit (KBps):"
+msgstr "Ограничение скорости загрузки (КБ/С)"
+
+#: src/PreferencesWindow.vala:146
+msgid "Upload speed limit (KBps):"
+msgstr "Ограничение скорости раздачи (КБ/С)"
+
+#: src/PreferencesWindow.vala:148
+msgid "Desktop Integration"
+msgstr "Интеграция с окружением"
+
+#: src/PreferencesWindow.vala:152
+msgid "Continue downloads when closed:"
+msgstr "Продолжать загрузки после закрытия:"
+
+#: src/TorrentManager.vala:45
+msgid "KB"
+msgstr "КБ"
+
+#: src/TorrentManager.vala:45
+msgid "MB"
+msgstr "МБ"
+
+#: src/TorrentManager.vala:45
+msgid "GB"
+msgstr "ГБ"
+
+#: src/TorrentManager.vala:45
+msgid "TB"
+msgstr "ТБ"
+
+#: src/TorrentManager.vala:46
+msgid "KB/s"
+msgstr "КБ/С"
+
+#: src/TorrentManager.vala:46
+msgid "MB/s"
+msgstr "МБ/С"
+
+#: src/TorrentManager.vala:46
+msgid "GB/s"
+msgstr "ГБ/С"
+
+#: src/TorrentManager.vala:46
+msgid "TB/s"
+msgstr "ТБ/С"
+
+#~ msgid "Failed to load blocklist. All torrents paused as a precaution."
+#~ msgstr ""
+#~ "Не удалось загрузить «чёрный список». Все торренты приостановлены в "
+#~ "качестве меры предосторожности."
+
+#~ msgid "Blocklist last downloaded: never"
+#~ msgstr "Последнее обновление: никогда"
+
+#~ msgid "Last downloaded: %s"
+#~ msgstr "Последний раз загружался: %s"
+
+#~ msgid "%a %e, %b %H:%M"
+#~ msgstr "%a, %e %b %H:%M"
+
+#~ msgid "Update Blocklist"
+#~ msgstr "Обновить список"
+
+#~ msgid "Blocklist URL:"
+#~ msgstr "Блокируемый URL:"
+
+#~ msgid "Blocklist"
+#~ msgstr "Чёрный список"
+
+#~ msgid "Seed Limit Ratio:"
+#~ msgstr "Прекратить раздачу при рейтинге:"
 
 #, fuzzy
 #~ msgid "Failed to Add Torrent"

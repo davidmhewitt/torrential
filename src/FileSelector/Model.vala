@@ -1,23 +1,23 @@
 /*
-* Copyright (c) 2023 David Hewitt (https://github.com/davidmhewitt)
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 2 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*
-* Authored by: David Hewitt <davidmhewitt@gmail.com>
-*/
+ * Copyright (c) 2023 David Hewitt (https://github.com/davidmhewitt)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ *
+ * Authored by: David Hewitt <davidmhewitt@gmail.com>
+ */
 
 public class FileSelector.Model : Object {
     public class TorrentFile : Object {
@@ -45,7 +45,7 @@ public class FileSelector.Model : Object {
                 } else {
                     var children = get_all_descendants ();
                     var all_checked = children.all_match ((a) => a.download);
-                    var some_checked = children.any_match((a) => a.download);
+                    var some_checked = children.any_match ((a) => a.download);
                     inconsistent = !all_checked && some_checked;
 
                     return some_checked;
@@ -57,7 +57,7 @@ public class FileSelector.Model : Object {
                 } else {
                     var children = get_all_descendants ();
                     uint32[] indexes = {};
-                    children.@foreach((a) => {
+                    children.@foreach ((a) => {
                         indexes += a.index;
 
                         return true;
@@ -72,24 +72,24 @@ public class FileSelector.Model : Object {
 
         public Gee.TreeSet<TorrentFile> get_direct_descendants () {
             var result = new Gee.TreeSet<TorrentFile> ((a, b) => {
-                if (a.path.hash() == b.path.hash()) {
+                if (a.path.hash () == b.path.hash ()) {
                     return 0;
                 }
 
                 if (a.index == -1 && b.index == -1) {
-                    return a.name.casefold() < b.name.casefold() ? -1 : 1;
+                    return a.name.casefold () < b.name.casefold () ? -1 : 1;
                 }
 
                 if (a.index == -1 || b.index == -1) {
                     return a.index == -1 ? -1 : 1;
                 }
 
-                return a.name.casefold() < b.name.casefold() ? -1 : 1;
+                return a.name.casefold () < b.name.casefold () ? -1 : 1;
             });
 
             for (int i = 0; i < torrent.file_count; i++) {
                 unowned var file = torrent.files[i];
-                var parts = file.name.split(Path.DIR_SEPARATOR_S);
+                var parts = file.name.split (Path.DIR_SEPARATOR_S);
                 int depth = parts.length;
 
                 if (depth == this.depth + 1 && file.name.has_prefix (this.path)) {
@@ -102,7 +102,7 @@ public class FileSelector.Model : Object {
                         model = model,
                     });
                 } else if (depth == this.depth + 2 && file.name.has_prefix (this.path)) {
-                    var stripped_path = string.joinv(Path.DIR_SEPARATOR_S, parts[0:parts.length - 1]);
+                    var stripped_path = string.joinv (Path.DIR_SEPARATOR_S, parts[0 : parts.length - 1]);
                     result.add (new TorrentFile () {
                         torrent = torrent,
                         index = -1,
@@ -119,7 +119,7 @@ public class FileSelector.Model : Object {
 
         private Gee.TreeSet<TorrentFile> get_all_descendants () {
             var result = new Gee.TreeSet<TorrentFile> ((a, b) => {
-                if (a.path.hash() == b.path.hash()) {
+                if (a.path.hash () == b.path.hash ()) {
                     return 0;
                 }
 
@@ -128,11 +128,13 @@ public class FileSelector.Model : Object {
 
             for (int i = 0; i < torrent.file_count; i++) {
                 unowned var file = torrent.files[i];
-                var parts = file.name.split(Path.DIR_SEPARATOR_S);
+                var parts = file.name.split (Path.DIR_SEPARATOR_S);
                 int depth = parts.length;
 
                 if (depth > this.depth && file.name.has_prefix (this.path)) {
-                    result.add (new TorrentFile () { torrent = torrent, index = i, path = file.name, depth = depth });
+                    result.add (new TorrentFile () {
+                        torrent = torrent, index = i, path = file.name, depth = depth
+                    });
                 }
             }
 
@@ -145,20 +147,22 @@ public class FileSelector.Model : Object {
     public Gtk.SelectionModel selection_model { get; construct; }
 
     public Model(Torrential.Torrent torrent) {
-        Object(torrent: torrent);
+        Object (torrent: torrent);
     }
 
     construct {
         var root = create_model (null);
-        tree_model = new Gtk.TreeListModel(root, false, false, create_model);
+        tree_model = new Gtk.TreeListModel (root, false, false, create_model);
         selection_model = new Gtk.SingleSelection (tree_model);
     }
 
     private ListModel? create_model (Object? item) {
         if (item == null) {
-            var root_node = new TorrentFile () { torrent = torrent, index = -1, name = torrent.name, path = "", depth = 0, model = this };
-            var result = new ListStore(typeof(TorrentFile));
-            result.append(root_node);
+            var root_node = new TorrentFile () {
+                torrent = torrent, index = -1, name = torrent.name, path = "", depth = 0, model = this
+            };
+            var result = new ListStore (typeof(TorrentFile));
+            result.append (root_node);
             return result;
         }
 
@@ -168,7 +172,7 @@ public class FileSelector.Model : Object {
         }
 
         if (file_item.index == -1) {
-            var result = new ListStore(typeof(TorrentFile));
+            var result = new ListStore (typeof(TorrentFile));
             var children = file_item.get_direct_descendants ();
             result.splice (0, 0, children.to_array ());
 
@@ -191,7 +195,7 @@ public class FileSelector.Model : Object {
 
                 if (row.children != null) {
                     for (int j = 0; j < row.children.get_n_items (); j++) {
-                        var child = row.children.get_object(j) as TorrentFile;
+                        var child = row.children.get_object (j) as TorrentFile;
                         child.notify_property ("download");
                     }
                 }

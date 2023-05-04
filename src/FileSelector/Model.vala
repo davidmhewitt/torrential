@@ -27,6 +27,17 @@ public class FileSelector.Model : Object {
         public uint depth { get; set; }
         public string name { get; set; }
         public string path { get; set; }
+        public string icon_name {
+            owned get {
+                if (index == -1) {
+                    return ContentType.get_generic_icon_name ("inode/directory");
+                }
+
+                var content_type = ContentType.guess (name, null, null);
+                return ContentType.get_generic_icon_name (content_type);
+            }
+        }
+
         public bool download {
             get {
                 if (index != -1) {

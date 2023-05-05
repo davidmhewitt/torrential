@@ -284,26 +284,31 @@ public class Torrential.MainWindow : Gtk.ApplicationWindow {
     }
 
     private void on_open (SimpleAction action) {
-        var all_files_filter = new Gtk.FileFilter ();
-        all_files_filter.set_filter_name (_("All files"));
+        var all_files_filter = new Gtk.FileFilter () {
+            name = _("All files")
+        };
         all_files_filter.add_pattern ("*");
 
-        var torrent_files_filter = new Gtk.FileFilter ();
-        torrent_files_filter.set_filter_name (_("Torrent files"));
+        var torrent_files_filter = new Gtk.FileFilter () {
+            name = _("Torrent files")
+        };
         torrent_files_filter.add_mime_type ("application/x-bittorrent");
 
-        var filech = new Gtk.FileChooserNative (_("Open some torrents"), this, Gtk.FileChooserAction.OPEN, _("Open"), _("Cancel"));
-        filech.set_select_multiple (true);
-        filech.add_filter (torrent_files_filter);
-        filech.add_filter (all_files_filter);
+        var filters = new ListStore (typeof (Gtk.FileFilter));
+        filters.append (all_files_filter);
+        filters.append (torrent_files_filter);
 
-        filech.show ();
+        var file_dialog = new Gtk.FileDialog () {
+            filters = filters,
+            title = _("Open some torrents")
+        };
 
-        filech.response.connect ((response) => {
-            if (response == Gtk.ResponseType.ACCEPT) {
-                add_files (filech.get_files ());
-            }
-        });
+        try {
+            var file_listmodel = file_dialog.open_multiple (this, null);
+            add_files (file_listmodel);
+        } catch (Error e) {
+            critical (e.message);
+        }
     }
 
     private void on_open_magnet () {

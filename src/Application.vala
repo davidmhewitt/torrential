@@ -42,6 +42,8 @@ public class Torrential.Application : Gtk.Application {
     public override void startup () {
         base.startup ();
 
+        Granite.init ();
+
         Intl.setlocale (LocaleCategory.ALL, "");
         Intl.bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
         Intl.bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");

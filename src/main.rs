@@ -1,14 +1,15 @@
-use gtk::prelude::{GtkWindowExt, OrientableExt};
+use gtk::prelude::{GtkWindowExt, OrientableExt, WidgetExt};
 use relm4::{
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
     gtk::{self},
+    prelude::AsyncComponentController,
     Component, ComponentController, ComponentParts, ComponentSender, Controller, RelmApp,
     SimpleComponent,
 };
 
 mod transmission;
-use transmission::{Transmission, TransmissionOutput};
+use transmission::{Transmission, TransmissionInput, TransmissionOutput};
 
 mod torrent;
 use torrent::Torrent;
@@ -25,6 +26,8 @@ struct App {
 #[derive(Debug)]
 enum AppInput {
     TorrentsChanged(Vec<transmission_client::Torrent>),
+    PauseTorrent(String),
+    ResumeTorrent(String),
     None,
 }
 
@@ -46,6 +49,7 @@ impl SimpleComponent for App {
                 torrent_box -> gtk::ListBox {
                     set_selection_mode: gtk::SelectionMode::Multiple,
                     set_activate_on_single_click: false,
+                    add_css_class: granite_rs::STYLE_CLASS_RICH_LIST,
                 }
             },
         }
@@ -56,11 +60,14 @@ impl SimpleComponent for App {
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        granite_rs::init();
+
         let view =
             FactoryVecDeque::builder()
                 .launch_default()
                 .forward(sender.input_sender(), |msg| match msg {
-                    () => AppInput::None,
+                    torrent::TorrentOutput::Pause(hash) => AppInput::PauseTorrent(hash),
+                    torrent::TorrentOutput::Resume(hash) => AppInput::ResumeTorrent(hash),
                 });
 
         let transmission =
@@ -128,6 +135,12 @@ impl SimpleComponent for App {
                     }
                 }
             }
+            AppInput::PauseTorrent(hash) => self
+                .transmission
+                .emit(TransmissionInput::PauseTorrent(hash)),
+            AppInput::ResumeTorrent(hash) => self
+                .transmission
+                .emit(TransmissionInput::ResumeTorrent(hash)),
             AppInput::None => {}
         }
     }

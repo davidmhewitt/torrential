@@ -1,4 +1,4 @@
-use gtk::prelude::{ActionableExt, ButtonExt, WidgetExt};
+use gtk::prelude::{ButtonExt, WidgetExt};
 use relm4::gtk;
 use relm4::ComponentParts;
 use relm4::SimpleComponent;
@@ -43,7 +43,7 @@ impl SimpleComponent for HeaderModel {
     }
 
     fn init(
-        init: Self::Init,
+        _init: Self::Init,
         root: Self::Root,
         sender: relm4::ComponentSender<Self>,
     ) -> relm4::ComponentParts<Self> {

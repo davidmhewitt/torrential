@@ -17,6 +17,8 @@ pub(crate) enum TransmissionOutput {
 #[derive(Debug)]
 pub(crate) enum TransmissionInput {
     UpdateTorrents,
+    PauseTorrent(String),
+    ResumeTorrent(String),
 }
 
 impl AsyncComponent for Transmission {
@@ -51,7 +53,7 @@ impl AsyncComponent for Transmission {
             loop {
                 sender.input(TransmissionInput::UpdateTorrents);
 
-                tokio::time::sleep(Duration::from_secs(5)).await;
+                tokio::time::sleep(Duration::from_secs(3)).await;
             }
         });
 
@@ -66,7 +68,7 @@ impl AsyncComponent for Transmission {
     async fn update(
         &mut self,
         message: Self::Input,
-        _sender: relm4::prelude::AsyncComponentSender<Self>,
+        sender: relm4::prelude::AsyncComponentSender<Self>,
         _root: &Self::Root,
     ) {
         match message {
@@ -75,21 +77,43 @@ impl AsyncComponent for Transmission {
 
                 match tr_client.torrents(None).await {
                     Ok(torrents) => {
-                        _sender
+                        sender
                             .output(TransmissionOutput::TorrentsChanged(torrents))
                             .unwrap();
                     }
                     Err(err) => {
-                        _sender
+                        sender
                             .output(TransmissionOutput::ConnectionError(err.to_string()))
                             .unwrap();
                     }
                 }
             }
+            TransmissionInput::PauseTorrent(hash) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                match tr_client.torrent_stop(Some(vec![hash])).await {
+                    Ok(_) => {}
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+                sender.input(TransmissionInput::UpdateTorrents);
+            }
+            TransmissionInput::ResumeTorrent(hash) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                match tr_client.torrent_start(Some(vec![hash]), false).await {
+                    Ok(_) => {}
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+                sender.input(TransmissionInput::UpdateTorrents);
+            }
         }
     }
 
-    fn init_root() -> Self::Root {
-        ()
-    }
+    fn init_root() -> Self::Root {}
 }

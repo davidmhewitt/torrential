@@ -1,0 +1,16 @@
+[package]
+name = "torrential-relm4"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+env_logger = "0.11.3"
+gettext-rs = { version = "0.7.0", features = ["gettext-system"] }
+log = "0.4.21"
+relm4 = "0.9"
+relm4-macros = "0.8.1"
+tokio = { version = "1.38.1", features = ["time"] }
+tracker = "0.2.1"
+transmission-client = "0.1.5"
+transmission-gobject = "0.1.5"
+url = "2.5.2"

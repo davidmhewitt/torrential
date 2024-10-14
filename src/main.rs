@@ -16,6 +16,7 @@ use torrent::Torrent;
 
 mod header;
 use header::{HeaderModel, HeaderOutput};
+use transmission_client::TorrentFiles;
 
 struct App {
     view: FactoryVecDeque<Torrent>,
@@ -28,6 +29,8 @@ enum AppInput {
     TorrentsChanged(Vec<transmission_client::Torrent>),
     PauseTorrent(String),
     ResumeTorrent(String),
+    GetTorrentFiles(i32),
+    TorrentFileListChanged(TorrentFiles),
     None,
 }
 
@@ -60,7 +63,18 @@ impl SimpleComponent for App {
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        tr::tr_init!("/usr/share/locale");
+
         granite_rs::init();
+
+        let seeding_css = gtk::CssProvider::new();
+        seeding_css.load_from_data("progressbar.seeding progress { background-color: @LIME_300; }");
+
+        gtk::style_context_add_provider_for_display(
+            &gtk::gdk::Display::default().unwrap(),
+            &seeding_css,
+            gtk::STYLE_PROVIDER_PRIORITY_USER,
+        );
 
         let view =
             FactoryVecDeque::builder()
@@ -68,6 +82,7 @@ impl SimpleComponent for App {
                 .forward(sender.input_sender(), |msg| match msg {
                     torrent::TorrentOutput::Pause(hash) => AppInput::PauseTorrent(hash),
                     torrent::TorrentOutput::Resume(hash) => AppInput::ResumeTorrent(hash),
+                    torrent::TorrentOutput::GetFiles(id) => AppInput::GetTorrentFiles(id),
                 });
 
         let transmission =
@@ -80,6 +95,9 @@ impl SimpleComponent for App {
                     TransmissionOutput::ConnectionError(err) => {
                         println!("Connection error: {}", err);
                         AppInput::None
+                    }
+                    TransmissionOutput::FileListChanged(files) => {
+                        AppInput::TorrentFileListChanged(files)
                     }
                 });
 
@@ -141,6 +159,18 @@ impl SimpleComponent for App {
             AppInput::ResumeTorrent(hash) => self
                 .transmission
                 .emit(TransmissionInput::ResumeTorrent(hash)),
+            AppInput::GetTorrentFiles(id) => {
+                self.transmission.emit(TransmissionInput::GetFiles(id))
+            }
+            AppInput::TorrentFileListChanged(files) => {
+                let mut guarded_view = self.view.guard();
+                for torrent in guarded_view.iter_mut() {
+                    if torrent.id == files.id {
+                        torrent.set_files(files);
+                        break;
+                    }
+                }
+            }
             AppInput::None => {}
         }
     }

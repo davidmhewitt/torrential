@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use relm4::component::{AsyncComponent, AsyncComponentParts};
-use transmission_client::{Client, Torrent};
+use transmission_client::{Client, Torrent, TorrentFiles};
 use url::Url;
 
 pub(crate) struct Transmission {
@@ -12,6 +12,7 @@ pub(crate) struct Transmission {
 pub(crate) enum TransmissionOutput {
     ConnectionError(String),
     TorrentsChanged(Vec<Torrent>),
+    FileListChanged(TorrentFiles),
 }
 
 #[derive(Debug)]
@@ -19,6 +20,7 @@ pub(crate) enum TransmissionInput {
     UpdateTorrents,
     PauseTorrent(String),
     ResumeTorrent(String),
+    GetFiles(i32),
 }
 
 impl AsyncComponent for Transmission {
@@ -111,6 +113,21 @@ impl AsyncComponent for Transmission {
                     }
                 }
                 sender.input(TransmissionInput::UpdateTorrents);
+            }
+            TransmissionInput::GetFiles(id) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                match tr_client.torrents_files(Some(vec![id])).await {
+                    Ok(files) => {
+                        sender
+                            .output(TransmissionOutput::FileListChanged(files[0].to_owned()))
+                            .unwrap();
+                    }
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
             }
         }
     }

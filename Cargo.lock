@@ -1710,15 +1710,25 @@ name = "torrential-relm4"
 version = "0.1.0"
 dependencies = [
  "env_logger",
- "gettext-rs",
  "granite-rs",
  "log",
  "relm4",
  "relm4-macros",
  "tokio",
+ "tr",
  "tracker",
  "transmission-client",
  "url",
+]
+
+[[package]]
+name = "tr"
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a592877f7cb2e5a6327b8c908fa6d51098482b1c87d478abdd783e61218f8151"
+dependencies = [
+ "gettext-rs",
+ "lazy_static",
 ]
 
 [[package]]

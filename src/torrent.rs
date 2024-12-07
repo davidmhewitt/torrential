@@ -29,6 +29,7 @@ pub(crate) struct Torrent {
     pub files: TorrentFiles,
     pub rate_download: i32,
     pub rate_upload: i32,
+    pub eta: i64,
 }
 
 #[derive(Debug)]
@@ -51,13 +52,19 @@ fn get_pause_resume_text(state: &TorrentState) -> String {
     }
 }
 
-fn generate_status_text(state: &TorrentState, rate_download: i32, rate_upload: i32) -> String {
+fn generate_status_text(
+    state: &TorrentState,
+    rate_download: i32,
+    rate_upload: i32,
+    eta: i64,
+) -> String {
     match state {
         TorrentState::Downloading | TorrentState::Seeding => {
             format!(
-                "\u{2b07}{}/s \u{2b06}{}/s",
+                "\u{2b07}{}/s \u{2b06}{}/s — {} remaining",
                 gtk::glib::format_size(rate_download as u64),
-                gtk::glib::format_size(rate_upload as u64)
+                gtk::glib::format_size(rate_upload as u64),
+                time_to_string(eta)
             )
         }
         TorrentState::Stopped => tr!("Paused"),
@@ -65,6 +72,35 @@ fn generate_status_text(state: &TorrentState, rate_download: i32, rate_upload: i
             tr!("Waiting in queue")
         }
         TorrentState::Checking => tr!("Checking"),
+    }
+}
+
+fn time_to_string(total_seconds: i64) -> String {
+    if total_seconds < 0 {
+        return "...".to_string();
+    }
+
+    let seconds = (total_seconds % 60) as u64;
+    let minutes = (total_seconds % 3600) / 60;
+    let hours = (total_seconds % 86400) / 3600;
+    let days = (total_seconds % (86400 * 30)) / 86400;
+
+    let seconds_str = tr!("{} second" | "{} seconds" % seconds, seconds);
+    let minutes_str = tr!("{} minute" | "{} minutes" % minutes, minutes);
+    let hours_str = tr!("{} hour" | "{} hours" % hours, hours);
+    let days_str = tr!("{} day" | "{} days" % days, days);
+
+    if days > 0 {
+        format!(
+            "{}, {}, {}, {}",
+            days_str, hours_str, minutes_str, seconds_str
+        )
+    } else if hours > 0 {
+        format!("{}, {}, {}", hours_str, minutes_str, seconds_str)
+    } else if minutes > 0 {
+        format!("{}, {}", minutes_str, seconds_str)
+    } else {
+        seconds_str
     }
 }
 
@@ -130,8 +166,8 @@ impl FactoryComponent for Torrent {
             },
 
             attach[1, 1, 1, 1] = &gtk::Label {
-                #[track = "self.changed(Torrent::state() | Torrent::rate_download() | Torrent::rate_upload())"]
-                set_text: &generate_status_text(&self.state, self.rate_download, self.rate_upload),
+                #[track = "self.changed(Torrent::state() | Torrent::rate_download() | Torrent::rate_upload() | Torrent::eta())"]
+                set_text: &generate_status_text(&self.state, self.rate_download, self.rate_upload, self.eta),
                 set_halign: gtk::Align::Start,
                 add_css_class: granite_rs::STYLE_CLASS_SMALL_LABEL,
             },
@@ -179,6 +215,7 @@ impl FactoryComponent for Torrent {
             files: Default::default(),
             rate_download: init.rate_download,
             rate_upload: init.rate_upload,
+            eta: init.eta,
         }
     }
 
@@ -216,5 +253,6 @@ impl Torrent {
 
         self.set_rate_download(torrent.rate_download);
         self.set_rate_upload(torrent.rate_upload);
+        self.set_eta(torrent.eta);
     }
 }

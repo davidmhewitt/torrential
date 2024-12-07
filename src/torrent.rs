@@ -162,14 +162,14 @@ impl FactoryComponent for Torrent {
                 set_text: &self.name,
                 set_ellipsize: gtk::pango::EllipsizeMode::End,
                 set_halign: gtk::Align::Start,
-                add_css_class: granite_rs::STYLE_CLASS_H3_LABEL,
+                add_css_class: granite::STYLE_CLASS_H3_LABEL,
             },
 
             attach[1, 1, 1, 1] = &gtk::Label {
                 #[track = "self.changed(Torrent::state() | Torrent::rate_download() | Torrent::rate_upload() | Torrent::eta())"]
                 set_text: &generate_status_text(&self.state, self.rate_download, self.rate_upload, self.eta),
                 set_halign: gtk::Align::Start,
-                add_css_class: granite_rs::STYLE_CLASS_SMALL_LABEL,
+                add_css_class: granite::STYLE_CLASS_SMALL_LABEL,
             },
 
             attach[1, 2, 1, 1] = &gtk::ProgressBar {
@@ -184,14 +184,14 @@ impl FactoryComponent for Torrent {
                 &gtk::Button {
                     set_icon_name: "media-playback-start-symbolic",
                     set_tooltip_text: Some(&get_pause_resume_text(&self.state)),
-                    add_css_class: granite_rs::STYLE_CLASS_ROUNDED,
+                    add_css_class: granite::STYLE_CLASS_ROUNDED,
                     connect_clicked => TorrentMsg::Resume,
                 }
             } else {
                 &gtk::Button {
                     set_icon_name: "media-playback-pause-symbolic",
                     set_tooltip_text: Some(&get_pause_resume_text(&self.state)),
-                    add_css_class: granite_rs::STYLE_CLASS_ROUNDED,
+                    add_css_class: granite::STYLE_CLASS_ROUNDED,
                     connect_clicked => TorrentMsg::Pause,
                 }
             }

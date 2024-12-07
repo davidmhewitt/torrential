@@ -1,5 +1,6 @@
 use gtk::prelude::{GtkWindowExt, OrientableExt, WidgetExt};
 use relm4::{
+    actions::{RelmAction, RelmActionGroup},
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
     gtk::{self},
@@ -8,20 +9,25 @@ use relm4::{
     SimpleComponent,
 };
 
-mod transmission;
-use transmission::{Transmission, TransmissionInput, TransmissionOutput};
+mod header;
+use header::{HeaderModel, HeaderOutput};
+
+mod preferences_window;
+use preferences_window::{PreferencesWindowInput, PreferencesWindowModel};
 
 mod torrent;
 use torrent::Torrent;
 
-mod header;
-use header::{HeaderModel, HeaderOutput};
+mod transmission;
+use transmission::{Transmission, TransmissionInput, TransmissionOutput};
+
 use transmission_client::TorrentFiles;
 
 struct App {
     view: FactoryVecDeque<Torrent>,
     transmission: AsyncController<Transmission>,
     header: Controller<HeaderModel>,
+    prefs_dialog: Controller<PreferencesWindowModel>,
 }
 
 #[derive(Debug)]
@@ -31,6 +37,7 @@ enum AppInput {
     ResumeTorrent(String),
     GetTorrentFiles(i32),
     TorrentFileListChanged(TorrentFiles),
+    OpenPrefsWindow,
     None,
 }
 
@@ -52,7 +59,7 @@ impl SimpleComponent for App {
                 torrent_box -> gtk::ListBox {
                     set_selection_mode: gtk::SelectionMode::Multiple,
                     set_activate_on_single_click: false,
-                    add_css_class: granite_rs::STYLE_CLASS_RICH_LIST,
+                    add_css_class: granite::STYLE_CLASS_RICH_LIST,
                 }
             },
         }
@@ -65,7 +72,7 @@ impl SimpleComponent for App {
     ) -> ComponentParts<Self> {
         tr::tr_init!("/usr/share/locale");
 
-        granite_rs::init();
+        granite::init();
 
         let seeding_css = gtk::CssProvider::new();
         seeding_css.load_from_data("progressbar.seeding progress { background-color: @LIME_300; }");
@@ -114,15 +121,30 @@ impl SimpleComponent for App {
                 }
             });
 
+        let prefs_dialog = PreferencesWindowModel::builder()
+            .transient_for(&root)
+            .launch(true)
+            .forward(sender.input_sender(), |msg| match msg {});
+
         let app = App {
             view,
             header,
             transmission,
+            prefs_dialog,
         };
 
         let torrent_box = app.view.widget();
 
         let widgets = view_output!();
+
+        let preferences_action: RelmAction<PreferencesAction> =
+            RelmAction::new_stateless(move |_| {
+                (&sender).input(AppInput::OpenPrefsWindow);
+            });
+
+        let mut group = RelmActionGroup::<WindowActionGroup>::new();
+        group.add_action(preferences_action);
+        group.register_for_widget(&widgets.main_window);
 
         ComponentParts {
             model: app,
@@ -171,10 +193,17 @@ impl SimpleComponent for App {
                     }
                 }
             }
+            AppInput::OpenPrefsWindow => {
+                self.prefs_dialog.emit(PreferencesWindowInput::Open);
+            }
             AppInput::None => {}
         }
     }
 }
+
+relm4::new_action_group!(WindowActionGroup, "win");
+relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences");
+relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 
 fn main() {
     env_logger::init();

@@ -76,6 +76,63 @@ impl SimpleComponent for PreferencesWindowModel {
                         attach[0, 2, 1, 1] = &granite::HeaderLabel {
                             set_label: &tr!("Limits"),
                         },
+
+                        attach[0, 3, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Max simultaneous downloads:"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 3, 1, 1] = &gtk::SpinButton {
+                            set_numeric: true,
+                            set_adjustment: &gtk::Adjustment::new(1.0, 1.0, 100.0, 1.0, 10.0, 0.0),
+                            set_digits: 0,
+                            set_hexpand: true,
+                        },
+
+                        attach[0, 4, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Download speed limit (KBps):"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 4, 1, 1] = &gtk::SpinButton {
+                            set_numeric: true,
+                            set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
+                            set_digits: 0,
+                            set_hexpand: true,
+                            set_tooltip_text: Some(&tr!("0 means unlimited")),
+                        },
+
+                        attach[0, 5, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Upload speed limit (KBps):"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 5, 1, 1] = &gtk::SpinButton {
+                            set_numeric: true,
+                            set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
+                            set_digits: 0,
+                            set_hexpand: true,
+                            set_tooltip_text: Some(&tr!("0 means unlimited")),
+                        },
+
+                        attach[0, 6, 1, 1] = &granite::HeaderLabel {
+                            set_label: &tr!("Desktop Integration"),
+                        },
+
+                        attach[0, 7, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Continue downloads when closed:"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 7, 1, 1] = &gtk::Switch {
+                            set_active: true,
+                            set_halign: gtk::Align::Start,
+                            set_hexpand: true,
+                        },
                     } -> {
                         set_title: &tr!("General")
                     },
@@ -85,9 +142,47 @@ impl SimpleComponent for PreferencesWindowModel {
                         set_row_spacing: 6,
                         set_hexpand: true,
 
-                        attach[0, 2, 1, 1] = &granite::HeaderLabel {
+                        attach[0, 0, 1, 1] = &granite::HeaderLabel {
                             set_label: &tr!("Security"),
                         },
+
+                        attach[0, 1, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Only connect to encrypted peers:"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 1, 1, 1] = &gtk::Switch {
+                            set_active: true,
+                            set_halign: gtk::Align::Start,
+                            set_hexpand: true,
+                        },
+
+                        attach[0, 2, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Randomise BitTorrent port on launch:"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 2, 1, 1] = &gtk::Switch {
+                            set_active: true,
+                            set_halign: gtk::Align::Start,
+                            set_hexpand: true,
+                        },
+
+                        attach[0, 3, 1, 1] = &gtk::Label {
+                            set_label: &tr!("Port number:"),
+                            set_halign: gtk::Align::End,
+                            set_margin_start: 12,
+                        },
+
+                        attach[1, 3, 1, 1] = &gtk::SpinButton {
+                            set_numeric: true,
+                            set_adjustment: &gtk::Adjustment::new(51413.0, 49152.0, 65535.0, 1.0, 10.0, 0.0),
+                            set_digits: 0,
+                            set_hexpand: true,
+                        },
+
                     } -> {
                         set_title: &tr!("Advanced")
                     },

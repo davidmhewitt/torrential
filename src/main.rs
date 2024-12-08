@@ -38,6 +38,7 @@ enum AppInput {
     GetTorrentFiles(i32),
     TorrentFileListChanged(TorrentFiles),
     OpenPrefsWindow,
+    ClosePrefsWindow,
     None,
 }
 
@@ -124,7 +125,9 @@ impl SimpleComponent for App {
         let prefs_dialog = PreferencesWindowModel::builder()
             .transient_for(&root)
             .launch(true)
-            .forward(sender.input_sender(), |msg| match msg {});
+            .forward(sender.input_sender(), |msg| match msg {
+                preferences_window::PreferencesWindowOutput::Close => AppInput::ClosePrefsWindow,
+            });
 
         let app = App {
             view,
@@ -195,6 +198,9 @@ impl SimpleComponent for App {
             }
             AppInput::OpenPrefsWindow => {
                 self.prefs_dialog.emit(PreferencesWindowInput::Open);
+            }
+            AppInput::ClosePrefsWindow => {
+                self.transmission.emit(TransmissionInput::UpdateSettings);
             }
             AppInput::None => {}
         }

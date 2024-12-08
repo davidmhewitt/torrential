@@ -1,7 +1,10 @@
 use std::time::Duration;
 
-use relm4::component::{AsyncComponent, AsyncComponentParts};
-use transmission_client::{Client, Torrent, TorrentFiles};
+use relm4::{
+    component::{AsyncComponent, AsyncComponentParts},
+    gtk::{gio, prelude::SettingsExt},
+};
+use transmission_client::{Client, Encryption, SessionMutator, Torrent, TorrentFiles};
 use url::Url;
 
 pub(crate) struct Transmission {
@@ -21,6 +24,7 @@ pub(crate) enum TransmissionInput {
     PauseTorrent(String),
     ResumeTorrent(String),
     GetFiles(i32),
+    UpdateSettings,
 }
 
 impl AsyncComponent for Transmission {
@@ -50,6 +54,69 @@ impl AsyncComponent for Transmission {
         };
 
         let tr_client = Client::new(url);
+
+        if let Ok(session) = tr_client.session().await {
+            let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+
+            match settings.set_int("max-downloads", session.download_queue_size) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting max downloads: {}", err);
+                }
+            }
+
+            match settings.set_int(
+                "download-speed-limit",
+                if session.speed_limit_down_enabled {
+                    session.speed_limit_down
+                } else {
+                    0
+                },
+            ) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting download speed limit: {}", err);
+                }
+            }
+
+            match settings.set_int(
+                "upload-speed-limit",
+                if session.speed_limit_up_enabled {
+                    session.speed_limit_up
+                } else {
+                    0
+                },
+            ) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting upload speed limit: {}", err);
+                }
+            }
+
+            match settings.set_int("peer-port", session.peer_port) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting peer port: {}", err);
+                }
+            }
+
+            match settings.set_boolean("randomize-port", session.peer_port_random_on_start) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting randomize port: {}", err);
+                }
+            }
+
+            match settings.set_boolean(
+                "force-encryption",
+                matches!(session.encryption, Encryption::Required),
+            ) {
+                Ok(_) => {}
+                Err(err) => {
+                    log::error!("Error setting force encryption: {}", err);
+                }
+            }
+        }
 
         tokio::spawn(async move {
             loop {
@@ -122,6 +189,36 @@ impl AsyncComponent for Transmission {
                             .output(TransmissionOutput::FileListChanged(files[0].to_owned()))
                             .unwrap();
                     }
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+            }
+            TransmissionInput::UpdateSettings => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+
+                let mutator = SessionMutator {
+                    download_queue_enabled: Some(settings.int("max-downloads") != 0),
+                    download_queue_size: Some(settings.int("max-downloads")),
+                    speed_limit_down: Some(settings.int("download-speed-limit")),
+                    speed_limit_down_enabled: Some(settings.int("download-speed-limit") != 0),
+                    speed_limit_up: Some(settings.int("upload-speed-limit")),
+                    speed_limit_up_enabled: Some(settings.int("upload-speed-limit") != 0),
+                    peer_port_random_on_start: Some(settings.boolean("randomize-port")),
+                    peer_port: Some(settings.int("peer-port")),
+                    encryption: if settings.boolean("force-encryption") {
+                        Some(Encryption::Required)
+                    } else {
+                        Some(Encryption::Preferred)
+                    },
+                    ..Default::default()
+                };
+
+                match tr_client.session_set(mutator).await {
+                    Ok(_) => {}
                     Err(err) => {
                         sender
                             .output(TransmissionOutput::ConnectionError(err.to_string()))

@@ -14,11 +14,14 @@ pub struct PreferencesWindowModel {
 }
 
 #[derive(Debug)]
-pub enum PreferencesWindowOutput {}
+pub enum PreferencesWindowOutput {
+    Close,
+}
 
 #[derive(Debug)]
 pub enum PreferencesWindowInput {
     Open,
+    Close,
 }
 
 #[relm4::component(pub)]
@@ -35,6 +38,10 @@ impl SimpleComponent for PreferencesWindowModel {
             set_title: Some(&tr!("Preferences")),
             set_resizable: false,
             set_destroy_with_parent: true,
+
+            connect_response[sender] => move |_, _| {
+                sender.input(PreferencesWindowInput::Close);
+            },
 
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
@@ -207,7 +214,7 @@ impl SimpleComponent for PreferencesWindowModel {
     fn init(
         init: Self::Init,
         _parent: Self::Root,
-        _sender: relm4::ComponentSender<Self>,
+        sender: relm4::ComponentSender<Self>,
     ) -> relm4::ComponentParts<Self> {
         let model = Self { hidden: init };
         let widgets = view_output!();
@@ -254,10 +261,14 @@ impl SimpleComponent for PreferencesWindowModel {
         relm4::ComponentParts { model, widgets }
     }
 
-    fn update(&mut self, event: PreferencesWindowInput, _sender: ComponentSender<Self>) {
+    fn update(&mut self, event: PreferencesWindowInput, sender: ComponentSender<Self>) {
         match event {
             PreferencesWindowInput::Open => {
                 self.hidden = false;
+            }
+            PreferencesWindowInput::Close => {
+                self.hidden = true;
+                sender.output(PreferencesWindowOutput::Close).unwrap();
             }
         }
     }

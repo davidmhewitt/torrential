@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/com/github/davidmhewitt/torrential/settings/" id="com.github.davidmhewitt.torrential.settings">
+        <key type="i" name="window-width">
+            <default>1100</default>
+            <summary>Window width</summary>
+            <description>Window width</description>
+        </key>
+        <key type="i" name="window-height">
+            <default>640</default>
+            <summary>Window height</summary>
+            <description>Window height</description>
+        </key>
+        <key name="window-maximized" type="b">
+            <default>false</default>
+            <summary>Open window maximized.</summary>
+            <description>Whether the main window of the application should open maximized or not.</description>
+        </key>
+        <key type="s" name="download-folder">
+            <default>""</default>
+            <summary>Where to place downloading torrents</summary>
+            <description>Where to place downloading torrents</description>
+        </key>
+        <key type="b" name="hide-on-close">
+            <default>false</default>
+            <summary>Whether the window should hide instead of closing the application</summary>
+            <description>Whether the window should hide instead of closing the application</description>
+        </key>
+        <key type="b" name="trash-original-torrents">
+            <default>true</default>
+            <summary>Whether .torrent files should be trashed after they've been added</summary>
+            <description>Whether .torrent files should be trashed after they've been added</description>
+        </key>
+        <key type="i" name="max-downloads">
+            <default>5</default>
+            <summary>The maximum number of simultaneous downloads</summary>
+            <description>Other downloads will be queued until others complete</description>
+        </key>
+        <key type="i" name="download-speed-limit">
+            <default>0</default>
+            <summary>The maximum download speed for all torrents combined</summary>
+            <description>Set to 0 for unlimited</description>
+        </key>
+        <key type="i" name="upload-speed-limit">
+            <default>0</default>
+            <summary>The maximum upload speed for all torrents combined</summary>
+            <description>Set to 0 for unlimited</description>
+        </key>
+        <key type="i" name="peer-port">
+            <default>51413</default>
+            <summary>The port on which to communicate with peers</summary>
+            <description>The port on which to communicate with peers</description>
+        </key>
+        <key type="b" name="randomize-port">
+            <default>false</default>
+            <summary>Whether to randomise the port used to communicate with peers on startup</summary>
+            <description>Whether to randomise the port used to communicate with peers on startup</description>
+        </key>
+        <key type="b" name="force-encryption">
+            <default>true</default>
+            <summary>Whether to force encryption between this device and peers</summary>
+            <description>If disabled, encryption will be preferred, but not forced</description>
+        </key>
+    </schema>
+</schemalist>

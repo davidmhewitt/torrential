@@ -1,6 +1,10 @@
 use granite::prelude::HeaderLabelExt;
-use gtk::prelude::{BoxExt, ButtonExt, DialogExt, GridExt, GtkWindowExt, OrientableExt, WidgetExt};
+use gtk::prelude::{
+    BoxExt, ButtonExt, DialogExt, GridExt, GtkWindowExt, OrientableExt, SettingsExtManual,
+    WidgetExt,
+};
 use relm4::gtk;
+use relm4::gtk::gio::SettingsBindFlags;
 use relm4::ComponentSender;
 use relm4::SimpleComponent;
 use tr::tr;
@@ -83,6 +87,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "max_downloads_spin"]
                         attach[1, 3, 1, 1] = &gtk::SpinButton {
                             set_numeric: true,
                             set_adjustment: &gtk::Adjustment::new(1.0, 1.0, 100.0, 1.0, 10.0, 0.0),
@@ -96,6 +101,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "download_speed_spin"]
                         attach[1, 4, 1, 1] = &gtk::SpinButton {
                             set_numeric: true,
                             set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
@@ -110,6 +116,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "upload_speed_spin"]
                         attach[1, 5, 1, 1] = &gtk::SpinButton {
                             set_numeric: true,
                             set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
@@ -128,6 +135,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "continue_downloads_switch"]
                         attach[1, 7, 1, 1] = &gtk::Switch {
                             set_active: true,
                             set_halign: gtk::Align::Start,
@@ -152,6 +160,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "encrypted_peers_switch"]
                         attach[1, 1, 1, 1] = &gtk::Switch {
                             set_active: true,
                             set_halign: gtk::Align::Start,
@@ -164,6 +173,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "randomise_port_switch"]
                         attach[1, 2, 1, 1] = &gtk::Switch {
                             set_active: true,
                             set_halign: gtk::Align::Start,
@@ -176,6 +186,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_margin_start: 12,
                         },
 
+                        #[name = "port_spin"]
                         attach[1, 3, 1, 1] = &gtk::SpinButton {
                             set_numeric: true,
                             set_adjustment: &gtk::Adjustment::new(51413.0, 49152.0, 65535.0, 1.0, 10.0, 0.0),
@@ -200,6 +211,45 @@ impl SimpleComponent for PreferencesWindowModel {
     ) -> relm4::ComponentParts<Self> {
         let model = Self { hidden: init };
         let widgets = view_output!();
+
+        let settings = gtk::gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+        settings
+            .bind("max-downloads", &widgets.max_downloads_spin, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        settings
+            .bind(
+                "download-speed-limit",
+                &widgets.download_speed_spin,
+                "value",
+            )
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        settings
+            .bind("upload-speed-limit", &widgets.upload_speed_spin, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        settings
+            .bind(
+                "hide-on-close",
+                &widgets.continue_downloads_switch,
+                "active",
+            )
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        settings
+            .bind("randomize-port", &widgets.randomise_port_switch, "active")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
+
+        settings
+            .bind("peer-port", &widgets.port_spin, "value")
+            .flags(SettingsBindFlags::DEFAULT)
+            .build();
 
         relm4::ComponentParts { model, widgets }
     }

@@ -142,7 +142,7 @@ impl SimpleComponent for App {
 
         let preferences_action: RelmAction<PreferencesAction> =
             RelmAction::new_stateless(move |_| {
-                (&sender).input(AppInput::OpenPrefsWindow);
+                sender.input(AppInput::OpenPrefsWindow);
             });
 
         let mut group = RelmActionGroup::<WindowActionGroup>::new();

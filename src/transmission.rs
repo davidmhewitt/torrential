@@ -1,5 +1,6 @@
-use std::time::Duration;
+use std::{process::Stdio, time::Duration};
 
+use nix::{sys::signal, unistd::Pid};
 use relm4::{
     component::{AsyncComponent, AsyncComponentParts},
     gtk::{gio, prelude::SettingsExt},
@@ -9,6 +10,7 @@ use url::Url;
 
 pub(crate) struct Transmission {
     tr_client: Option<Client>,
+    transmission_process: Option<std::process::Child>,
 }
 
 #[derive(Debug)]
@@ -25,6 +27,19 @@ pub(crate) enum TransmissionInput {
     ResumeTorrent(String),
     GetFiles(i32),
     UpdateSettings,
+}
+
+impl Drop for Transmission {
+    fn drop(&mut self) {
+        // Send SIGINT to the transmission-daemon process
+        if let Some(transmission_process) = &self.transmission_process {
+            signal::kill(
+                Pid::from_raw(transmission_process.id() as i32),
+                signal::SIGINT,
+            )
+            .unwrap();
+        }
+    }
 }
 
 impl AsyncComponent for Transmission {
@@ -48,12 +63,38 @@ impl AsyncComponent for Transmission {
                 ))
                 .unwrap();
             return AsyncComponentParts {
-                model: Self { tr_client: None },
+                model: Self {
+                    tr_client: None,
+                    transmission_process: None,
+                },
                 widgets: (),
             };
         };
 
         let tr_client = Client::new(url);
+
+        let transmission_daemon = match std::process::Command::new("transmission-daemon")
+            .stdout(Stdio::piped())
+            .arg("--foreground")
+            .spawn()
+        {
+            Ok(process) => Some(process),
+            Err(e) => {
+                sender
+                    .output(TransmissionOutput::ConnectionError(format!(
+                        "Error starting transmission-daemon: {}",
+                        e
+                    )))
+                    .unwrap();
+                return AsyncComponentParts {
+                    model: Self {
+                        tr_client: Some(tr_client),
+                        transmission_process: None,
+                    },
+                    widgets: (),
+                };
+            }
+        };
 
         if let Ok(session) = tr_client.session().await {
             let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
@@ -129,6 +170,7 @@ impl AsyncComponent for Transmission {
         AsyncComponentParts {
             model: Self {
                 tr_client: Some(tr_client),
+                transmission_process: transmission_daemon,
             },
             widgets: (),
         }

@@ -6,7 +6,7 @@ use relm4::{gtk, RelmWidgetExt};
 use tr::tr;
 use transmission_client::TorrentFiles;
 
-fn get_icon_type_for_files(files: &Vec<transmission_client::File>) -> Icon {
+fn get_icon_type_for_files(files: &[transmission_client::File]) -> Icon {
     if files.len() > 1 {
         content_type_get_icon("inode/directory")
     // TODO: Implement this once content_type_guess supports passing NULL data

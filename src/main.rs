@@ -21,6 +21,8 @@ use torrent::Torrent;
 mod transmission;
 use transmission::{Transmission, TransmissionInput, TransmissionOutput};
 
+mod utils;
+
 use transmission_client::TorrentFiles;
 
 struct App {

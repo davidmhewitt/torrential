@@ -6,15 +6,16 @@ use relm4::{gtk, RelmWidgetExt};
 use tr::tr;
 use transmission_client::TorrentFiles;
 
+use crate::utils;
+
 fn get_icon_type_for_files(files: &[transmission_client::File]) -> Icon {
-    if files.len() > 1 {
-        content_type_get_icon("inode/directory")
-    // TODO: Implement this once content_type_guess supports passing NULL data
-    // } else if files.len() == 1 {
-    //     let content_type = content_type_guess(Some(&files[0].name), 0).0;
-    //     content_type_get_icon(&content_type)
-    } else {
-        content_type_get_icon("application/x-bittorrent")
+    match files.len() {
+        0 => content_type_get_icon("application/x-bittorrent"),
+        1 => {
+            let content_type = utils::content_type_guess(&Some(&files[0].name), None).0;
+            content_type_get_icon(&content_type)
+        }
+        _ => content_type_get_icon("inode/directory"),
     }
 }
 

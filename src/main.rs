@@ -240,8 +240,8 @@ impl SimpleComponent for App {
                 self.open_dialog.emit(OpenDialogMsg::Open);
             }
             AppInput::OpenTorrent(path) => {
-                // TODO; Pass the path to the transmission component
-                println!("Opening torrent: {:?}", path);
+                self.transmission
+                    .emit(TransmissionInput::AddTorrentFile(path));
             }
             AppInput::OpenPrefsWindow => {
                 self.prefs_dialog.emit(PreferencesWindowInput::Open);

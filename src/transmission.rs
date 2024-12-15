@@ -1,4 +1,4 @@
-use std::{process::Stdio, time::Duration};
+use std::{path::PathBuf, process::Stdio, time::Duration};
 
 use nix::{sys::signal, unistd::Pid};
 use relm4::{
@@ -22,6 +22,7 @@ pub(crate) enum TransmissionOutput {
 
 #[derive(Debug)]
 pub(crate) enum TransmissionInput {
+    AddTorrentFile(PathBuf),
     UpdateTorrents,
     PauseTorrent(String),
     ResumeTorrent(String),
@@ -32,12 +33,14 @@ pub(crate) enum TransmissionInput {
 impl Drop for Transmission {
     fn drop(&mut self) {
         // Send SIGINT to the transmission-daemon process
-        if let Some(transmission_process) = &self.transmission_process {
+        if let Some(transmission_process) = self.transmission_process.as_mut() {
             signal::kill(
                 Pid::from_raw(transmission_process.id() as i32),
-                signal::SIGINT,
+                signal::SIGTERM,
             )
             .unwrap();
+
+            transmission_process.wait().unwrap();
         }
     }
 }
@@ -183,6 +186,19 @@ impl AsyncComponent for Transmission {
         _root: &Self::Root,
     ) {
         match message {
+            TransmissionInput::AddTorrentFile(path) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                let path = path.to_string_lossy().to_string();
+                match tr_client.torrent_add_filename(&path).await {
+                    Ok(_) => {}
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+                sender.input(TransmissionInput::UpdateTorrents);
+            }
             TransmissionInput::UpdateTorrents => {
                 let tr_client = self.tr_client.as_ref().unwrap();
 

@@ -1,13 +1,15 @@
+use granite::prelude::PlaceholderExt;
 use gtk::prelude::{GtkWindowExt, OrientableExt, WidgetExt};
 use relm4::{
-    actions::{RelmAction, RelmActionGroup},
+    actions::*,
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
-    gtk::{self},
+    gtk::{self, gio::ThemedIcon, prelude::ActionableExt},
     prelude::AsyncComponentController,
     Component, ComponentController, ComponentParts, ComponentSender, Controller, RelmApp,
     SimpleComponent,
 };
+use tr::tr;
 
 mod header;
 use header::{HeaderModel, HeaderOutput};
@@ -63,6 +65,19 @@ impl SimpleComponent for App {
                     set_selection_mode: gtk::SelectionMode::Multiple,
                     set_activate_on_single_click: false,
                     add_css_class: granite::STYLE_CLASS_RICH_LIST,
+                    #[wrap(Some)]
+                    set_placeholder = &gtk::Stack {
+                        add_child = &granite::Placeholder {
+                            set_title: &tr!("No torrents"),
+                            set_description: &tr!("Add a torrent to begin downloading"),
+                            append_button[&tr!("Open torrent"), &tr!("Open a torrent from a file on your computer")] = &ThemedIcon::new("folder") {} -> {
+                                // TODO: Add open action
+                            },
+                            append_button[&tr!("Preferences"), &tr!("Set download folder and other preferences")] = &ThemedIcon::new("open-menu") {} -> {
+                                set_action_name: Some(&PreferencesAction::action_name()),
+                            },
+                        },
+                    },
                 }
             },
         }
@@ -216,6 +231,6 @@ relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 fn main() {
     env_logger::init();
 
-    let app = RelmApp::new("relm4.test.simple");
+    let app = RelmApp::new("com.github.davidmhewitt.torrential");
     app.run::<App>(());
 }

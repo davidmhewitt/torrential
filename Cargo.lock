@@ -717,9 +717,9 @@ dependencies = [
 
 [[package]]
 name = "granite-rs"
-version = "1.4.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49d39efa863736e50f9b8022081644d941ec4b03022b095937d043f6f27223a2"
+checksum = "f025950e055e37c13cc66953fd006087a702fe1f84eada671b9cf40839347063"
 dependencies = [
  "bitflags 2.6.0",
  "gdk4",

@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 env_logger = "0.11"
-granite = { package = "granite-rs", version = "1.4.0", features = ["v7_5", "relm4"] }
+granite = { package = "granite-rs", version = "2.0.0", features = ["v7_5", "relm4"] }
 log = "0.4"
 nix = { version = "0.29.0", features = ["signal"] }
 relm4 = "0.9"

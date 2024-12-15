@@ -1,14 +1,17 @@
+use std::path::PathBuf;
+
 use granite::prelude::PlaceholderExt;
-use gtk::prelude::{GtkWindowExt, OrientableExt, WidgetExt};
+use gtk::{gio::ThemedIcon, prelude::*, FileFilter};
 use relm4::{
     actions::*,
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
-    gtk::{self, gio::ThemedIcon, prelude::ActionableExt},
+    gtk,
     prelude::AsyncComponentController,
     Component, ComponentController, ComponentParts, ComponentSender, Controller, RelmApp,
     SimpleComponent,
 };
+use relm4_components::open_dialog::*;
 use tr::tr;
 
 mod header;
@@ -32,6 +35,7 @@ struct App {
     transmission: AsyncController<Transmission>,
     header: Controller<HeaderModel>,
     prefs_dialog: Controller<PreferencesWindowModel>,
+    open_dialog: Controller<OpenDialog>,
 }
 
 #[derive(Debug)]
@@ -41,6 +45,10 @@ enum AppInput {
     ResumeTorrent(String),
     GetTorrentFiles(i32),
     TorrentFileListChanged(TorrentFiles),
+
+    ShowOpenDialog,
+    OpenTorrent(PathBuf),
+
     OpenPrefsWindow,
     ClosePrefsWindow,
     None,
@@ -71,7 +79,7 @@ impl SimpleComponent for App {
                             set_title: &tr!("No torrents"),
                             set_description: &tr!("Add a torrent to begin downloading"),
                             append_button[&tr!("Open torrent"), &tr!("Open a torrent from a file on your computer")] = &ThemedIcon::new("folder") {} -> {
-                                // TODO: Add open action
+                                set_action_name: Some(&OpenAction::action_name()),
                             },
                             append_button[&tr!("Preferences"), &tr!("Set download folder and other preferences")] = &ThemedIcon::new("open-menu") {} -> {
                                 set_action_name: Some(&PreferencesAction::action_name()),
@@ -129,14 +137,22 @@ impl SimpleComponent for App {
         let header = HeaderModel::builder()
             .launch(())
             .forward(sender.input_sender(), |msg| match msg {
-                HeaderOutput::OpenTorrent => {
-                    println!("Open torrent");
-                    AppInput::None
-                }
+                HeaderOutput::OpenTorrent => AppInput::ShowOpenDialog,
                 HeaderOutput::OpenMagnet => {
                     println!("Open magnet");
                     AppInput::None
                 }
+            });
+
+        let open_dialog = OpenDialog::builder()
+            .transient_for_native(&root)
+            .launch(OpenDialogSettings {
+                filters: torrent_file_filters(),
+                ..Default::default()
+            })
+            .forward(sender.input_sender(), |response| match response {
+                OpenDialogResponse::Accept(path) => AppInput::OpenTorrent(path),
+                OpenDialogResponse::Cancel => AppInput::None,
             });
 
         let prefs_dialog = PreferencesWindowModel::builder()
@@ -151,19 +167,26 @@ impl SimpleComponent for App {
             header,
             transmission,
             prefs_dialog,
+            open_dialog,
         };
 
         let torrent_box = app.view.widget();
 
         let widgets = view_output!();
 
+        let prefs_sender = sender.clone();
         let preferences_action: RelmAction<PreferencesAction> =
             RelmAction::new_stateless(move |_| {
-                sender.input(AppInput::OpenPrefsWindow);
+                prefs_sender.input(AppInput::OpenPrefsWindow);
             });
+
+        let open_action: RelmAction<OpenAction> = RelmAction::new_stateless(move |_| {
+            sender.input(AppInput::ShowOpenDialog);
+        });
 
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
         group.add_action(preferences_action);
+        group.add_action(open_action);
         group.register_for_widget(&widgets.main_window);
 
         ComponentParts {
@@ -213,6 +236,13 @@ impl SimpleComponent for App {
                     }
                 }
             }
+            AppInput::ShowOpenDialog => {
+                self.open_dialog.emit(OpenDialogMsg::Open);
+            }
+            AppInput::OpenTorrent(path) => {
+                // TODO; Pass the path to the transmission component
+                println!("Opening torrent: {:?}", path);
+            }
             AppInput::OpenPrefsWindow => {
                 self.prefs_dialog.emit(PreferencesWindowInput::Open);
             }
@@ -224,8 +254,21 @@ impl SimpleComponent for App {
     }
 }
 
+fn torrent_file_filters() -> Vec<FileFilter> {
+    let all_files_filter = FileFilter::new();
+    all_files_filter.set_name(Some(&tr!("All files")));
+    all_files_filter.add_pattern("*");
+
+    let torrent_files_filter = FileFilter::new();
+    torrent_files_filter.add_mime_type("application/x-bittorrent");
+    torrent_files_filter.set_name(Some(&tr!("Torrent files")));
+
+    vec![torrent_files_filter, all_files_filter]
+}
+
 relm4::new_action_group!(WindowActionGroup, "win");
 relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences");
+relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 
 fn main() {

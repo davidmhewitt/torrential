@@ -24,8 +24,8 @@ pub(crate) enum TransmissionOutput {
 pub(crate) enum TransmissionInput {
     AddTorrentFile(PathBuf),
     UpdateTorrents,
-    PauseTorrent(String),
-    ResumeTorrent(String),
+    PauseTorrents(Vec<String>),
+    ResumeTorrents(Vec<String>),
     GetFiles(i32),
     UpdateSettings,
     RemoveTorrents(Vec<String>),
@@ -216,9 +216,9 @@ impl AsyncComponent for Transmission {
                     }
                 }
             }
-            TransmissionInput::PauseTorrent(hash) => {
+            TransmissionInput::PauseTorrents(hashes) => {
                 let tr_client = self.tr_client.as_ref().unwrap();
-                match tr_client.torrent_stop(Some(vec![hash])).await {
+                match tr_client.torrent_stop(Some(hashes)).await {
                     Ok(_) => {}
                     Err(err) => {
                         sender
@@ -228,9 +228,9 @@ impl AsyncComponent for Transmission {
                 }
                 sender.input(TransmissionInput::UpdateTorrents);
             }
-            TransmissionInput::ResumeTorrent(hash) => {
+            TransmissionInput::ResumeTorrents(hashes) => {
                 let tr_client = self.tr_client.as_ref().unwrap();
-                match tr_client.torrent_start(Some(vec![hash]), false).await {
+                match tr_client.torrent_start(Some(hashes), false).await {
                     Ok(_) => {}
                     Err(err) => {
                         sender

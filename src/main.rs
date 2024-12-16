@@ -57,6 +57,7 @@ enum AppInput {
     None,
     RemoveSelected,
     PauseSelectedTorrents,
+    ResumeSelectedTorrents,
 }
 
 #[relm4::component]
@@ -218,10 +219,17 @@ impl SimpleComponent for App {
                 pause_sender.input(AppInput::PauseSelectedTorrents);
             });
 
+        let resume_sender = sender.clone();
+        let resume_selected_action: RelmAction<ResumeSelectedAction> =
+            RelmAction::new_stateless(move |_| {
+                resume_sender.input(AppInput::ResumeSelectedTorrents);
+            });
+
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
         group.add_action(preferences_action);
         group.add_action(open_action);
         group.add_action(pause_selected_action);
+        group.add_action(resume_selected_action);
         group.add_action(remove_selected_action);
         group.register_for_widget(&widgets.main_window);
 
@@ -272,6 +280,18 @@ impl SimpleComponent for App {
             AppInput::ResumeTorrent(hash) => self
                 .transmission
                 .emit(TransmissionInput::ResumeTorrents(vec![hash])),
+            AppInput::ResumeSelectedTorrents => {
+                let mut hashes = vec![];
+                let items = self.view.guard().widget().selected_rows();
+                for item in items {
+                    if let Some(torrent) = self.view.guard().get(item.index() as usize) {
+                        hashes.push(torrent.hash.clone());
+                    }
+                }
+
+                self.transmission
+                    .emit(TransmissionInput::ResumeTorrents(hashes));
+            }
             AppInput::RemoveSelected => {
                 let mut hashes = vec![];
                 let items = self.view.guard().widget().selected_rows();
@@ -348,7 +368,10 @@ impl SimpleComponent for App {
                 );
 
                 if all_paused {
-                    menu.append(Some(&tr!("Resume")), None);
+                    menu.append(
+                        Some(&tr!("Resume")),
+                        Some(&ResumeSelectedAction::action_name()),
+                    );
                 } else {
                     menu.append(
                         Some(&tr!("Pause")),
@@ -392,6 +415,7 @@ fn torrent_file_filters() -> Vec<FileFilter> {
 relm4::new_action_group!(WindowActionGroup, "win");
 relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences");
 relm4::new_stateless_action!(PauseSelectedAction, WindowActionGroup, "pause-selected");
+relm4::new_stateless_action!(ResumeSelectedAction, WindowActionGroup, "resume-selected");
 relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");
 relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");

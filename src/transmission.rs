@@ -28,6 +28,7 @@ pub(crate) enum TransmissionInput {
     ResumeTorrent(String),
     GetFiles(i32),
     UpdateSettings,
+    RemoveTorrents(Vec<String>),
 }
 
 impl Drop for Transmission {
@@ -230,6 +231,18 @@ impl AsyncComponent for Transmission {
             TransmissionInput::ResumeTorrent(hash) => {
                 let tr_client = self.tr_client.as_ref().unwrap();
                 match tr_client.torrent_start(Some(vec![hash]), false).await {
+                    Ok(_) => {}
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+                sender.input(TransmissionInput::UpdateTorrents);
+            }
+            TransmissionInput::RemoveTorrents(hashes) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+                match tr_client.torrent_remove(Some(hashes), false).await {
                     Ok(_) => {}
                     Err(err) => {
                         sender

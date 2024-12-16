@@ -55,6 +55,7 @@ enum AppInput {
     OpenPrefsWindow,
     ClosePrefsWindow,
     None,
+    RemoveSelected,
 }
 
 #[relm4::component]
@@ -199,13 +200,20 @@ impl SimpleComponent for App {
                 prefs_sender.input(AppInput::OpenPrefsWindow);
             });
 
+        let open_sender = sender.clone();
         let open_action: RelmAction<OpenAction> = RelmAction::new_stateless(move |_| {
-            sender.input(AppInput::ShowOpenDialog);
+            open_sender.input(AppInput::ShowOpenDialog);
         });
+
+        let remove_selected_action: RelmAction<RemoveSelectedAction> =
+            RelmAction::new_stateless(move |_| {
+                sender.input(AppInput::RemoveSelected);
+            });
 
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
         group.add_action(preferences_action);
         group.add_action(open_action);
+        group.add_action(remove_selected_action);
         group.register_for_widget(&widgets.main_window);
 
         ComponentParts {
@@ -243,6 +251,18 @@ impl SimpleComponent for App {
             AppInput::ResumeTorrent(hash) => self
                 .transmission
                 .emit(TransmissionInput::ResumeTorrent(hash)),
+            AppInput::RemoveSelected => {
+                let mut hashes = vec![];
+                let items = self.view.guard().widget().selected_rows();
+                for item in items {
+                    if let Some(torrent) = self.view.guard().get(item.index() as usize) {
+                        hashes.push(torrent.hash.clone());
+                    }
+                }
+
+                self.transmission
+                    .emit(TransmissionInput::RemoveTorrents(hashes));
+            }
             AppInput::GetTorrentFiles(id) => {
                 self.transmission.emit(TransmissionInput::GetFiles(id))
             }
@@ -301,7 +321,10 @@ impl SimpleComponent for App {
                 }
 
                 let menu = gtk::gio::Menu::new();
-                menu.append(Some(&tr!("Remove")), None);
+                menu.append(
+                    Some(&tr!("Remove")),
+                    Some(&RemoveSelectedAction::action_name()),
+                );
 
                 if all_paused {
                     menu.append(Some(&tr!("Resume")), None);
@@ -344,6 +367,7 @@ fn torrent_file_filters() -> Vec<FileFilter> {
 
 relm4::new_action_group!(WindowActionGroup, "win");
 relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences");
+relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");
 relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 

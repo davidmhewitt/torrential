@@ -36,6 +36,7 @@ struct App {
     header: Controller<HeaderModel>,
     prefs_dialog: Controller<PreferencesWindowModel>,
     open_dialog: Controller<OpenDialog>,
+    context_popover: gtk::PopoverMenu,
 }
 
 #[derive(Debug)]
@@ -48,6 +49,8 @@ enum AppInput {
 
     ShowOpenDialog,
     OpenTorrent(PathBuf),
+
+    RightClickTorrent(f64, f64),
 
     OpenPrefsWindow,
     ClosePrefsWindow,
@@ -65,6 +68,7 @@ impl SimpleComponent for App {
             set_default_size: (400, 100),
             set_titlebar: Some(app.header.widget()),
 
+            #[name="toplevel_box"]
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
 
@@ -86,6 +90,13 @@ impl SimpleComponent for App {
                             },
                         },
                     },
+
+                    add_controller = gtk::GestureClick {
+                        set_button: gtk::gdk::BUTTON_SECONDARY,
+                        connect_released[sender] => move |_, _, x, y| {
+                            sender.input(AppInput::RightClickTorrent(x, y));
+                        }
+                    }
                 }
             },
         }
@@ -162,17 +173,25 @@ impl SimpleComponent for App {
                 preferences_window::PreferencesWindowOutput::Close => AppInput::ClosePrefsWindow,
             });
 
+        let context_popover = gtk::PopoverMenu::builder()
+            .halign(gtk::Align::Start)
+            .has_arrow(false)
+            .position(gtk::PositionType::Bottom)
+            .build();
+
         let app = App {
             view,
             header,
             transmission,
             prefs_dialog,
             open_dialog,
+            context_popover,
         };
 
         let torrent_box = app.view.widget();
 
         let widgets = view_output!();
+        app.context_popover.set_parent(&widgets.toplevel_box);
 
         let prefs_sender = sender.clone();
         let preferences_action: RelmAction<PreferencesAction> =
@@ -248,6 +267,63 @@ impl SimpleComponent for App {
             }
             AppInput::ClosePrefsWindow => {
                 self.transmission.emit(TransmissionInput::UpdateSettings);
+            }
+            AppInput::RightClickTorrent(x, y) => {
+                let guarded_view = self.view.guard();
+                let torrent_box = guarded_view.widget();
+
+                let clicked_row = match torrent_box.row_at_y(y as i32) {
+                    Some(row) => row,
+                    None => return,
+                };
+
+                let mut found = false;
+                for row in torrent_box.selected_rows() {
+                    if row.eq(&clicked_row) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if !found {
+                    torrent_box.unselect_all();
+                    torrent_box.select_row(Some(&clicked_row));
+                }
+
+                let items = torrent_box.selected_rows();
+                let mut all_paused = true;
+                for item in &items {
+                    let torrent = guarded_view.get(item.index() as usize).unwrap();
+                    if torrent.state != torrent::TorrentState::Stopped {
+                        all_paused = false;
+                        break;
+                    }
+                }
+
+                let menu = gtk::gio::Menu::new();
+                menu.append(Some(&tr!("Remove")), None);
+
+                if all_paused {
+                    menu.append(Some(&tr!("Resume")), None);
+                } else {
+                    menu.append(Some(&tr!("Pause")), None);
+                }
+
+                if items.len() < 2 {
+                    if let Some(selected_torrent) = guarded_view.get(items[0].index() as usize) {
+                        if selected_torrent.files.file_count > 1 {
+                            menu.append(Some(&tr!("Select Files to Download")), None);
+                        }
+                    }
+
+                    menu.append(Some(&tr!("Copy Magnet Link")), None);
+                    menu.append(Some(&tr!("Show in File Browser")), None);
+                }
+
+                let rect = gtk::gdk::Rectangle::new(x as i32, y as i32, 0, 0);
+                self.context_popover.set_pointing_to(Some(&rect));
+                self.context_popover.set_menu_model(Some(&menu));
+                self.context_popover.popup();
             }
             AppInput::None => {}
         }

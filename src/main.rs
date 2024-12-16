@@ -58,6 +58,7 @@ enum AppInput {
     RemoveSelected,
     PauseSelectedTorrents,
     ResumeSelectedTorrents,
+    CopySelectedMagnet,
 }
 
 #[relm4::component]
@@ -225,12 +226,19 @@ impl SimpleComponent for App {
                 resume_sender.input(AppInput::ResumeSelectedTorrents);
             });
 
+        let copy_magnet_sender = sender.clone();
+        let copy_magnet_action: RelmAction<CopySelectedMagnetAction> =
+            RelmAction::new_stateless(move |_| {
+                copy_magnet_sender.input(AppInput::CopySelectedMagnet);
+            });
+
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
         group.add_action(preferences_action);
         group.add_action(open_action);
         group.add_action(pause_selected_action);
         group.add_action(resume_selected_action);
         group.add_action(remove_selected_action);
+        group.add_action(copy_magnet_action);
         group.register_for_widget(&widgets.main_window);
 
         ComponentParts {
@@ -303,6 +311,15 @@ impl SimpleComponent for App {
 
                 self.transmission
                     .emit(TransmissionInput::RemoveTorrents(hashes));
+            }
+            AppInput::CopySelectedMagnet => {
+                let items = self.view.guard().widget().selected_rows();
+                if items.len() == 1 {
+                    if let Some(torrent) = self.view.guard().get(items[0].index() as usize) {
+                        let clipboard = gtk::gdk::Display::default().unwrap().clipboard();
+                        clipboard.set_text(&torrent.magnet_link);
+                    }
+                }
             }
             AppInput::GetTorrentFiles(id) => {
                 self.transmission.emit(TransmissionInput::GetFiles(id))
@@ -386,7 +403,10 @@ impl SimpleComponent for App {
                         }
                     }
 
-                    menu.append(Some(&tr!("Copy Magnet Link")), None);
+                    menu.append(
+                        Some(&tr!("Copy Magnet Link")),
+                        Some(&CopySelectedMagnetAction::action_name()),
+                    );
                     menu.append(Some(&tr!("Show in File Browser")), None);
                 }
 
@@ -417,6 +437,7 @@ relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences"
 relm4::new_stateless_action!(PauseSelectedAction, WindowActionGroup, "pause-selected");
 relm4::new_stateless_action!(ResumeSelectedAction, WindowActionGroup, "resume-selected");
 relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");
+relm4::new_stateless_action!(CopySelectedMagnetAction, WindowActionGroup, "copy-magnet");
 relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 

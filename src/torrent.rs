@@ -25,6 +25,7 @@ pub(crate) struct Torrent {
     pub hash: String,
     pub id: i32,
     pub name: String,
+    pub magnet_link: String,
     pub percent_done: f32,
     pub state: TorrentState,
     pub files: TorrentFiles,
@@ -210,6 +211,7 @@ impl FactoryComponent for Torrent {
             hash: init.hash_string,
             id: init.id,
             name: init.name,
+            magnet_link: init.magnet_link,
             percent_done: init.percent_done,
             state: TorrentState::Stopped,
             tracker: Default::default(),
@@ -247,6 +249,10 @@ impl Torrent {
 
         if self.name != torrent.name {
             self.set_name(torrent.name.clone());
+        }
+
+        if self.magnet_link != torrent.magnet_link {
+            self.set_magnet_link(torrent.magnet_link.clone());
         }
 
         self.set_state(torrent.status.try_into().unwrap_or(TorrentState::Stopped));

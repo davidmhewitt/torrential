@@ -23,6 +23,9 @@ use preferences_window::{PreferencesWindowInput, PreferencesWindowModel};
 mod torrent;
 use torrent::Torrent;
 
+mod toast;
+use toast::{Toast, ToastMsg};
+
 mod transmission;
 use transmission::{Transmission, TransmissionInput, TransmissionOutput};
 
@@ -36,6 +39,7 @@ struct App {
     header: Controller<HeaderModel>,
     prefs_dialog: Controller<PreferencesWindowModel>,
     open_dialog: Controller<OpenDialog>,
+    toast: Controller<Toast>,
     context_popover: gtk::PopoverMenu,
 }
 
@@ -72,37 +76,41 @@ impl SimpleComponent for App {
             set_default_size: (400, 100),
             set_titlebar: Some(app.header.widget()),
 
-            #[name="toplevel_box"]
-            gtk::Box {
-                set_orientation: gtk::Orientation::Vertical,
+            gtk::Overlay {
+                #[name="toplevel_box"]
+                add_overlay = &gtk::Box {
+                    set_orientation: gtk::Orientation::Vertical,
 
-                #[local_ref]
-                torrent_box -> gtk::ListBox {
-                    set_selection_mode: gtk::SelectionMode::Multiple,
-                    set_activate_on_single_click: false,
-                    add_css_class: granite::STYLE_CLASS_RICH_LIST,
-                    #[wrap(Some)]
-                    set_placeholder = &gtk::Stack {
-                        add_child = &granite::Placeholder {
-                            set_title: &tr!("No torrents"),
-                            set_description: &tr!("Add a torrent to begin downloading"),
-                            append_button[&tr!("Open torrent"), &tr!("Open a torrent from a file on your computer")] = &ThemedIcon::new("folder") {} -> {
-                                set_action_name: Some(&OpenAction::action_name()),
-                            },
-                            append_button[&tr!("Preferences"), &tr!("Set download folder and other preferences")] = &ThemedIcon::new("open-menu") {} -> {
-                                set_action_name: Some(&PreferencesAction::action_name()),
+                    #[local_ref]
+                    torrent_box -> gtk::ListBox {
+                        set_selection_mode: gtk::SelectionMode::Multiple,
+                        set_activate_on_single_click: false,
+                        add_css_class: granite::STYLE_CLASS_RICH_LIST,
+                        #[wrap(Some)]
+                        set_placeholder = &gtk::Stack {
+                            add_child = &granite::Placeholder {
+                                set_title: &tr!("No torrents"),
+                                set_description: &tr!("Add a torrent to begin downloading"),
+                                append_button[&tr!("Open torrent"), &tr!("Open a torrent from a file on your computer")] = &ThemedIcon::new("folder") {} -> {
+                                    set_action_name: Some(&OpenAction::action_name()),
+                                },
+                                append_button[&tr!("Preferences"), &tr!("Set download folder and other preferences")] = &ThemedIcon::new("open-menu") {} -> {
+                                    set_action_name: Some(&PreferencesAction::action_name()),
+                                },
                             },
                         },
-                    },
 
-                    add_controller = gtk::GestureClick {
-                        set_button: gtk::gdk::BUTTON_SECONDARY,
-                        connect_released[sender] => move |_, _, x, y| {
-                            sender.input(AppInput::RightClickTorrent(x, y));
+                        add_controller = gtk::GestureClick {
+                            set_button: gtk::gdk::BUTTON_SECONDARY,
+                            connect_released[sender] => move |_, _, x, y| {
+                                sender.input(AppInput::RightClickTorrent(x, y));
+                            }
                         }
                     }
-                }
-            },
+                },
+
+                add_overlay = app.toast.widget(),
+            }
         }
     }
 
@@ -177,6 +185,10 @@ impl SimpleComponent for App {
                 preferences_window::PreferencesWindowOutput::Close => AppInput::ClosePrefsWindow,
             });
 
+        let toast = Toast::builder()
+            .launch(())
+            .forward(sender.input_sender(), |response| match response {});
+
         let context_popover = gtk::PopoverMenu::builder()
             .halign(gtk::Align::Start)
             .has_arrow(false)
@@ -190,6 +202,7 @@ impl SimpleComponent for App {
             prefs_dialog,
             open_dialog,
             context_popover,
+            toast,
         };
 
         let torrent_box = app.view.widget();
@@ -318,6 +331,7 @@ impl SimpleComponent for App {
                     if let Some(torrent) = self.view.guard().get(items[0].index() as usize) {
                         let clipboard = gtk::gdk::Display::default().unwrap().clipboard();
                         clipboard.set_text(&torrent.magnet_link);
+                        self.toast.emit(ToastMsg::Show(tr!("Magnet link copied")));
                     }
                 }
             }

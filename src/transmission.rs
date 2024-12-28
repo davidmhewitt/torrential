@@ -11,6 +11,7 @@ use url::Url;
 pub(crate) struct Transmission {
     tr_client: Option<Client>,
     transmission_process: Option<std::process::Child>,
+    timer_handle: Option<tokio::task::JoinHandle<()>>,
 }
 
 #[derive(Debug)]
@@ -70,6 +71,7 @@ impl AsyncComponent for Transmission {
                 model: Self {
                     tr_client: None,
                     transmission_process: None,
+                    timer_handle: None,
                 },
                 widgets: (),
             };
@@ -94,6 +96,7 @@ impl AsyncComponent for Transmission {
                     model: Self {
                         tr_client: Some(tr_client),
                         transmission_process: None,
+                        timer_handle: None,
                     },
                     widgets: (),
                 };
@@ -163,7 +166,7 @@ impl AsyncComponent for Transmission {
             }
         }
 
-        tokio::spawn(async move {
+        let timer_handle = tokio::spawn(async move {
             loop {
                 sender.input(TransmissionInput::UpdateTorrents);
 
@@ -175,8 +178,16 @@ impl AsyncComponent for Transmission {
             model: Self {
                 tr_client: Some(tr_client),
                 transmission_process: transmission_daemon,
+                timer_handle: Some(timer_handle),
             },
             widgets: (),
+        }
+    }
+
+    fn shutdown(&mut self, _widgets: &mut Self::Widgets, _output: relm4::Sender<Self::Output>) {
+        // Prevent trying to update the model after shutdown
+        if self.timer_handle.is_some() {
+            self.timer_handle.take().unwrap().abort();
         }
     }
 

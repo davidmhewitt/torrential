@@ -6,7 +6,7 @@ use relm4::{
     actions::*,
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
-    gtk,
+    gtk::{self, gio},
     prelude::AsyncComponentController,
     Component, ComponentController, ComponentParts, ComponentSender, Controller, RelmApp,
     SimpleComponent,
@@ -254,6 +254,8 @@ impl SimpleComponent for App {
         group.add_action(copy_magnet_action);
         group.register_for_widget(&widgets.main_window);
 
+        widgets.load_window_size();
+
         ComponentParts {
             model: app,
             widgets,
@@ -430,6 +432,40 @@ impl SimpleComponent for App {
                 self.context_popover.popup();
             }
             AppInput::None => {}
+        }
+    }
+
+    fn shutdown(&mut self, widgets: &mut Self::Widgets, _output: relm4::Sender<Self::Output>) {
+        widgets.save_window_size().unwrap();
+    }
+}
+
+impl AppWidgets {
+    fn save_window_size(&self) -> Result<(), gtk::glib::BoolError> {
+        let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+        let (width, height) = self.main_window.default_size();
+
+        settings
+            .set_int("window-width", width)
+            .expect("Failed to save window width");
+        settings
+            .set_int("window-height", height)
+            .expect("Failed to save window height");
+
+        settings.set_boolean("window-maximized", self.main_window.is_maximized())?;
+
+        Ok(())
+    }
+
+    fn load_window_size(&self) {
+        let settings = gio::Settings::new("com.github.davidmhewitt.torrential.settings");
+        let width = settings.int("window-width");
+        let height = settings.int("window-height");
+
+        self.main_window.set_default_size(width, height);
+
+        if settings.boolean("window-maximized") {
+            self.main_window.maximize();
         }
     }
 }

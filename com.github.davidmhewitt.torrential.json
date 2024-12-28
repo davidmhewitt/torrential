@@ -11,7 +11,8 @@
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
-        "--socket=wayland"
+        "--socket=wayland",
+        "--share=network"
     ],
     "build-options": {
         "append-path": "/usr/lib/sdk/rust-stable/bin"
@@ -28,6 +29,34 @@
         "*.a"
     ],
     "modules": [
+        {
+            "name": "libevent",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/transmission/libevent/archive/release-2.1.12-stable.tar.gz",
+                    "sha256": "7180a979aaa7000e1264da484f712d403fcf7679b1e9212c4e3d09f5c93efc24"
+                }
+            ]
+        },
+        {
+            "name": "transmission",
+            "buildsystem": "cmake-ninja",
+            "config-opts": [
+                "-DENABLE_CLI=OFF",
+                "-DENABLE_TESTS=OFF",
+                "-DENABLE_MAC=OFF",
+                "-DENABLE_DAEMON=ON",
+                "-DENABLE_GTK=OFF"
+            ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/transmission/transmission",
+                    "tag": "4.0.6"
+                }
+            ]
+        },
         {
             "name": "app",
             "builddir": true,

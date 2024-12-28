@@ -12,7 +12,8 @@
         "--socket=fallback-x11",
         "--device=dri",
         "--socket=wayland",
-        "--share=network"
+        "--share=network",
+        "--filesystem=xdg-download"
     ],
     "build-options": {
         "append-path": "/usr/lib/sdk/rust-stable/bin"

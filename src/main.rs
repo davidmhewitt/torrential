@@ -492,8 +492,6 @@ relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 
 fn main() {
-    env_logger::init();
-
     let app = RelmApp::new("com.github.davidmhewitt.torrential");
     app.run::<App>(());
 }

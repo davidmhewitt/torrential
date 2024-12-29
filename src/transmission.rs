@@ -6,7 +6,6 @@ use relm4::{
     gtk::{gio, prelude::SettingsExt},
 };
 use transmission_client::{Client, Encryption, SessionMutator, Torrent, TorrentFiles};
-use url::Url;
 
 pub(crate) struct Transmission {
     tr_client: Option<Client>,
@@ -61,23 +60,7 @@ impl AsyncComponent for Transmission {
         _root: Self::Root,
         sender: relm4::prelude::AsyncComponentSender<Self>,
     ) -> AsyncComponentParts<Self> {
-        let Ok(url) = Url::parse("http://localhost:9091/transmission/rpc") else {
-            sender
-                .output(TransmissionOutput::ConnectionError(
-                    "Invalid URL".to_string(),
-                ))
-                .unwrap();
-            return AsyncComponentParts {
-                model: Self {
-                    tr_client: None,
-                    transmission_process: None,
-                    timer_handle: None,
-                },
-                widgets: (),
-            };
-        };
-
-        let tr_client = Client::new(url);
+        let tr_client = Client::default();
 
         let transmission_daemon = match std::process::Command::new("transmission-daemon")
             .stdout(Stdio::piped())

@@ -1,3 +1,4 @@
+use crate::fl;
 use granite::prelude::HeaderLabelExt;
 use gtk::prelude::{
     BoxExt, ButtonExt, DialogExt, GridExt, GtkWindowExt, OrientableExt, SettingsExtManual,
@@ -7,7 +8,6 @@ use relm4::gtk;
 use relm4::gtk::gio::SettingsBindFlags;
 use relm4::ComponentSender;
 use relm4::SimpleComponent;
-use tr::tr;
 
 pub struct PreferencesWindowModel {
     hidden: bool,
@@ -35,7 +35,7 @@ impl SimpleComponent for PreferencesWindowModel {
         granite::Dialog {
             #[watch]
             set_visible: !model.hidden,
-            set_title: Some(&tr!("Preferences")),
+            set_title: Some(&fl!("preferences-title")),
             set_resizable: false,
             set_destroy_with_parent: true,
 
@@ -63,7 +63,7 @@ impl SimpleComponent for PreferencesWindowModel {
                         set_hexpand: true,
 
                         attach[0, 0, 1, 1] = &granite::HeaderLabel {
-                            set_label: &tr!("Download Location"),
+                            set_label: &fl!("heading-download-location"),
                         },
 
                         attach[0, 1, 2, 1] = &gtk::Button {
@@ -85,11 +85,11 @@ impl SimpleComponent for PreferencesWindowModel {
                         },
 
                         attach[0, 2, 1, 1] = &granite::HeaderLabel {
-                            set_label: &tr!("Limits"),
+                            set_label: &fl!("heading-limits"),
                         },
 
                         attach[0, 3, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Max simultaneous downloads:"),
+                            set_label: &fl!("label-max-downloads"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -103,7 +103,7 @@ impl SimpleComponent for PreferencesWindowModel {
                         },
 
                         attach[0, 4, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Download speed limit (KBps):"),
+                            set_label: &fl!("label-download-speed-limit"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -114,11 +114,11 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
                             set_digits: 0,
                             set_hexpand: true,
-                            set_tooltip_text: Some(&tr!("0 means unlimited")),
+                            set_tooltip_text: Some(&fl!("tooltip-unlimited-hint")),
                         },
 
                         attach[0, 5, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Upload speed limit (KBps):"),
+                            set_label: &fl!("label-upload-speed-limit"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -129,15 +129,15 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_adjustment: &gtk::Adjustment::new(0.0, 0.0, 1000000.0, 25.0, 250.0, 0.0),
                             set_digits: 0,
                             set_hexpand: true,
-                            set_tooltip_text: Some(&tr!("0 means unlimited")),
+                            set_tooltip_text: Some(&fl!("tooltip-unlimited-hint")),
                         },
 
                         attach[0, 6, 1, 1] = &granite::HeaderLabel {
-                            set_label: &tr!("Desktop Integration"),
+                            set_label: &fl!("header-desktop-integration"),
                         },
 
                         attach[0, 7, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Continue downloads when closed:"),
+                            set_label: &fl!("label-hide-on-close"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -149,7 +149,7 @@ impl SimpleComponent for PreferencesWindowModel {
                             set_hexpand: true,
                         },
                     } -> {
-                        set_title: &tr!("General")
+                        set_title: &fl!("general-preferences-title")
                     },
 
                     add_child = &gtk::Grid {
@@ -158,11 +158,11 @@ impl SimpleComponent for PreferencesWindowModel {
                         set_hexpand: true,
 
                         attach[0, 0, 1, 1] = &granite::HeaderLabel {
-                            set_label: &tr!("Security"),
+                            set_label: &fl!("header-security"),
                         },
 
                         attach[0, 1, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Only connect to encrypted peers:"),
+                            set_label: &fl!("label-only-encrypted-peers"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -175,7 +175,7 @@ impl SimpleComponent for PreferencesWindowModel {
                         },
 
                         attach[0, 2, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Randomise BitTorrent port on launch:"),
+                            set_label: &fl!("label-random-port"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -188,7 +188,7 @@ impl SimpleComponent for PreferencesWindowModel {
                         },
 
                         attach[0, 3, 1, 1] = &gtk::Label {
-                            set_label: &tr!("Port number:"),
+                            set_label: &fl!("label-port-number"),
                             set_halign: gtk::Align::End,
                             set_margin_start: 12,
                         },
@@ -202,12 +202,12 @@ impl SimpleComponent for PreferencesWindowModel {
                         },
 
                     } -> {
-                        set_title: &tr!("Advanced")
+                        set_title: &fl!("advanced-preferences-title")
                     },
                 },
             },
 
-            add_button: (&tr!("Close"), gtk::ResponseType::Close),
+            add_button: (&fl!("action-close"), gtk::ResponseType::Close),
         }
     }
 

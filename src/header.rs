@@ -1,9 +1,9 @@
+use crate::fl;
 use gtk::prelude::{ButtonExt, WidgetExt};
 use relm4::gtk;
 use relm4::ComponentParts;
 use relm4::SimpleComponent;
 use relm4_macros::menu;
-use tr::tr;
 
 pub struct HeaderModel;
 
@@ -44,7 +44,7 @@ impl SimpleComponent for HeaderModel {
 
             pack_end = &gtk::MenuButton {
                 set_icon_name: "open-menu",
-                set_tooltip_text: Some(&tr!("Application menu")),
+                set_tooltip_text: Some(&fl!("appmenu-tooltip")),
                 set_menu_model: Some(&main_menu),
                 set_primary: true,
             },
@@ -58,8 +58,8 @@ impl SimpleComponent for HeaderModel {
     ) -> relm4::ComponentParts<Self> {
         menu! {
             main_menu: {
-                &tr!("Preferences") => crate::PreferencesAction,
-                &tr!("Quit") => crate::QuitAction,
+                &fl!("action-prefs") => crate::PreferencesAction,
+                &fl!("action-quit") => crate::QuitAction,
             }
         }
 

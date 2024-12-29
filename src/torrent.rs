@@ -1,9 +1,9 @@
+use crate::fl;
 use gtk::gio::functions::content_type_get_icon;
 use gtk::prelude::{ButtonExt, GridExt, WidgetExt};
 use relm4::factory::FactoryComponent;
 use relm4::gtk::gio::Icon;
 use relm4::{gtk, RelmWidgetExt};
-use tr::tr;
 use transmission_client::TorrentFiles;
 
 use crate::utils;
@@ -49,8 +49,8 @@ pub enum TorrentOutput {
 
 fn get_pause_resume_text(state: &TorrentState) -> String {
     match state {
-        TorrentState::Stopped => tr!("Resume"),
-        _ => tr!("Pause"),
+        TorrentState::Stopped => fl!("action-resume"),
+        _ => fl!("action-pause"),
     }
 }
 
@@ -69,11 +69,11 @@ fn generate_status_text(
                 time_to_string(eta)
             )
         }
-        TorrentState::Stopped => tr!("Paused"),
+        TorrentState::Stopped => fl!("state-paused"),
         TorrentState::CheckWaiting | TorrentState::DownloadWaiting | TorrentState::SeedWaiting => {
-            tr!("Waiting in queue")
+            fl!("state-waiting")
         }
-        TorrentState::Checking => tr!("Checking"),
+        TorrentState::Checking => fl!("state-checking"),
     }
 }
 
@@ -87,10 +87,10 @@ fn time_to_string(total_seconds: i64) -> String {
     let hours = (total_seconds % 86400) / 3600;
     let days = (total_seconds % (86400 * 30)) / 86400;
 
-    let seconds_str = tr!("{} second" | "{} seconds" % seconds, seconds);
-    let minutes_str = tr!("{} minute" | "{} minutes" % minutes, minutes);
-    let hours_str = tr!("{} hour" | "{} hours" % hours, hours);
-    let days_str = tr!("{} day" | "{} days" % days, days);
+    let seconds_str = fl!("seconds", seconds = seconds);
+    let minutes_str = fl!("minutes", minutes = minutes);
+    let hours_str = fl!("hours", hours = hours);
+    let days_str = fl!("days", days = days);
 
     if days > 0 {
         format!(

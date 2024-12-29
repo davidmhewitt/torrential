@@ -2,6 +2,10 @@ use std::path::PathBuf;
 
 use granite::prelude::PlaceholderExt;
 use gtk::{gio::ThemedIcon, prelude::*, FileFilter};
+use i18n_embed::{
+    fluent::{fluent_language_loader, FluentLanguageLoader},
+    DesktopLanguageRequester,
+};
 use relm4::{
     actions::*,
     component::{AsyncComponent, AsyncController},
@@ -12,7 +16,7 @@ use relm4::{
     SimpleComponent,
 };
 use relm4_components::open_dialog::*;
-use tr::tr;
+use rust_embed::RustEmbed;
 
 mod header;
 use header::{HeaderModel, HeaderOutput};
@@ -32,6 +36,27 @@ use transmission::{Transmission, TransmissionInput, TransmissionOutput};
 mod utils;
 
 use transmission_client::TorrentFiles;
+
+#[derive(RustEmbed)]
+#[folder = "i18n"]
+struct Localizations;
+
+lazy_static::lazy_static! {
+    static ref STATIC_LANGUAGE_LOADER: FluentLanguageLoader = {
+        fluent_language_loader!()
+    };
+}
+
+#[macro_export]
+macro_rules! fl {
+    ($message_id:literal) => {{
+        i18n_embed_fl::fl!($crate::STATIC_LANGUAGE_LOADER, $message_id)
+    }};
+
+    ($message_id:literal, $($args:expr),*) => {{
+        i18n_embed_fl::fl!($crate::STATIC_LANGUAGE_LOADER, $message_id, $($args), *)
+    }};
+}
 
 struct App {
     view: FactoryVecDeque<Torrent>,
@@ -89,12 +114,12 @@ impl SimpleComponent for App {
                         #[wrap(Some)]
                         set_placeholder = &gtk::Stack {
                             add_child = &granite::Placeholder {
-                                set_title: &tr!("No torrents"),
-                                set_description: &tr!("Add a torrent to begin downloading"),
-                                append_button[&tr!("Open torrent"), &tr!("Open a torrent from a file on your computer")] = &ThemedIcon::new("folder") {} -> {
+                                set_title: &fl!("no-torrents-title"),
+                                set_description: &fl!("no-torrents-subtitle"),
+                                append_button[&fl!("action-open"), &fl!("action-open-description")] = &ThemedIcon::new("folder") {} -> {
                                     set_action_name: Some(&OpenAction::action_name()),
                                 },
-                                append_button[&tr!("Preferences"), &tr!("Set download folder and other preferences")] = &ThemedIcon::new("open-menu") {} -> {
+                                append_button[&fl!("action-prefs"), &fl!("action-prefs-description")] = &ThemedIcon::new("open-menu") {} -> {
                                     set_action_name: Some(&PreferencesAction::action_name()),
                                 },
                             },
@@ -119,8 +144,6 @@ impl SimpleComponent for App {
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        tr::tr_init!("/usr/share/locale");
-
         granite::init();
 
         let seeding_css = gtk::CssProvider::new();
@@ -333,7 +356,8 @@ impl SimpleComponent for App {
                     if let Some(torrent) = self.view.guard().get(items[0].index() as usize) {
                         let clipboard = gtk::gdk::Display::default().unwrap().clipboard();
                         clipboard.set_text(&torrent.magnet_link);
-                        self.toast.emit(ToastMsg::Show(tr!("Magnet link copied")));
+                        self.toast
+                            .emit(ToastMsg::Show(fl!("magnet-copied-notification")));
                     }
                 }
             }
@@ -396,18 +420,18 @@ impl SimpleComponent for App {
 
                 let menu = gtk::gio::Menu::new();
                 menu.append(
-                    Some(&tr!("Remove")),
+                    Some(&fl!("action-remove")),
                     Some(&RemoveSelectedAction::action_name()),
                 );
 
                 if all_paused {
                     menu.append(
-                        Some(&tr!("Resume")),
+                        Some(&fl!("action-resume")),
                         Some(&ResumeSelectedAction::action_name()),
                     );
                 } else {
                     menu.append(
-                        Some(&tr!("Pause")),
+                        Some(&fl!("action-pause")),
                         Some(&PauseSelectedAction::action_name()),
                     );
                 }
@@ -415,15 +439,15 @@ impl SimpleComponent for App {
                 if items.len() < 2 {
                     if let Some(selected_torrent) = guarded_view.get(items[0].index() as usize) {
                         if selected_torrent.files.file_count > 1 {
-                            menu.append(Some(&tr!("Select Files to Download")), None);
+                            menu.append(Some(&fl!("action-select-files")), None);
                         }
                     }
 
                     menu.append(
-                        Some(&tr!("Copy Magnet Link")),
+                        Some(&fl!("action-copy-magnet")),
                         Some(&CopySelectedMagnetAction::action_name()),
                     );
-                    menu.append(Some(&tr!("Show in File Browser")), None);
+                    menu.append(Some(&fl!("action-show-in-filemanager")), None);
                 }
 
                 let rect = gtk::gdk::Rectangle::new(x as i32, y as i32, 0, 0);
@@ -472,12 +496,12 @@ impl AppWidgets {
 
 fn torrent_file_filters() -> Vec<FileFilter> {
     let all_files_filter = FileFilter::new();
-    all_files_filter.set_name(Some(&tr!("All files")));
+    all_files_filter.set_name(Some(&fl!("all-files-filter-description")));
     all_files_filter.add_pattern("*");
 
     let torrent_files_filter = FileFilter::new();
     torrent_files_filter.add_mime_type("application/x-bittorrent");
-    torrent_files_filter.set_name(Some(&tr!("Torrent files")));
+    torrent_files_filter.set_name(Some(&fl!("torrent-files-filter-description")));
 
     vec![torrent_files_filter, all_files_filter]
 }
@@ -492,6 +516,14 @@ relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 
 fn main() {
+    let requested_languages = DesktopLanguageRequester::requested_languages();
+
+    let _result = i18n_embed::select(
+        &*STATIC_LANGUAGE_LOADER,
+        &Localizations,
+        &requested_languages,
+    );
+
     let app = RelmApp::new("com.github.davidmhewitt.torrential");
     app.run::<App>(());
 }

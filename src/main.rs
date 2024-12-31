@@ -268,6 +268,13 @@ impl SimpleComponent for App {
                 copy_magnet_sender.input(AppInput::CopySelectedMagnet);
             });
 
+        let filter_action_sender = sender.clone();
+        let filter_action: RelmAction<FilterAction> =
+            RelmAction::new_stateful_with_target_value(&0, move |_, state, value| {
+                *state = value;
+                filter_action_sender.input(AppInput::None);
+            });
+
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
         group.add_action(preferences_action);
         group.add_action(open_action);
@@ -275,6 +282,7 @@ impl SimpleComponent for App {
         group.add_action(resume_selected_action);
         group.add_action(remove_selected_action);
         group.add_action(copy_magnet_action);
+        group.add_action(filter_action);
         group.register_for_widget(&widgets.main_window);
 
         widgets.load_window_size();
@@ -508,6 +516,7 @@ fn torrent_file_filters() -> Vec<FileFilter> {
 
 relm4::new_action_group!(WindowActionGroup, "win");
 relm4::new_stateless_action!(PreferencesAction, WindowActionGroup, "preferences");
+relm4::new_stateful_action!(FilterAction, WindowActionGroup, "filter", u8, u8);
 relm4::new_stateless_action!(PauseSelectedAction, WindowActionGroup, "pause-selected");
 relm4::new_stateless_action!(ResumeSelectedAction, WindowActionGroup, "resume-selected");
 relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");

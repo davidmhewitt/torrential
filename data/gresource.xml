@@ -2,5 +2,6 @@
 <gresources>
     <gresource prefix="/com/github/davidmhewitt/torrential">
         <file preprocess="xml-stripblanks">icons/open-magnet.svg</file>
+        <file preprocess="xml-stripblanks">icons/filter.svg</file>
     </gresource>
 </gresources>

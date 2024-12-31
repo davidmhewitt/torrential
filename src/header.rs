@@ -48,6 +48,12 @@ impl SimpleComponent for HeaderModel {
                 set_menu_model: Some(&main_menu),
                 set_primary: true,
             },
+
+            pack_end = &gtk::MenuButton {
+                set_icon_name: "filter",
+                set_tooltip_text: Some(&fl!("filter-tooltip")),
+                set_menu_model: Some(&filter_menu),
+            }
         }
     }
 
@@ -60,6 +66,12 @@ impl SimpleComponent for HeaderModel {
             main_menu: {
                 &fl!("action-prefs") => crate::PreferencesAction,
                 &fl!("action-quit") => crate::QuitAction,
+            },
+            filter_menu: {
+                &fl!("filter-all") => crate::FilterAction(0),
+                &fl!("filter-downloading") => crate::FilterAction(1),
+                &fl!("filter-seeding") => crate::FilterAction(2),
+                &fl!("filter-paused") => crate::FilterAction(3),
             }
         }
 

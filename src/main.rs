@@ -1,6 +1,5 @@
-use std::path::PathBuf;
-
 use granite::prelude::PlaceholderExt;
+use gtk::{gdk, gio};
 use gtk::{gio::ThemedIcon, prelude::*, FileFilter};
 use i18n_embed::{
     fluent::{fluent_language_loader, FluentLanguageLoader},
@@ -10,13 +9,14 @@ use relm4::{
     actions::*,
     component::{AsyncComponent, AsyncController},
     factory::FactoryVecDeque,
-    gtk::{self, gio},
+    gtk,
     prelude::AsyncComponentController,
     Component, ComponentController, ComponentParts, ComponentSender, Controller, RelmApp,
     SimpleComponent,
 };
 use relm4_components::open_dialog::*;
 use rust_embed::RustEmbed;
+use std::path::PathBuf;
 
 mod header;
 use header::{HeaderModel, HeaderOutput};
@@ -525,5 +525,12 @@ fn main() {
     );
 
     let app = RelmApp::new("com.github.davidmhewitt.torrential");
+
+    gio::resources_register_include!("com.github.davidmhewitt.torrential.gresource").unwrap();
+
+    let display = gdk::Display::default().unwrap();
+    let theme = gtk::IconTheme::for_display(&display);
+    theme.add_resource_path("/com/github/davidmhewitt/torrential/icons");
+
     app.run::<App>(());
 }

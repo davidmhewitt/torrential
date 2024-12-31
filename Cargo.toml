@@ -13,7 +13,10 @@ nix = { version = "0.29.0", features = ["signal"] }
 relm4 = "0.9"
 relm4-components = "0.9"
 relm4-macros = "0.9"
-rust-embed = "8"
+rust-embed = { version = "8", features = ["debug-embed"] }
 tokio = { version = "1.38", features = ["time"] }
 tracker = "0.2"
 transmission-client = "0.1.5"
+
+[build-dependencies]
+glib-build-tools = "0.20.0"

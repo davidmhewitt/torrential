@@ -24,6 +24,9 @@ use header::{HeaderModel, HeaderOutput};
 mod preferences_window;
 use preferences_window::{PreferencesWindowInput, PreferencesWindowModel};
 
+mod magnet_dialog;
+use magnet_dialog::{MagnetDialogInput, MagnetDialogModel, MagnetDialogOutput};
+
 mod torrent;
 use torrent::Torrent;
 
@@ -70,6 +73,7 @@ struct App {
     transmission: AsyncController<Transmission>,
     header: Controller<HeaderModel>,
     prefs_dialog: Controller<PreferencesWindowModel>,
+    magnet_dialog: Controller<MagnetDialogModel>,
     open_dialog: Controller<OpenDialog>,
     toast: Controller<Toast>,
     context_popover: gtk::PopoverMenu,
@@ -87,6 +91,8 @@ enum AppInput {
 
     ShowOpenDialog,
     OpenTorrent(PathBuf),
+
+    ShowMagnetDialog,
 
     RightClickTorrent(f64, f64),
 
@@ -195,10 +201,7 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), |msg| match msg {
                 HeaderOutput::OpenTorrent => AppInput::ShowOpenDialog,
-                HeaderOutput::OpenMagnet => {
-                    println!("Open magnet");
-                    AppInput::None
-                }
+                HeaderOutput::OpenMagnet => AppInput::ShowMagnetDialog,
                 HeaderOutput::SearchChanged(search_term) => AppInput::UpdateSearch(search_term),
             });
 
@@ -220,6 +223,14 @@ impl SimpleComponent for App {
                 preferences_window::PreferencesWindowOutput::Close => AppInput::ClosePrefsWindow,
             });
 
+        let magnet_dialog = MagnetDialogModel::builder()
+            .transient_for(&root)
+            .launch(())
+            .forward(sender.input_sender(), |msg| match msg {
+                MagnetDialogOutput::AddMagnet(link) => AppInput::OpenTorrent(PathBuf::from(link)),
+                MagnetDialogOutput::Close => AppInput::None,
+            });
+
         let toast = Toast::builder()
             .launch(())
             .forward(sender.input_sender(), |response| match response {});
@@ -235,6 +246,7 @@ impl SimpleComponent for App {
             header,
             transmission,
             prefs_dialog,
+            magnet_dialog,
             open_dialog,
             context_popover,
             toast,
@@ -329,6 +341,9 @@ impl SimpleComponent for App {
                         guarded_view.pop_back();
                     }
                 }
+
+                drop(guarded_view);
+                self.apply_filter();
             }
             AppInput::PauseTorrent(hash) => self
                 .transmission
@@ -399,8 +414,12 @@ impl SimpleComponent for App {
                 self.open_dialog.emit(OpenDialogMsg::Open);
             }
             AppInput::OpenTorrent(path) => {
-                self.transmission
-                    .emit(TransmissionInput::AddTorrentFile(path));
+                self.transmission.emit(TransmissionInput::AddTorrentFile(
+                    path.to_string_lossy().to_string(),
+                ));
+            }
+            AppInput::ShowMagnetDialog => {
+                self.magnet_dialog.emit(MagnetDialogInput::Open);
             }
             AppInput::OpenPrefsWindow => {
                 self.prefs_dialog.emit(PreferencesWindowInput::Open);

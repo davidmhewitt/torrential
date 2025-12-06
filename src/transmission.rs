@@ -1,4 +1,4 @@
-use std::{path::PathBuf, process::Stdio, time::Duration};
+use std::{process::Stdio, time::Duration};
 
 use nix::{sys::signal, unistd::Pid};
 use relm4::{
@@ -22,7 +22,7 @@ pub(crate) enum TransmissionOutput {
 
 #[derive(Debug)]
 pub(crate) enum TransmissionInput {
-    AddTorrentFile(PathBuf),
+    AddTorrentFile(String),
     UpdateTorrents,
     PauseTorrents(Vec<String>),
     ResumeTorrents(Vec<String>),
@@ -183,7 +183,6 @@ impl AsyncComponent for Transmission {
         match message {
             TransmissionInput::AddTorrentFile(path) => {
                 let tr_client = self.tr_client.as_ref().unwrap();
-                let path = path.to_string_lossy().to_string();
                 match tr_client.torrent_add_filename(&path).await {
                     Ok(_) => {}
                     Err(err) => {

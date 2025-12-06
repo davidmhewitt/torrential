@@ -58,6 +58,13 @@ macro_rules! fl {
     }};
 }
 
+enum FilterType {
+    All,
+    Downloading,
+    Seeding,
+    Paused,
+}
+
 struct App {
     view: FactoryVecDeque<Torrent>,
     transmission: AsyncController<Transmission>,
@@ -66,6 +73,8 @@ struct App {
     open_dialog: Controller<OpenDialog>,
     toast: Controller<Toast>,
     context_popover: gtk::PopoverMenu,
+    current_filter: FilterType,
+    search_term: String,
 }
 
 #[derive(Debug)]
@@ -88,6 +97,8 @@ enum AppInput {
     PauseSelectedTorrents,
     ResumeSelectedTorrents,
     CopySelectedMagnet,
+    ApplyFilter(u8),
+    UpdateSearch(String),
 }
 
 #[relm4::component]
@@ -188,6 +199,7 @@ impl SimpleComponent for App {
                     println!("Open magnet");
                     AppInput::None
                 }
+                HeaderOutput::SearchChanged(search_term) => AppInput::UpdateSearch(search_term),
             });
 
         let open_dialog = OpenDialog::builder()
@@ -226,6 +238,8 @@ impl SimpleComponent for App {
             open_dialog,
             context_popover,
             toast,
+            current_filter: FilterType::All,
+            search_term: String::new(),
         };
 
         let torrent_box = app.view.widget();
@@ -272,7 +286,7 @@ impl SimpleComponent for App {
         let filter_action: RelmAction<FilterAction> =
             RelmAction::new_stateful_with_target_value(&0, move |_, state, value| {
                 *state = value;
-                filter_action_sender.input(AppInput::None);
+                filter_action_sender.input(AppInput::ApplyFilter(value));
             });
 
         let mut group = RelmActionGroup::<WindowActionGroup>::new();
@@ -463,12 +477,74 @@ impl SimpleComponent for App {
                 self.context_popover.set_menu_model(Some(&menu));
                 self.context_popover.popup();
             }
+            AppInput::ApplyFilter(filter_type) => {
+                self.current_filter = match filter_type {
+                    0 => FilterType::All,
+                    1 => FilterType::Downloading,
+                    2 => FilterType::Seeding,
+                    3 => FilterType::Paused,
+                    _ => FilterType::All,
+                };
+                self.apply_filter();
+            }
+            AppInput::UpdateSearch(search_term) => {
+                self.search_term = search_term;
+                self.apply_filter();
+            }
             AppInput::None => {}
         }
     }
 
     fn shutdown(&mut self, widgets: &mut Self::Widgets, _output: relm4::Sender<Self::Output>) {
         widgets.save_window_size().unwrap();
+    }
+}
+
+impl App {
+    fn apply_filter(&mut self) {
+        let search_term_lower = self.search_term.to_lowercase();
+        let guarded = self.view.guard();
+        let listbox = guarded.widget();
+
+        let mut index = 0;
+        let mut child = listbox.first_child();
+
+        while let Some(current_child) = child {
+            if let Some(row) = current_child.downcast_ref::<gtk::ListBoxRow>() {
+                let should_show = if let Some(torrent) = guarded.get(index) {
+                    // First check search term
+                    let matches_search = if self.search_term.is_empty() {
+                        true
+                    } else {
+                        torrent.name.to_lowercase().contains(&search_term_lower)
+                    };
+
+                    // Then check filter type
+                    if !matches_search {
+                        false
+                    } else {
+                        match self.current_filter {
+                            FilterType::All => true,
+                            FilterType::Downloading => {
+                                torrent.state == torrent::TorrentState::Downloading
+                                    || torrent.state == torrent::TorrentState::DownloadWaiting
+                            }
+                            FilterType::Seeding => {
+                                torrent.state == torrent::TorrentState::Seeding
+                                    || torrent.state == torrent::TorrentState::SeedWaiting
+                            }
+                            FilterType::Paused => torrent.state == torrent::TorrentState::Stopped,
+                        }
+                    }
+                } else {
+                    true
+                };
+
+                row.set_visible(should_show);
+                index += 1;
+            }
+            child = current_child.next_sibling();
+        }
     }
 }
 

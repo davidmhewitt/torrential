@@ -1,5 +1,5 @@
 use crate::fl;
-use gtk::prelude::{ButtonExt, WidgetExt};
+use gtk::prelude::{ButtonExt, EditableExt, WidgetExt};
 use relm4::gtk;
 use relm4::ComponentParts;
 use relm4::SimpleComponent;
@@ -11,6 +11,7 @@ pub struct HeaderModel;
 pub enum HeaderOutput {
     OpenTorrent,
     OpenMagnet,
+    SearchChanged(String),
 }
 
 #[relm4::component(pub)]
@@ -28,6 +29,9 @@ impl SimpleComponent for HeaderModel {
                 set_hexpand: true,
                 set_placeholder_text: Some("Search Torrents"),
                 set_valign: gtk::Align::Center,
+                connect_search_changed[sender] => move |search_entry| {
+                    sender.output(HeaderOutput::SearchChanged(search_entry.text().to_string())).unwrap();
+                },
             },
 
             pack_start = &gtk::Button {

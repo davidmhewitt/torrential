@@ -98,6 +98,7 @@ enum AppInput {
 
     ShowMagnetDialog,
     TriggerFileSelect,
+    OpenTorrentLocation,
 
     RightClickTorrent(f64, f64),
 
@@ -316,6 +317,12 @@ impl SimpleComponent for App {
                 file_select_sender.input(AppInput::TriggerFileSelect);
             });
 
+        let show_in_filemanager_sender = sender.clone();
+        let show_in_filemanager_action: RelmAction<ShowInFileManagerAction> =
+            RelmAction::new_stateless(move |_| {
+                show_in_filemanager_sender.input(AppInput::OpenTorrentLocation);
+            });
+
         let filter_action_sender = sender.clone();
         let filter_action: RelmAction<FilterAction> =
             RelmAction::new_stateful_with_target_value(&0, move |_, state, value| {
@@ -331,6 +338,7 @@ impl SimpleComponent for App {
         group.add_action(remove_selected_action);
         group.add_action(copy_magnet_action);
         group.add_action(file_select_action);
+        group.add_action(show_in_filemanager_action);
         group.add_action(filter_action);
         group.register_for_widget(&widgets.main_window);
 
@@ -533,7 +541,10 @@ impl SimpleComponent for App {
                         Some(&fl!("action-copy-magnet")),
                         Some(&CopySelectedMagnetAction::action_name()),
                     );
-                    menu.append(Some(&fl!("action-show-in-filemanager")), None);
+                    menu.append(
+                        Some(&fl!("action-show-in-filemanager")),
+                        Some(&ShowInFileManagerAction::action_name()),
+                    );
                 }
 
                 let rect = gtk::gdk::Rectangle::new(x as i32, y as i32, 0, 0);
@@ -554,6 +565,17 @@ impl SimpleComponent for App {
             AppInput::UpdateSearch(search_term) => {
                 self.search_term = search_term;
                 self.apply_filter();
+            }
+            AppInput::OpenTorrentLocation => {
+                let items = self.view.guard().widget().selected_rows();
+                if items.len() == 1 {
+                    if let Some(torrent) = self.view.guard().get(items[0].index() as usize) {
+                        let download_dir = torrent.download_dir.clone();
+                        let torrent_name = torrent.name.clone();
+
+                        utils::open_torrent_location(&download_dir, &torrent_name);
+                    }
+                }
             }
             AppInput::None => {}
         }
@@ -662,6 +684,11 @@ relm4::new_stateless_action!(ResumeSelectedAction, WindowActionGroup, "resume-se
 relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");
 relm4::new_stateless_action!(CopySelectedMagnetAction, WindowActionGroup, "copy-magnet");
 relm4::new_stateless_action!(FileSelectAction, WindowActionGroup, "file-select");
+relm4::new_stateless_action!(
+    ShowInFileManagerAction,
+    WindowActionGroup,
+    "show-in-filemanager"
+);
 relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 

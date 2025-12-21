@@ -1335,9 +1335,9 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
 name = "libc"
-version = "0.2.169"
+version = "0.2.178"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5aba8db14291edd000dfcc4d620c7ebfb122c613afb886ca8803fa4e128a20a"
+checksum = "37c93d8daa9d8a012fd8ab92f088405fb202ea0b6ab73ee2482ae66af4f42091"
 
 [[package]]
 name = "libnghttp2-sys"
@@ -2221,6 +2221,7 @@ version = "0.1.0"
 dependencies = [
  "glib-build-tools",
  "granite-rs",
+ "gtk4",
  "i18n-embed",
  "i18n-embed-fl",
  "lazy_static",

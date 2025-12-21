@@ -44,7 +44,7 @@ impl SimpleComponent for FileSelectDialogModel {
 
     view! {
         #[root]
-        dialog = gtk::Dialog {
+        dialog = granite::Dialog {
             set_title: Some("Select Files to Download"),
             set_modal: true,
             set_default_size: (550, 400),

@@ -32,7 +32,7 @@ impl SimpleComponent for MagnetDialogModel {
 
     view! {
         #[root]
-        gtk::Dialog {
+        granite::Dialog {
             #[watch]
             set_visible: model.visible,
             set_title: Some("Add Magnet Link"),
@@ -87,8 +87,8 @@ impl SimpleComponent for MagnetDialogModel {
         let widgets = view_output!();
 
         // Add buttons to the root dialog
-        root.add_button("Cancel", gtk::ResponseType::Cancel);
-        root.add_button("Add", gtk::ResponseType::Ok);
+        root.add_button("Cancel", gtk::ResponseType::Cancel.into());
+        root.add_button("Add", gtk::ResponseType::Ok.into());
 
         relm4::ComponentParts { model, widgets }
     }

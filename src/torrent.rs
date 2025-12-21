@@ -32,6 +32,7 @@ pub(crate) struct Torrent {
     pub rate_download: i32,
     pub rate_upload: i32,
     pub eta: i64,
+    pub download_dir: String,
 }
 
 #[derive(Debug)]
@@ -219,6 +220,7 @@ impl FactoryComponent for Torrent {
             rate_download: init.rate_download,
             rate_upload: init.rate_upload,
             eta: init.eta,
+            download_dir: init.download_dir,
         }
     }
 
@@ -261,5 +263,9 @@ impl Torrent {
         self.set_rate_download(torrent.rate_download);
         self.set_rate_upload(torrent.rate_upload);
         self.set_eta(torrent.eta);
+
+        if self.download_dir != torrent.download_dir {
+            self.set_download_dir(torrent.download_dir.clone());
+        }
     }
 }

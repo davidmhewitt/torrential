@@ -1,7 +1,7 @@
 {
     "id": "com.github.davidmhewitt.torrential",
     "runtime": "io.elementary.Platform",
-    "runtime-version": "8",
+    "runtime-version": "8.2",
     "sdk": "io.elementary.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.rust-stable"

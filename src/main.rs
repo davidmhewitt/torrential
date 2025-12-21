@@ -27,6 +27,9 @@ use preferences_window::{PreferencesWindowInput, PreferencesWindowModel};
 mod magnet_dialog;
 use magnet_dialog::{MagnetDialogInput, MagnetDialogModel, MagnetDialogOutput};
 
+mod file_select_dialog;
+use file_select_dialog::{FileSelectDialogInput, FileSelectDialogModel, FileSelectDialogOutput};
+
 mod torrent;
 use torrent::Torrent;
 
@@ -74,6 +77,7 @@ struct App {
     header: Controller<HeaderModel>,
     prefs_dialog: Controller<PreferencesWindowModel>,
     magnet_dialog: Controller<MagnetDialogModel>,
+    file_select_dialog: Controller<FileSelectDialogModel>,
     open_dialog: Controller<OpenDialog>,
     toast: Controller<Toast>,
     context_popover: gtk::PopoverMenu,
@@ -93,6 +97,7 @@ enum AppInput {
     OpenTorrent(PathBuf),
 
     ShowMagnetDialog,
+    TriggerFileSelect,
 
     RightClickTorrent(f64, f64),
 
@@ -103,6 +108,7 @@ enum AppInput {
     PauseSelectedTorrents,
     ResumeSelectedTorrents,
     CopySelectedMagnet,
+    UpdateFileSelection(String, i32, Vec<i32>, Vec<i32>),
     ApplyFilter(u8),
     UpdateSearch(String),
 }
@@ -231,6 +237,15 @@ impl SimpleComponent for App {
                 MagnetDialogOutput::Close => AppInput::None,
             });
 
+        let file_select_dialog = FileSelectDialogModel::builder()
+            .transient_for(&root)
+            .launch(())
+            .forward(sender.input_sender(), |msg| match msg {
+                FileSelectDialogOutput::UpdateFiles(hash, torrent_id, wanted, unwanted) => {
+                    AppInput::UpdateFileSelection(hash, torrent_id, wanted, unwanted)
+                }
+            });
+
         let toast = Toast::builder()
             .launch(())
             .forward(sender.input_sender(), |response| match response {});
@@ -247,6 +262,7 @@ impl SimpleComponent for App {
             transmission,
             prefs_dialog,
             magnet_dialog,
+            file_select_dialog,
             open_dialog,
             context_popover,
             toast,
@@ -294,6 +310,12 @@ impl SimpleComponent for App {
                 copy_magnet_sender.input(AppInput::CopySelectedMagnet);
             });
 
+        let file_select_sender = sender.clone();
+        let file_select_action: RelmAction<FileSelectAction> =
+            RelmAction::new_stateless(move |_| {
+                file_select_sender.input(AppInput::TriggerFileSelect);
+            });
+
         let filter_action_sender = sender.clone();
         let filter_action: RelmAction<FilterAction> =
             RelmAction::new_stateful_with_target_value(&0, move |_, state, value| {
@@ -308,6 +330,7 @@ impl SimpleComponent for App {
         group.add_action(resume_selected_action);
         group.add_action(remove_selected_action);
         group.add_action(copy_magnet_action);
+        group.add_action(file_select_action);
         group.add_action(filter_action);
         group.register_for_widget(&widgets.main_window);
 
@@ -421,6 +444,25 @@ impl SimpleComponent for App {
             AppInput::ShowMagnetDialog => {
                 self.magnet_dialog.emit(MagnetDialogInput::Open);
             }
+            AppInput::TriggerFileSelect => {
+                // Get the selected torrent's information
+                let items = self.view.guard().widget().selected_rows();
+                if items.len() == 1 {
+                    if let Some(torrent) = self.view.guard().get(items[0].index() as usize) {
+                        self.file_select_dialog.emit(FileSelectDialogInput::Open(
+                            torrent.hash.clone(),
+                            torrent.id,
+                            torrent.name.clone(),
+                            torrent.files.clone(),
+                        ));
+                    }
+                }
+            }
+            AppInput::UpdateFileSelection(hash, torrent_id, wanted, unwanted) => {
+                self.transmission.emit(TransmissionInput::SetFilesWanted(
+                    hash, torrent_id, wanted, unwanted,
+                ));
+            }
             AppInput::OpenPrefsWindow => {
                 self.prefs_dialog.emit(PreferencesWindowInput::Open);
             }
@@ -480,7 +522,10 @@ impl SimpleComponent for App {
                 if items.len() < 2 {
                     if let Some(selected_torrent) = guarded_view.get(items[0].index() as usize) {
                         if selected_torrent.files.file_count > 1 {
-                            menu.append(Some(&fl!("action-select-files")), None);
+                            menu.append(
+                                Some(&fl!("action-select-files")),
+                                Some(&FileSelectAction::action_name()),
+                            );
                         }
                     }
 
@@ -616,6 +661,7 @@ relm4::new_stateless_action!(PauseSelectedAction, WindowActionGroup, "pause-sele
 relm4::new_stateless_action!(ResumeSelectedAction, WindowActionGroup, "resume-selected");
 relm4::new_stateless_action!(RemoveSelectedAction, WindowActionGroup, "remove-selected");
 relm4::new_stateless_action!(CopySelectedMagnetAction, WindowActionGroup, "copy-magnet");
+relm4::new_stateless_action!(FileSelectAction, WindowActionGroup, "file-select");
 relm4::new_stateless_action!(OpenAction, WindowActionGroup, "open");
 relm4::new_stateless_action!(QuitAction, WindowActionGroup, "quit");
 

@@ -5,7 +5,9 @@ use relm4::{
     component::{AsyncComponent, AsyncComponentParts},
     gtk::{gio, prelude::SettingsExt},
 };
-use transmission_client::{Client, Encryption, SessionMutator, Torrent, TorrentFiles};
+use transmission_client::{
+    Client, Encryption, SessionMutator, Torrent, TorrentFiles, TorrentMutator,
+};
 
 pub(crate) struct Transmission {
     tr_client: Option<Client>,
@@ -27,6 +29,7 @@ pub(crate) enum TransmissionInput {
     PauseTorrents(Vec<String>),
     ResumeTorrents(Vec<String>),
     GetFiles(i32),
+    SetFilesWanted(String, i32, Vec<i32>, Vec<i32>),
     UpdateSettings,
     RemoveTorrents(Vec<String>),
 }
@@ -252,6 +255,39 @@ impl AsyncComponent for Transmission {
                         sender
                             .output(TransmissionOutput::FileListChanged(files[0].to_owned()))
                             .unwrap();
+                    }
+                    Err(err) => {
+                        sender
+                            .output(TransmissionOutput::ConnectionError(err.to_string()))
+                            .unwrap();
+                    }
+                }
+            }
+            TransmissionInput::SetFilesWanted(hash, torrent_id, wanted, unwanted) => {
+                let tr_client = self.tr_client.as_ref().unwrap();
+
+                let mutator = TorrentMutator {
+                    files_wanted: if !wanted.is_empty() {
+                        Some(wanted)
+                    } else {
+                        None
+                    },
+                    files_unwanted: if !unwanted.is_empty() {
+                        Some(unwanted)
+                    } else {
+                        None
+                    },
+                    ..Default::default()
+                };
+
+                match tr_client
+                    .torrent_set(Some(vec![hash.clone()]), mutator)
+                    .await
+                {
+                    Ok(_) => {
+                        // Refresh torrents to get updated info
+                        sender.input(TransmissionInput::UpdateTorrents);
+                        sender.input(TransmissionInput::GetFiles(torrent_id));
                     }
                     Err(err) => {
                         sender

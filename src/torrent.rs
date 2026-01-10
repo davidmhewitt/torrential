@@ -1,18 +1,17 @@
 use crate::fl;
 use gtk::gio::functions::content_type_get_icon;
 use gtk::prelude::{ButtonExt, GridExt, WidgetExt};
+use gtk4::gio::content_type_guess;
 use relm4::factory::FactoryComponent;
 use relm4::gtk::gio::Icon;
 use relm4::{gtk, RelmWidgetExt};
 use transmission_client::TorrentFiles;
 
-use crate::utils;
-
 fn get_icon_type_for_files(files: &[transmission_client::File]) -> Icon {
     match files.len() {
         0 => content_type_get_icon("application/x-bittorrent"),
         1 => {
-            let content_type = utils::content_type_guess(&Some(&files[0].name), None).0;
+            let content_type = content_type_guess(Some(&files[0].name), None).0;
             content_type_get_icon(&content_type)
         }
         _ => content_type_get_icon("inode/directory"),

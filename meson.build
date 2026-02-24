@@ -17,7 +17,7 @@ vapi_dir = join_paths(meson.current_source_dir(), 'vapi')
 add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 
 dependencies = [
-    dependency('gtk4'),
+    dependency('gtk4', version: '>=4.10'),
     dependency('gee-0.8'),
     dependency('granite-7'),
     dependency('threads'),

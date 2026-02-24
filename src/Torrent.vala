@@ -1,23 +1,23 @@
 /*
-* Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; either
-* version 2 of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-* General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-* Boston, MA 02110-1301 USA
-*
-* Authored by: David Hewitt <davidmhewitt@gmail.com>
-*/
+ * Copyright (c) 2017 David Hewitt (https://github.com/davidmhewitt)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301 USA
+ *
+ * Authored by: David Hewitt <davidmhewitt@gmail.com>
+ */
 
 public class Torrential.Torrent {
     private unowned Transmission.Torrent torrent;
@@ -232,6 +232,14 @@ public class Torrential.Torrent {
 
     public void set_file_download (uint32 index, bool download) {
         torrent.set_file_downloads ({index}, download);
+    }
+
+    public void set_files_download (uint32[] indexes, bool download) {
+        torrent.set_file_downloads (indexes, download);
+    }
+
+    public bool is_file_wanted (uint32 index) {
+        return files[index].dnd == 0;
     }
 
     public void pause () {

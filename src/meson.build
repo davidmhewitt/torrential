@@ -1,6 +1,6 @@
 sources = files(
-    'Dialogs/FileSelectDialog.vala',
-    'Widgets/FileSelectTreeView.vala',
+    'FileSelector/FileSelectDialog.vala',
+    'FileSelector/Model.vala',
     'Widgets/MultiInfoBar.vala',
     'Widgets/TorrentListBox.vala',
     'Widgets/TorrentListRow.vala',

@@ -1,6 +1,6 @@
 app-id: com.github.davidmhewitt.torrential
 runtime: io.elementary.Platform
-runtime-version: '7.2'
+runtime-version: '8'
 sdk: io.elementary.Sdk
 command: com.github.davidmhewitt.torrential
 finish-args:

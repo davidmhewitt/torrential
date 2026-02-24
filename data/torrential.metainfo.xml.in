@@ -52,6 +52,11 @@
   </custom>
 
   <releases>
+    <release version="3.0.0" date="2023-04-20">
+      <description>
+        GTK 4 version! A big thank you to Danielle Foré for doing the work on the GTK 4 port.
+      </description>
+    </release>
     <release version="2.0.1" date="2021-12-08">
       <description>
         <ul>

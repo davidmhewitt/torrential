@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/com/github/davidmhewitt/torrential">
-    <file alias="open-magnet.svg" compressed="true" preprocess="xml-stripblanks">icons/open-magnet.svg</file>
-    <file compressed="true" preprocess="xml-stripblanks">icons/filter.svg</file>
+    <file preprocess="xml-stripblanks">icons/open-magnet.svg</file>
+    <file preprocess="xml-stripblanks">icons/filter.svg</file>
+    <file compressed="true" preprocess="xml-stripblanks">ui/FileSelectFactory.ui</file>
   </gresource>
 </gresources>
 

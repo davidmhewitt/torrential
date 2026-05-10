@@ -30,7 +30,7 @@ jobs:
 
     - name: Update modules
       run: |
-        sudo apt-get install -y python3-toml python3-aiohttp
+        sudo apt-get install -y python3-tomlkit python3-aiohttp
         python3 tools/cargo/flatpak-cargo-generator.py -o repo/cargo-sources.json repo/Cargo.lock
     - uses: peter-evans/create-pull-request@v8
       with:

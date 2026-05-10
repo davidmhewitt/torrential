@@ -20,4 +20,4 @@ tracker = "0.2"
 transmission-client = "0.1.5"
 
 [build-dependencies]
-glib-build-tools = "0.20.0"
+glib-build-tools = "0.22.0"

@@ -52,7 +52,7 @@ jobs:
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
           bundle: app.flatpak
-          manifest-path: io.github.davidmhewitt.ElementaryRustExample.json
+          manifest-path: com.github.davidmhewitt.torrential.json
           run-tests: ${{ matrix.configuration.arch == 'x86_64' }}
           repository-name: appcenter
           repository-url: https://flatpak.elementary.io/repo.flatpakrepo

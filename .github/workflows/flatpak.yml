@@ -51,11 +51,10 @@ jobs:
       - name: Build
         uses: flatpak/flatpak-github-actions/flatpak-builder@v6
         with:
-          bundle: app.flatpak
           manifest-path: com.github.davidmhewitt.torrential.json
           run-tests: ${{ matrix.configuration.arch == 'x86_64' }}
           repository-name: appcenter
-          repository-url: https://flatpak.elementary.io/repo.flatpakrepo
+          repository-url: https://flatpak.elementaryos.org/repo.flatpakrepo
           cache-key: "flatpak-builder-${{ github.sha }}"
           branch: daily
           arch: ${{ matrix.configuration.arch }}
